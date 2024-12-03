@@ -1,0 +1,9 @@
+name: okane
+project_root: . # これが公式の方法です
+
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - nvim .
+        - bun run ios

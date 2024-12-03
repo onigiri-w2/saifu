@@ -1,0 +1,33 @@
+import { NavigationProp } from '@react-navigation/native';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+
+import CategoryForm from '@/src/presentation/screens/CategoryForm';
+import CategoryIconSelector from '@/src/presentation/screens/CategoryIconSelector';
+
+import MainTabs from './mainTabs';
+
+export type RootStackParamList = {
+  MainTabs: undefined;
+  CategoryDetail: { categoryId: string | undefined };
+  CategoryIconSelector: undefined;
+};
+export type RootStackNavigationProp = NavigationProp<RootStackParamList>;
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+export default function RootStack() {
+  return (
+    <Stack.Navigator initialRouteName="MainTabs">
+      <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="CategoryDetail"
+        component={CategoryForm}
+        options={{
+          presentation: 'modal',
+          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+        }}
+      />
+      <Stack.Screen name="CategoryIconSelector" component={CategoryIconSelector} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}

@@ -1,0 +1,83 @@
+import { useCallback, useState } from 'react';
+import { FlatList, ListRenderItemInfo, View } from 'react-native';
+
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+
+import { Month, months } from '@/src/domain/valueobject/types';
+import { useCalendarMutation } from '@/src/presentation/usecase/mutation/calendar/mutation';
+import { queryOptions } from '@/src/presentation/usecase/query/calendar/query-options';
+
+import Item from './Item';
+
+type Props = {
+  initialStartYear: Month;
+  onSelected?: () => void;
+};
+function StartYearUpdater({ initialStartYear, onSelected }: Props) {
+  const { styles, theme } = useStyles(stylesheet);
+  const query = useQuery(queryOptions.loadCalendar());
+  const [startYear, setStartYear] = useState(initialStartYear);
+
+  const queryClient = useQueryClient();
+  const mutation = useCalendarMutation.update(queryClient);
+
+  const handleSelect = useCallback(
+    (v: string) => {
+      const cycleStartDef = query.data?.cycleStartDef;
+      if (!cycleStartDef) return;
+      const newStartMonth = parseInt(v, 10) as Month;
+      const newCycleStartDef = cycleStartDef.updateStartMonth(newStartMonth);
+      mutation.mutate({ cycleStartDef: newCycleStartDef });
+      setStartYear(newStartMonth);
+      onSelected?.();
+    },
+    [query.data],
+  );
+
+  const keyExtractor = useCallback((item: Month) => {
+    return item.toString();
+  }, []);
+  const renderItem = useCallback(
+    (item: ListRenderItemInfo<Month>) => {
+      return (
+        <Item
+          value={item.item.toString()}
+          label={`${item.item}月`}
+          onPress={handleSelect}
+          isActive={startYear === item.item}
+        />
+      );
+    },
+    [startYear],
+  );
+
+  return (
+    <FlatList
+      data={months}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      initialScrollIndex={startYear - 1}
+      getItemLayout={(_, index) => ({
+        length: 52,
+        offset: (52 + theme.spacing.lg) * index,
+        index,
+      })}
+      ListFooterComponent={<View style={{ height: 200 }} />}
+    />
+  );
+}
+export default StartYearUpdater;
+
+const stylesheet = createStyleSheet((theme) => ({
+  container: {
+    flex: 1,
+  },
+  content: {
+    paddingHorizontal: theme.spacing.xl,
+    paddingVertical: theme.spacing['3xl'],
+    gap: theme.spacing.lg,
+  },
+}));
