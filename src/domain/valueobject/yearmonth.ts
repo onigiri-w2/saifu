@@ -1,6 +1,6 @@
 import { Month } from '@/src/domain/valueobject/types';
 
-class Yearmonth {
+export default class Yearmonth {
   private constructor(
     public readonly year: number,
     public readonly month: Month,
@@ -26,5 +26,3 @@ class Yearmonth {
     return `${this.year}-${this.month.toString().padStart(2, '0')}`;
   }
 }
-
-export default Yearmonth;

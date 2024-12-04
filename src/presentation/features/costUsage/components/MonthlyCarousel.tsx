@@ -14,7 +14,7 @@ const CENTER_POSITION = 1000;
 type Props = {
   initialYearmonth: Yearmonth;
 };
-function MonthlyCarousel({ initialYearmonth }: Props) {
+export default function MonthlyCarousel({ initialYearmonth }: Props) {
   const [currentPosition, setCurrentPosition] = useState(CENTER_POSITION);
   const renderItem = useCallback((item: ListRenderItemInfo<number>) => {
     const position = item.index;
@@ -46,7 +46,6 @@ function MonthlyCarousel({ initialYearmonth }: Props) {
     </View>
   );
 }
-export default MonthlyCarousel;
 
 const styles = StyleSheet.create({
   container: {
