@@ -3,7 +3,7 @@ import { useDeferredValue } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { withSuspense } from '../../components/hoc/withSuspense';
-import { queryOptions } from '../../usecase/query/budgeting-category/query-options';
+import { queryOptions } from '../../usecase/query';
 
 import ListView from './components/ListView';
 import { StoreProvider } from './context';
@@ -14,7 +14,7 @@ type Props = {
   useDeferredRender?: boolean;
 };
 function CategoryList({ onPressAdd, onPressItem, useDeferredRender = true }: Props) {
-  const query = useSuspenseQuery(queryOptions.list());
+  const query = useSuspenseQuery(queryOptions.category.list());
   const viewData = query.data;
   const deferredViewData = useDeferredValue(viewData);
 

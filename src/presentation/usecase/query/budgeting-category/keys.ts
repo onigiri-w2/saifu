@@ -1,5 +1,5 @@
 const root = 'budgeting-category';
-export const keys = {
+export const budgetingCategoryKeys = {
   list: [root],
   detail: (id: string) => [root, id],
 };

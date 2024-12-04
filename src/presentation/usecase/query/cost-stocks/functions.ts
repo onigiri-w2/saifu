@@ -42,3 +42,8 @@ export const loadMonthlyCostStocks = async (yearmonth: Yearmonth): Promise<CostS
     }),
   );
 };
+
+export const loadMonthlyAggregatedCostStocks = async (yearmonth: Yearmonth): Promise<DailyStock> => {
+  const costStocks = await loadMonthlyCostStocks(yearmonth);
+  return DailyStock.aggregate(costStocks.map((cs) => cs.stock));
+};

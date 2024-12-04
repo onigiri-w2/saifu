@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import { Month, months } from '@/src/domain/valueobject/types';
 import { useCalendarMutation } from '@/src/presentation/usecase/mutation/calendar/mutation';
-import { queryOptions } from '@/src/presentation/usecase/query/calendar/query-options';
+import { queryOptions } from '@/src/presentation/usecase/query';
 
 import Item from './Item';
 
@@ -16,7 +16,7 @@ type Props = {
 };
 function StartYearUpdater({ initialStartYear, onSelected }: Props) {
   const { styles, theme } = useStyles(stylesheet);
-  const query = useQuery(queryOptions.loadCalendar());
+  const query = useQuery(queryOptions.calendar.loadCalendar());
   const [startYear, setStartYear] = useState(initialStartYear);
 
   const queryClient = useQueryClient();

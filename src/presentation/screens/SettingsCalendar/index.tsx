@@ -6,7 +6,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useStyles, createStyleSheet } from 'react-native-unistyles';
 
 import { dayOfWeekLabels } from '@/src/domain/valueobject/types';
-import { queryOptions } from '@/src/presentation/usecase/query/calendar/query-options';
+import { calendarQueryOptions } from '@/src/presentation/usecase/query/calendar/query-options';
 
 import Row from '../../features/settings/components/Row';
 import Section from '../../features/settings/components/Section';
@@ -14,7 +14,7 @@ import { SettingsStackNavigationProp } from '../../navigation/settingsStack';
 
 export default function Tab() {
   const { styles, theme } = useStyles(stylesheet);
-  const { data: calendar } = useSuspenseQuery(queryOptions.loadCalendar());
+  const { data: calendar } = useSuspenseQuery(calendarQueryOptions.loadCalendar());
 
   const navigation = useNavigation<SettingsStackNavigationProp>();
 

@@ -1,4 +1,4 @@
 const root = 'calendars';
-export const keys = {
+export const calendarKeys = {
   one: [root, 'one'],
 };

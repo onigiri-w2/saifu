@@ -4,7 +4,6 @@ import { View, Text } from 'react-native';
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import Category from '@/src/domain/aggregation/category';
 import Expense from '@/src/domain/aggregation/expense';
 import { Month, Day } from '@/src/domain/valueobject/types';
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
@@ -12,13 +11,16 @@ import { numberFormat } from '@/src/presentation/i18n/format';
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
 import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
+import { useCategoryContext } from '../../context/CategoryContext';
+
 type Props = {
-  category: Category;
   expense: Expense;
   focusDate: SharedValue<JsonLocalDate>;
 };
-function ExpenseRow({ category, expense, focusDate }: Props) {
+function ExpenseRow({ expense, focusDate }: Props) {
   const { styles } = useStyles(stylesheet);
+  const categoryList = useCategoryContext();
+  const category = categoryList.find((c) => c.category.id === expense.categoryId)?.category;
   const localDate = {
     year: expense.date.getFullYear(),
     month: (expense.date.getMonth() + 1) as Month,
@@ -30,6 +32,8 @@ function ExpenseRow({ category, expense, focusDate }: Props) {
       display: isAfterThan ? 'none' : 'flex',
     };
   });
+
+  if (!category) return null;
 
   return (
     <Animated.View style={[styles.container, containerStyle]}>

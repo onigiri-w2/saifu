@@ -120,6 +120,10 @@ class LocalDate implements Hashable {
     return this.format().value;
   }
 
+  toString() {
+    return `${this.year}-${this.month}-${this.day}`;
+  }
+
   static decode(hash: string) {
     return this.fromFormat(LocalDateFormat.build(hash));
   }

@@ -1,12 +1,12 @@
 import { queryOptions as queryOptionsRQ } from '@tanstack/react-query';
 
 import { loadToday } from './functions';
-import { keys } from './keys';
+import { todayKeys } from './keys';
 
-export const queryOptions = {
+export const todayQueryOptions = {
   today: () =>
     queryOptionsRQ({
-      queryKey: keys.today,
+      queryKey: todayKeys.today,
       queryFn: loadToday,
     }),
 };

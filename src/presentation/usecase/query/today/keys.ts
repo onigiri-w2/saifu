@@ -1,4 +1,4 @@
 const root = 'today';
-export const keys = {
+export const todayKeys = {
   today: [root],
 };

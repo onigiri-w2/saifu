@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useRef } from 'react';
 
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 
-import { keys as budgetingCategoryQuerykeys } from '@/src/presentation/usecase/query/budgeting-category/keys';
-import { queryOptions } from '@/src/presentation/usecase/query/budgeting-category/query-options';
+import { budgetingCategoryKeys as budgetingCategoryQuerykeys } from '@/src/presentation/usecase/query/budgeting-category/keys';
+import { budgetingCategoryQueryOptions } from '@/src/presentation/usecase/query/budgeting-category/query-options';
 
 import { FormStore, createFormStore } from '../store/form.store';
 import { SelectedItemStore, createSelectedItemStore } from '../store/selectedItem.store';
@@ -21,7 +21,7 @@ type StoreProviderProps = {
 };
 export function StoreProvider({ refreshKey, categoryId, children }: StoreProviderProps) {
   const queryClient = useQueryClient();
-  const { data } = useSuspenseQuery(queryOptions.detail(categoryId ?? ''));
+  const { data } = useSuspenseQuery(budgetingCategoryQueryOptions.detail(categoryId ?? ''));
   useEffect(() => {
     queryClient.resetQueries({ queryKey: budgetingCategoryQuerykeys.detail(categoryId ?? '') });
   }, [refreshKey, categoryId]);

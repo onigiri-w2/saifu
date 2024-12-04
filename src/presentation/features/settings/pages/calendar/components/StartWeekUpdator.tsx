@@ -6,16 +6,17 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import { DayOfWeek, dayOfWeekLabels, dayOfWeeks } from '@/src/domain/valueobject/types';
 import { useCalendarMutation } from '@/src/presentation/usecase/mutation/calendar/mutation';
-import { queryOptions } from '@/src/presentation/usecase/query/calendar/query-options';
+import { queryOptions } from '@/src/presentation/usecase/query';
 
 import Item from './Item';
+
 type Props = {
   initialStartWeek: DayOfWeek;
   onSelected?: () => void;
 };
 function StartWeekUpdater({ initialStartWeek, onSelected }: Props) {
   const { styles } = useStyles(stylesheet);
-  const query = useQuery(queryOptions.loadCalendar());
+  const query = useQuery(queryOptions.calendar.loadCalendar());
   const [startWeek, setStartWeek] = useState(initialStartWeek);
 
   const queryClient = useQueryClient();

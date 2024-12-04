@@ -1,17 +1,17 @@
 import { queryOptions as queryOptionsRQ } from '@tanstack/react-query';
 
 import { loadBudgetingCategories, loadBudgetingCategory } from './functions';
-import { keys } from './keys';
+import { budgetingCategoryKeys } from './keys';
 
-export const queryOptions = {
+export const budgetingCategoryQueryOptions = {
   list: () =>
     queryOptionsRQ({
-      queryKey: keys.list,
+      queryKey: budgetingCategoryKeys.list,
       queryFn: loadBudgetingCategories,
     }),
   detail: (id: string) =>
     queryOptionsRQ({
-      queryKey: keys.detail(id),
+      queryKey: budgetingCategoryKeys.detail(id),
       queryFn: () => loadBudgetingCategory(id),
     }),
 };

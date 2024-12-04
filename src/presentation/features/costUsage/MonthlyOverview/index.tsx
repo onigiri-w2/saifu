@@ -6,52 +6,49 @@ import { useSnapshot } from 'valtio';
 
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
 import { withSuspense } from '@/src/presentation/components/hoc/withSuspense';
-import { queryOptions as categoryQueryOptions } from '@/src/presentation/usecase/query/budgeting-category/query-options';
-import { queryOptions as stockQueryOptions } from '@/src/presentation/usecase/query/cost-stocks/query-options';
-import { queryOptions as expenseQueryOptions } from '@/src/presentation/usecase/query/expense/query-options';
-import { queryOptions } from '@/src/presentation/usecase/query/today/query-options';
+import { queryOptions } from '@/src/presentation/usecase/query';
 import { convertToJsonLocalDate, JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
+import { CategoryContext } from '../context/CategoryContext';
 import { useRenderingModeSwitchContext } from '../context/RenderingModeSwitchContext';
 import { costUsagePreferenceStore } from '../store/preference.store';
 
 import ListView from './components/ListView';
 import NotFound from './components/NotFound';
-import { useStocksWithCategory, useTimeline, useAggregatedStock } from './hooks';
+import { useTimelineViewData } from './hooks';
 
 type Props = {
   yearmonth: Yearmonth;
 };
 function MonthlyOverview({ yearmonth }: Props) {
   // query
-  const [categoryQuery, expenseQuery, stockQuery, todayQuery] = useSuspenseQueries({
+  const [categoryQuery, timelineQuery, stocksQuery, aggregatedStockQuery, todayQuery] = useSuspenseQueries({
     queries: [
-      categoryQueryOptions.list(),
-      expenseQueryOptions.monthly(yearmonth),
-      stockQueryOptions.monthly(yearmonth),
-      queryOptions.today(),
+      queryOptions.category.list(),
+      queryOptions.expense['monthly/timeline'](yearmonth, false),
+      queryOptions.costStock.monthly(yearmonth),
+      queryOptions.costStock['monthly/aggregated'](yearmonth),
+      queryOptions.today.today(),
     ],
   });
 
   // data
   const stocksOrTimeline = useSnapshot(costUsagePreferenceStore).costOrTransaction;
-  const stocks = useStocksWithCategory(stockQuery.data, categoryQuery.data);
-  const timeline = useTimeline(expenseQuery.data, categoryQuery.data);
-  const aggregatedStock = useAggregatedStock(stockQuery.data);
+  const timelineViewData = useTimelineViewData(timelineQuery.data);
   const today = todayQuery.data;
 
   // validation
-  if (stocks.length === 0 || !aggregatedStock) return <NotFound />;
+  if (stocksQuery.data.length === 0) return <NotFound />;
 
   const viewData = useMemo(() => {
     return {
-      stocks,
-      aggregatedStock,
-      timeline,
+      stocks: stocksQuery.data,
+      aggregatedStock: aggregatedStockQuery.data,
+      timeline: timelineViewData,
       today,
       stocksOrTimeline,
     };
-  }, [stocks, aggregatedStock, timeline, today, stocksOrTimeline]);
+  }, [stocksQuery.data, aggregatedStockQuery.data, timelineViewData, today, stocksOrTimeline]);
   const deferredViewData = useDeferredValue(viewData);
 
   const renderModeMap = useRenderingModeSwitchContext();
@@ -63,6 +60,10 @@ function MonthlyOverview({ yearmonth }: Props) {
     focusDate.value = convertToJsonLocalDate(today.date);
   }, [yearmonth]);
 
-  return <ListView focusDate={focusDate} {...(isImmediate ? viewData : deferredViewData)} />;
+  return (
+    <CategoryContext.Provider value={categoryQuery.data}>
+      <ListView focusDate={focusDate} {...(isImmediate ? viewData : deferredViewData)} />
+    </CategoryContext.Provider>
+  );
 }
 export default withSuspense(MonthlyOverview);

@@ -1,12 +1,12 @@
 import { queryOptions as queryOptionsRQ } from '@tanstack/react-query';
 
 import { loadCalendar } from './functions';
-import { keys } from './keys';
+import { calendarKeys } from './keys';
 
-export const queryOptions = {
+export const calendarQueryOptions = {
   loadCalendar: () =>
     queryOptionsRQ({
-      queryKey: keys.one,
+      queryKey: calendarKeys.one,
       queryFn: loadCalendar,
     }),
 };

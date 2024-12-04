@@ -1,7 +1,6 @@
 import Category from '@/src/domain/aggregation/category';
 import Expense from '@/src/domain/aggregation/expense';
-
-import { CostStock } from '../../usecase/query/cost-stocks/functions';
+import LocalDate from '@/src/domain/valueobject/localdate';
 
 export type ExpenseViewData = {
   category: Category;
@@ -11,7 +10,4 @@ export const isExpenseViewData = (v: any): v is ExpenseViewData => {
   return v && v.category && v.expense;
 };
 
-export type StockViewData = {
-  category: Category;
-  stock: CostStock['stock'];
-};
+export type TimelineViewData = (Expense | LocalDate)[];

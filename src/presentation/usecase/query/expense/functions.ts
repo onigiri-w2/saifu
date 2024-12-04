@@ -1,5 +1,6 @@
 import Expense from '@/src/domain/aggregation/expense';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
+import LocalDate from '@/src/domain/valueobject/localdate';
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
 
 export const loadMonthlyExpenses = async (yearmonth: Yearmonth): Promise<Expense[]> => {
@@ -14,4 +15,33 @@ export const loadMonthlyExpenses = async (yearmonth: Yearmonth): Promise<Expense
   const expenses = await expenseRepo.findSome(undefined, start, end);
 
   return expenses;
+};
+
+export type MonthlyTimeline = { date: LocalDate; expenses: Expense[] }[];
+export const loadMonthlyTimeline = async (yearmonth: Yearmonth, asc: boolean): Promise<MonthlyTimeline> => {
+  const calendarRepo = RepositoryRegistry.getInstance().calendarRepository;
+  const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
+
+  const calendar = await calendarRepo.findOne();
+  const period = calendar.cycleStartDef.genMonthPeriodYm(yearmonth);
+
+  const start = new Date(period.start.year, period.start.month - 1, 1);
+  const end = new Date(period.end.year, period.end.month, 0);
+  const expenses = await expenseRepo.findSome(undefined, start, end);
+
+  const map = new Map<string, Expense[]>();
+  expenses.forEach((e) => {
+    const key = LocalDate.fromDate(e.date).toString();
+    map.set(key, (map.get(key) || []).concat(e));
+  });
+
+  const result: { date: LocalDate; expenses: Expense[] }[] = [];
+  period.genArray().forEach((d) => {
+    if (map.has(d.toString())) {
+      result.push({ date: d, expenses: map.get(d.toString())! });
+    }
+  });
+
+  if (asc) return result;
+  else return result.reverse();
 };

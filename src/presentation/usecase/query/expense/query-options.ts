@@ -2,13 +2,18 @@ import { queryOptions as queryOptionsRQ } from '@tanstack/react-query';
 
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
 
-import { loadMonthlyExpenses } from './functions';
-import { keys } from './keys';
+import { loadMonthlyExpenses, loadMonthlyTimeline } from './functions';
+import { expenseQueryKeys } from './keys';
 
-export const queryOptions = {
+export const expenseQueryOptions = {
   monthly: (yearmonth: Yearmonth) =>
     queryOptionsRQ({
-      queryKey: keys.monthly(yearmonth),
+      queryKey: expenseQueryKeys.monthly(yearmonth),
       queryFn: async () => loadMonthlyExpenses(yearmonth),
+    }),
+  'monthly/timeline': (yearmonth: Yearmonth, asc: boolean) =>
+    queryOptionsRQ({
+      queryKey: expenseQueryKeys['monthly/timeline'](yearmonth, asc),
+      queryFn: async () => loadMonthlyTimeline(yearmonth, asc),
     }),
 };

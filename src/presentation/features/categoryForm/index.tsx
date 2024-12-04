@@ -16,7 +16,7 @@ import IconItem from './components/IconItem';
 import { StoreProvider, useStoreContext } from './context/StoreContext';
 
 export type CategoryBudgetFormRef = {
-  save: () => Promise<boolean>;
+  save: () => boolean;
 };
 type Props = {
   categoryId?: string;
@@ -32,7 +32,7 @@ const CategoryBudgetForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref)
   const updateCategoryMutation = useBudgetingCategoryMutation.update(queryClient);
 
   useImperativeHandle(ref, () => ({
-    save: async () => {
+    save: () => {
       const canSave = formStore.isDirty() && formStore.isValid();
       const context = formStore.getContext();
       const formData = formStore.form;
@@ -50,7 +50,7 @@ const CategoryBudgetForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref)
       }
 
       if (context.mode === 'update') {
-        await updateCategoryMutation.mutateAsync({
+        updateCategoryMutation.mutate({
           category: {
             id: context.categoryId,
             name: formData.categoryName,
@@ -63,7 +63,7 @@ const CategoryBudgetForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref)
           },
         });
       } else {
-        await createCategoryMutation.mutateAsync({
+        createCategoryMutation.mutate({
           category: {
             name: formData.categoryName,
             iconName: formData.iconName,
