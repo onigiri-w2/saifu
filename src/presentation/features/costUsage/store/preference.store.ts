@@ -5,5 +5,5 @@ type Store = {
 };
 
 export const costUsagePreferenceStore = proxy<Store>({
-  costOrTransaction: 'cost',
+  costOrTransaction: 'transaction',
 });

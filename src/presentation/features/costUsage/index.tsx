@@ -4,9 +4,13 @@ import Yearmonth from '@/src/domain/valueobject/yearmonth';
 
 import { loadToday } from '../../usecase/query/today/functions';
 
-import MonthlyCarousel from './components/MonthlyCarousel';
+import { RenderingModeSwitchProvider } from './context/RenderingModeSwitchContext';
+import MonthlyCarousel from './MonthlyCaousel';
 
-export default function CostUsage() {
+type Props = {
+  useDeferredRndering: boolean;
+};
+export default function CostUsage({ useDeferredRndering }: Props) {
   const [yearmonth, setYearmonth] = useState<Yearmonth>();
 
   useEffect(() => {
@@ -20,5 +24,9 @@ export default function CostUsage() {
     return null;
   }
 
-  return <MonthlyCarousel initialYearmonth={yearmonth} />;
+  return (
+    <RenderingModeSwitchProvider useDeferredRendering={useDeferredRndering} initialYearmonth={yearmonth}>
+      <MonthlyCarousel initialYearmonth={yearmonth} />
+    </RenderingModeSwitchProvider>
+  );
 }

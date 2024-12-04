@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
@@ -6,7 +6,8 @@ import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
 import { DEVICE_LAYOUT } from '@/src/presentation/utils/const';
 
-import MonthlyOverview from './MonthlyOverview';
+import { useRenderingModeSwitchContext } from '../context/RenderingModeSwitchContext';
+import MonthlyOverview from '../MonthlyOverview';
 
 const POSITIONs = Array.from({ length: 2000 }, (_, i) => i);
 const CENTER_POSITION = 1000;
@@ -14,14 +15,15 @@ const CENTER_POSITION = 1000;
 type Props = {
   initialYearmonth: Yearmonth;
 };
+
 export default function MonthlyCarousel({ initialYearmonth }: Props) {
-  const [currentPosition, setCurrentPosition] = useState(CENTER_POSITION);
+  const { switchMode } = useRenderingModeSwitchContext();
   const renderItem = useCallback((item: ListRenderItemInfo<number>) => {
     const position = item.index;
     const yearmonth = initialYearmonth.addMonths(position - CENTER_POSITION);
     return (
       <View style={styles.body}>
-        <MonthlyOverview yearmonth={yearmonth} useDeferredRender={Math.abs(position - currentPosition) > 1} />
+        <MonthlyOverview yearmonth={yearmonth} />
       </View>
     );
   }, []);
@@ -40,7 +42,8 @@ export default function MonthlyCarousel({ initialYearmonth }: Props) {
         estimatedItemSize={DEVICE_LAYOUT.width}
         onMomentumScrollEnd={(event) => {
           const position = Math.round(event.nativeEvent.contentOffset.x / DEVICE_LAYOUT.width);
-          setCurrentPosition(position);
+          const yearmonth = initialYearmonth.addMonths(position - CENTER_POSITION);
+          switchMode(yearmonth, 'immediate');
         }}
       />
     </View>

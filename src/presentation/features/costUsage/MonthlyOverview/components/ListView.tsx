@@ -7,13 +7,13 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import Today from '@/src/domain/aggregation/today';
 import LocalDate from '@/src/domain/valueobject/localdate';
 import { DailyStock } from '@/src/domain/valueobject/timeseries';
-import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 import { ExpenseViewData, StockViewData, isExpenseViewData } from '../../types';
-import CategoryCost from '../CategoryCost';
-import DateRow from '../ExpenseDateRow';
-import ExpenseRow from '../ExpenseRow';
 
+import CategoryCost from './CategoryCost';
+import DateRow from './ExpenseDateRow';
+import ExpenseRow from './ExpenseRow';
 import Header from './Header';
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
 function ListView({ stocks, aggregatedStock, timeline, today, focusDate, stocksOrTimeline }: Props) {
   const renderItem = useCallback((item: ListRenderItemInfo<StockViewData | ExpenseViewData | LocalDate>) => {
     if (item.item instanceof LocalDate) {
-      return <DateRow date={item.item} focusDate={focusDate} />;
+      return <DateRow date={convertToJsonLocalDate(item.item)} focusDate={focusDate} />;
     } else if (isExpenseViewData(item.item)) {
       return <ExpenseRow category={item.item.category} expense={item.item.expense} focusDate={focusDate} />;
     } else {

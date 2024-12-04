@@ -12,17 +12,17 @@ import { queryOptions as expenseQueryOptions } from '@/src/presentation/usecase/
 import { queryOptions } from '@/src/presentation/usecase/query/today/query-options';
 import { convertToJsonLocalDate, JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
-import { costUsagePreferenceStore } from '../../store/preference.store';
+import { useRenderingModeSwitchContext } from '../context/RenderingModeSwitchContext';
+import { costUsagePreferenceStore } from '../store/preference.store';
 
+import ListView from './components/ListView';
+import NotFound from './components/NotFound';
 import { useStocksWithCategory, useTimeline, useAggregatedStock } from './hooks';
-import ListView from './ListView';
-import NotFound from './NotFound';
 
 type Props = {
   yearmonth: Yearmonth;
-  useDeferredRender?: boolean;
 };
-function MonthlyOverview({ yearmonth, useDeferredRender = true }: Props) {
+function MonthlyOverview({ yearmonth }: Props) {
   // query
   const [categoryQuery, expenseQuery, stockQuery, todayQuery] = useSuspenseQueries({
     queries: [
@@ -54,12 +54,15 @@ function MonthlyOverview({ yearmonth, useDeferredRender = true }: Props) {
   }, [stocks, aggregatedStock, timeline, today, stocksOrTimeline]);
   const deferredViewData = useDeferredValue(viewData);
 
+  const renderModeMap = useRenderingModeSwitchContext();
+  const isImmediate = renderModeMap.modes.get(yearmonth.toString()) === 'immediate';
+
   // animation
   const focusDate = useSharedValue<JsonLocalDate>(convertToJsonLocalDate(today.date));
   useEffect(() => {
     focusDate.value = convertToJsonLocalDate(today.date);
   }, [yearmonth]);
 
-  return <ListView focusDate={focusDate} {...(useDeferredRender ? deferredViewData : viewData)} />;
+  return <ListView focusDate={focusDate} {...(isImmediate ? viewData : deferredViewData)} />;
 }
 export default withSuspense(MonthlyOverview);

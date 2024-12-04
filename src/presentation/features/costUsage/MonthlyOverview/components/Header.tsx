@@ -8,8 +8,8 @@ import Today from '@/src/domain/aggregation/today';
 import { DailyStock } from '@/src/domain/valueobject/timeseries';
 import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
-import CostChart from '../CostChart';
-import MonthlyCostHeader from '../MonthlyCostHeader';
+import CostChart from './CostChart';
+import MonthlyCostHeader from './MonthlyCostHeader';
 
 type Props = {
   stock: DailyStock;
