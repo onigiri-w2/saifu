@@ -4,6 +4,8 @@ import { Canvas, useCanvasRef } from '@shopify/react-native-skia';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { SharedValue } from 'react-native-reanimated';
 
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+
 import { DEFAULT_PADDING } from '../const';
 import { Padding, EnsuredPadding } from '../types';
 
@@ -21,7 +23,7 @@ import YgridLines from './parts/YgridLines';
 type Props = {
   points: TimePoint[];
   today: ChartDate;
-  focusDate: SharedValue<ChartDate>;
+  focusDate: SharedValue<JsonLocalDate>;
   appearance: {
     color?: string;
     dimensions: {

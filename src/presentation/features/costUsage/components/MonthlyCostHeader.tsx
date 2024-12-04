@@ -4,20 +4,20 @@ import { TextInput, View } from 'react-native';
 import Animated, { SharedValue, useAnimatedProps } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import { LocalDateDTO } from '@/src/domain/valueobject/localdate';
 import { DailyStock } from '@/src/domain/valueobject/timeseries';
 import { numberFormatOnWorklet } from '@/src/presentation/i18n/format';
-import { compareOnWorklet } from '@/src/presentation/utils/date.worklet';
+import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
+import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type Props = {
   stock: DailyStock;
-  focusDate: SharedValue<LocalDateDTO>;
+  focusDate: SharedValue<JsonLocalDate>;
 };
 function MonthlyCostHeader({ stock, focusDate }: Props) {
   const dailyCosts = useMemo(() => {
-    return stock.points.map((s) => ({ date: s.date.toDTO(), cost: s.value }));
+    return stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
   }, [stock]);
 
   const costTextProps = useAnimatedProps(() => {
@@ -62,7 +62,7 @@ function MonthlyCostHeader({ stock, focusDate }: Props) {
 }
 export default MonthlyCostHeader;
 
-const formatDateOnWorklet = (date: LocalDateDTO) => {
+const formatDateOnWorklet = (date: JsonLocalDate) => {
   'worklet';
   return `${date.month}/${date.day}`;
 };

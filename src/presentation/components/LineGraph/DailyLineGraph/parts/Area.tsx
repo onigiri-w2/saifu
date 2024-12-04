@@ -4,14 +4,16 @@ import { Path } from '@shopify/react-native-skia';
 import { area, curveMonotoneX } from 'd3';
 import { SharedValue, useDerivedValue } from 'react-native-reanimated';
 
-import { ChartDate, compare } from '../models/date';
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+
+import { compare } from '../models/date';
 import { Scale } from '../models/scale';
 import { TimePoint } from '../models/timepoint';
 
 type Props = {
   points: TimePoint[];
   scale: Scale;
-  focusDate: SharedValue<ChartDate>;
+  focusDate: SharedValue<JsonLocalDate>;
   color: string;
   graphHeight: number;
 };
@@ -21,7 +23,7 @@ const Area = React.memo(({ color, points, scale, graphHeight, focusDate }: Props
   return <Path path={path} color={color} style="fill" opacity={0.1} />;
 });
 
-export const usePath = (points: TimePoint[], scale: Scale, y0: number, focusDate: SharedValue<ChartDate>) => {
+export const usePath = (points: TimePoint[], scale: Scale, y0: number, focusDate: SharedValue<JsonLocalDate>) => {
   const generator = useMemo(() => {
     const { xScale, yScale } = scale;
     return area<TimePoint>()

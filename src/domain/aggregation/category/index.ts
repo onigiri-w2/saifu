@@ -1,7 +1,6 @@
 import uuid from 'react-native-uuid';
 
 import { ValidationError } from '../../error';
-import { ToDTO } from '../../types';
 
 import { IconColor } from './types/iconColor';
 import { IconName } from './types/iconName';
@@ -10,7 +9,6 @@ const LIMIT = {
   maxNameLength: 50,
 };
 
-export type CategoryDTO = ToDTO<Category>;
 class Category {
   private constructor(
     public readonly id: string,

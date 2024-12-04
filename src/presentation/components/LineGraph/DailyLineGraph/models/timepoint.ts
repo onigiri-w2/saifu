@@ -1,7 +1,9 @@
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+
 import { ChartDate, compare } from './date';
 
 export interface TimePoint {
-  date: ChartDate;
+  date: JsonLocalDate;
   value: number;
 }
 

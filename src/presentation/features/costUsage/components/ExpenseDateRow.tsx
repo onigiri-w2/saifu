@@ -4,15 +4,14 @@ import { Text } from 'react-native';
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import { LocalDateDTO } from '@/src/domain/valueobject/localdate';
-import { compareOnWorklet } from '@/src/presentation/utils/date.worklet';
+import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 type Props = {
-  date: LocalDateDTO;
-  focusDate: SharedValue<LocalDateDTO>;
+  date: JsonLocalDate;
+  focusDate: SharedValue<JsonLocalDate>;
 };
 function ExpenseDateRow({ date, focusDate }: Props) {
-  // TODO: 表示の調整
   const label = `${date.month + 1}月${date.day}日`;
 
   const animationStyle = useAnimatedStyle(() => {

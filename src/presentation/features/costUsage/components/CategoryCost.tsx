@@ -5,22 +5,22 @@ import Animated, { SharedValue, useAnimatedProps } from 'react-native-reanimated
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import Category from '@/src/domain/aggregation/category';
-import { LocalDateDTO } from '@/src/domain/valueobject/localdate';
 import { DailyStock } from '@/src/domain/valueobject/timeseries';
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 import { numberFormat, numberFormatOnWorklet } from '@/src/presentation/i18n/format';
-import { compareOnWorklet } from '@/src/presentation/utils/date.worklet';
+import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
+import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type CategoryCostProps = {
   category: Category;
   stock: DailyStock;
-  focusDate: SharedValue<LocalDateDTO>;
+  focusDate: SharedValue<JsonLocalDate>;
 };
 function CategoryCost({ category, stock, focusDate }: CategoryCostProps) {
   const dailyCosts = useMemo(() => {
-    return stock.points.map((s) => ({ date: s.date.toDTO(), cost: s.value }));
+    return stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
   }, [stock]);
 
   //TODO: マウント時に一瞬文字が消えるのを修正

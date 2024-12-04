@@ -6,22 +6,23 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import Category from '@/src/domain/aggregation/category';
 import Expense from '@/src/domain/aggregation/expense';
-import { LocalDateDTO } from '@/src/domain/valueobject/localdate';
+import { Month, Day } from '@/src/domain/valueobject/types';
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 import { numberFormat } from '@/src/presentation/i18n/format';
-import { compareOnWorklet } from '@/src/presentation/utils/date.worklet';
+import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 type Props = {
   category: Category;
   expense: Expense;
-  focusDate: SharedValue<LocalDateDTO>;
+  focusDate: SharedValue<JsonLocalDate>;
 };
 function ExpenseRow({ category, expense, focusDate }: Props) {
   const { styles } = useStyles(stylesheet);
   const localDate = {
     year: expense.date.getFullYear(),
-    month: expense.date.getMonth() + 1,
-    day: expense.date.getDate(),
+    month: (expense.date.getMonth() + 1) as Month,
+    day: expense.date.getDate() as Day,
   };
   const containerStyle = useAnimatedStyle(() => {
     const isAfterThan = compareOnWorklet(localDate, focusDate.value) > 0;

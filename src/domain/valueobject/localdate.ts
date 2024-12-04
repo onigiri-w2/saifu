@@ -2,10 +2,7 @@ import { Year, Month, Day, DayOfWeek } from '@/src/domain/valueobject/types';
 import { Hashable } from '@/src/utils/collections';
 import { clampDateToMonthEnd, getDaysInMonth } from '@/src/utils/dates';
 
-import { ToDTO } from '../types';
-
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
-export type LocalDateDTO = ToDTO<LocalDate>;
 class LocalDate implements Hashable {
   public readonly year!: Year;
   public readonly month!: Month;
@@ -143,16 +140,6 @@ class LocalDate implements Hashable {
   static max(dates: LocalDate[]) {
     return dates.reduce((max, date) => (date.isAfterThan(max) ? date : max), dates[0]);
   }
-
-  toDTO(): LocalDateDTO {
-    return {
-      year: this.year,
-      month: this.month,
-      day: this.day,
-      datetime: this.datetime,
-      dayOfWeek: this.dayOfWeek,
-    };
-  }
 }
 
 export class LocalDateFormat {
@@ -187,14 +174,3 @@ export class LocalDateFormat {
 }
 
 export default LocalDate;
-
-export const isLocalDateDTO = (value: any): value is LocalDateDTO => {
-  return (
-    typeof value === 'object' &&
-    'year' in value &&
-    'month' in value &&
-    'day' in value &&
-    'datetime' in value &&
-    'dayOfWeek' in value
-  );
-};

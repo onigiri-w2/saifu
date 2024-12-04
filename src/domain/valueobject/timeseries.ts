@@ -1,7 +1,5 @@
 import { HashMap } from '@/src/utils/collections';
 
-import { ToDTO } from '../types';
-
 import LocalDate from './localdate';
 import Period from './period';
 
@@ -14,9 +12,8 @@ export interface ITimeSeries {
   getPeriod(): Period;
 }
 
-export type DailyStockDTO = ToDTO<DailyStock>;
 export class DailyStock implements ITimeSeries {
-  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) {}
+  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) { }
 
   static fromMap(map: HashMap<LocalDate, number>, period: Period): DailyStock {
     const dates = period.genArray();
@@ -73,7 +70,7 @@ export class DailyStock implements ITimeSeries {
 }
 
 export class DailyFlow implements ITimeSeries {
-  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) {}
+  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) { }
 
   static fromMap(map: HashMap<LocalDate, number>, period: Period): DailyFlow {
     const dates = period.genArray();

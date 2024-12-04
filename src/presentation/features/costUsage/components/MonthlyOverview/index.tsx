@@ -10,6 +10,7 @@ import { queryOptions as categoryQueryOptions } from '@/src/presentation/usecase
 import { queryOptions as stockQueryOptions } from '@/src/presentation/usecase/query/cost-stocks/query-options';
 import { queryOptions as expenseQueryOptions } from '@/src/presentation/usecase/query/expense/query-options';
 import { queryOptions } from '@/src/presentation/usecase/query/today/query-options';
+import { convertToJsonLocalDate, JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 import { costUsagePreferenceStore } from '../../store/preference.store';
 
@@ -54,9 +55,9 @@ function MonthlyOverview({ yearmonth, useDeferredRender = true }: Props) {
   const deferredViewData = useDeferredValue(viewData);
 
   // animation
-  const focusDate = useSharedValue(today.date.toDTO());
+  const focusDate = useSharedValue<JsonLocalDate>(convertToJsonLocalDate(today.date));
   useEffect(() => {
-    focusDate.value = today.date.toDTO();
+    focusDate.value = convertToJsonLocalDate(today.date);
   }, [yearmonth]);
 
   return <ListView focusDate={focusDate} {...(useDeferredRender ? deferredViewData : viewData)} />;

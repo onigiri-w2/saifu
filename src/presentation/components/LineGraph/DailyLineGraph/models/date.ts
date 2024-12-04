@@ -1,8 +1,8 @@
-export interface ChartDate {
+export type ChartDate = {
   year: number;
   month: number;
   day: number;
-}
+};
 
 export function toInt(chartdate: ChartDate) {
   'worklet';

@@ -1,12 +1,13 @@
 import { Gesture } from 'react-native-gesture-handler';
 import { SharedValue } from 'react-native-reanimated';
 
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+
 import { findClosestNumberAndIndex } from '../../functions/worklet/findClosestNumberAndIndex';
-import { ChartDate } from '../models/date';
 import { Scale } from '../models/scale';
 import { TimePoint } from '../models/timepoint';
 
-export const useGesture = (focusDate: SharedValue<ChartDate>, points: TimePoint[], scale: Scale) => {
+export const useGesture = (focusDate: SharedValue<JsonLocalDate>, points: TimePoint[], scale: Scale) => {
   const xScaleValues = points.map((_, i) => scale.xScale.scale(i));
 
   const updateFocusDate = (x: number) => {

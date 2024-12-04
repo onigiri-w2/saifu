@@ -4,20 +4,20 @@ import { SharedValue } from 'react-native-reanimated';
 import { useStyles } from 'react-native-unistyles';
 
 import Today from '@/src/domain/aggregation/today';
-import { LocalDateDTO } from '@/src/domain/valueobject/localdate';
 import { DailyStock } from '@/src/domain/valueobject/timeseries';
 import DailyLineGraph from '@/src/presentation/components/LineGraph/DailyLineGraph';
 import { DEVICE_LAYOUT } from '@/src/presentation/utils/const';
+import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 type Props = {
   stock: DailyStock;
   today: Today;
-  focusDate: SharedValue<LocalDateDTO>;
+  focusDate: SharedValue<JsonLocalDate>;
 };
 function CostChart({ stock, today, focusDate }: Props) {
   const { theme } = useStyles();
   const points = stock.points.map((p) => ({
-    date: p.date.toDTO(),
+    date: convertToJsonLocalDate(p.date),
     value: p.value,
   }));
 

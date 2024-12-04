@@ -5,15 +5,15 @@ import { SharedValue } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import Today from '@/src/domain/aggregation/today';
-import { LocalDateDTO } from '@/src/domain/valueobject/localdate';
 import { DailyStock } from '@/src/domain/valueobject/timeseries';
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 import CostChart from '../CostChart';
 import MonthlyCostHeader from '../MonthlyCostHeader';
 
 type Props = {
   stock: DailyStock;
-  focusDate: SharedValue<LocalDateDTO>;
+  focusDate: SharedValue<JsonLocalDate>;
   today: Today;
 };
 function Header({ stock, focusDate, today }: Props) {

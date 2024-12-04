@@ -3,12 +3,14 @@ import React, { useMemo } from 'react';
 import { Circle } from '@shopify/react-native-skia';
 import { SharedValue, useDerivedValue } from 'react-native-reanimated';
 
-import { ChartDate, compare } from '../models/date';
+import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+
+import { compare } from '../models/date';
 import { Scale } from '../models/scale';
 import { TimePoint } from '../models/timepoint';
 
 type Props = {
-  focusDate: SharedValue<ChartDate>;
+  focusDate: SharedValue<JsonLocalDate>;
   points: TimePoint[];
   scale: Scale;
   color: string;
