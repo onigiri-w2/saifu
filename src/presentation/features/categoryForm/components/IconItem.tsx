@@ -48,7 +48,7 @@ const stylesheet = createStyleSheet((theme) => ({
     height: ICON_WRAPPER_HEIGHT,
     width: ICON_WRAPPER_HEIGHT,
     backgroundColor: theme.colors.background.layer2,
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -34,11 +34,11 @@ export default React.memo(ExpenseDateRow);
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     backgroundColor: theme.colors.background.ground,
-    paddingHorizontal: theme.spacing.xl,
-    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.x4,
+    paddingVertical: theme.spacing.x1,
   },
   text: {
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.subBody,
     color: theme.colors.text.tertiary,
   },
 }));

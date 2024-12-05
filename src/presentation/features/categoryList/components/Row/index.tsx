@@ -13,7 +13,6 @@ import { NotImplementedError } from '@/src/utils/errors';
 
 import { useEnrichedCategoryListContext } from '../../context';
 
-import { ROW_HEIGHT, CATEGORY_ICON_SIZE } from './constants';
 import DeleteAction from './DeleteAction';
 
 type Props = {
@@ -22,7 +21,7 @@ type Props = {
 };
 function Row({ budgetingCategory, onPress }: Props) {
   const swipeableRef = useRef<SwipeableRef>(null);
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
 
   const { category, budgetPlan } = budgetingCategory;
 
@@ -34,7 +33,7 @@ function Row({ budgetingCategory, onPress }: Props) {
         const amount = budgetPlan.strategy.tempAmount?.value ?? budgetPlan.strategy.amount.value;
         const cycleLabel = budgetCycleLabels[budgetPlan.strategy.cycle];
         const value = `${numberFormat(amount, true)} / ${cycleLabel}`;
-        return { label: '定期予算', value };
+        return { label: undefined, value };
       }
       case 'none': {
         return { label: '予算なし', value: undefined };
@@ -63,7 +62,7 @@ function Row({ budgetingCategory, onPress }: Props) {
   return (
     <Swipeable
       ref={swipeableRef}
-      leftThreshold={-ROW_HEIGHT}
+      leftThreshold={-theme.component.list.row.height.default}
       rightThreshold={0}
       righActions={deleteAction}
       onPress={handlePress}
@@ -76,11 +75,15 @@ function Row({ budgetingCategory, onPress }: Props) {
     >
       <View style={styles.container}>
         <View style={styles.categoryWrap}>
-          <CategoryIcon iconName={category.iconName} iconColor={category.iconColor} size={CATEGORY_ICON_SIZE} />
+          <CategoryIcon
+            iconName={category.iconName}
+            iconColor={category.iconColor}
+            size={theme.component.list.row.iconSize.middle}
+          />
           <Text style={styles.categoryName}>{category.name}</Text>
         </View>
         <View style={styles.budgetPlanWrap}>
-          <Text style={styles.budgetPlanLabel}>{label}</Text>
+          {label && <Text style={styles.budgetPlanLabel}>{label}</Text>}
           {value && <Text style={styles.budgetPlanValue}>{value}</Text>}
         </View>
       </View>
@@ -93,31 +96,31 @@ export default React.memo(Row);
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     flexDirection: 'row',
-    height: ROW_HEIGHT,
+    height: theme.component.list.row.height.default,
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.x4,
   },
   categoryWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.md,
+    gap: theme.spacing.x2,
   },
   categoryName: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.primary,
   },
   budgetPlanWrap: {
     alignItems: 'flex-end',
-    gap: theme.spacing.sm,
+    gap: theme.spacing.x1,
   },
   budgetPlanLabel: {
-    fontSize: theme.fontSize['2xs'],
-    color: theme.colors.text.secondary,
+    fontSize: theme.fontSize.caption,
+    color: theme.colors.text.tertiary,
   },
   budgetPlanValue: {
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.subBody,
     color: theme.colors.text.primary,
   },
 }));

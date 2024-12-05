@@ -60,30 +60,30 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   modalContent: {
     backgroundColor: theme.colors.background.layer1,
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.xl,
+    borderRadius: theme.radius.default,
+    padding: theme.spacing.x4,
     width: '88%',
   },
   title: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.primary,
     textAlign: 'center',
   },
   buttonsContent: {
-    marginTop: theme.spacing.xl,
-    gap: theme.spacing.lg,
+    marginTop: theme.spacing.x4,
+    gap: theme.spacing.x3,
   },
   button: (isActive: boolean) => ({
     justifyContent: 'center',
     alignItems: 'center',
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.x3,
+    borderRadius: theme.radius.default,
     backgroundColor: isActive ? theme.colors.brand.primaryTint : theme.colors.background.layer2,
     borderWidth: 1,
     borderColor: isActive ? theme.colors.brand.primary : theme.colors.background.layer2,
   }),
   buttonText: (isActive: boolean) => ({
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: isActive ? theme.colors.brand.primary : theme.colors.text.primary,
   }),
 }));

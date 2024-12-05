@@ -20,12 +20,12 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: theme.spacing['4xl'],
-    borderRadius: theme.borderRadius.md,
+    paddingVertical: theme.spacing['x7'],
+    borderRadius: theme.radius.default,
     backgroundColor: theme.colors.background.layer2,
   },
   description: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.secondary,
   },
 }));

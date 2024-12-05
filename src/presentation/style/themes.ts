@@ -1,36 +1,58 @@
+const spaceUnit = 4;
+const fontSizeBase = 16;
+const fontSizeUnit = 2;
+const radiusUnit = 4;
+
 const baseTheme = {
   spacing: {
-    xs: 2,
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
-    '2xl': 20,
-    '3xl': 24,
-    '4xl': 28,
-    '6xl': 48,
+    xhalf: spaceUnit / 2,
+    x1: spaceUnit,
+    x2: spaceUnit * 2,
+    x3: spaceUnit * 3,
+    x4: spaceUnit * 4,
+    x5: spaceUnit * 5,
+    x6: spaceUnit * 6,
+    x7: spaceUnit * 7,
+    x8: spaceUnit * 8,
+    x10: spaceUnit * 10,
+    x12: spaceUnit * 12,
   },
   fontSize: {
-    '2xs': 10,
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
-    '2xl': 24,
+    subCaption: fontSizeBase - fontSizeUnit * 3,
+    caption: fontSizeBase - fontSizeUnit * 2,
+    subBody: fontSizeBase - fontSizeUnit,
+    body: fontSizeBase,
+    subHeading: fontSizeBase + fontSizeUnit,
+    heading: fontSizeBase + fontSizeUnit * 2,
   },
-  borderRadius: {
-    sm: 4,
-    md: 8,
+  radius: {
+    small: radiusUnit,
+    default: radiusUnit * 2,
     full: 1000,
   },
-  height: {
-    tabBar: 60,
-    pageHeader: 52,
+
+  component: {
+    navigation: {
+      header: { height: 56 },
+      bottomBar: { height: 60 },
+    },
+    list: {
+      row: {
+        height: { default: 52 },
+        padding: {
+          horizontal: spaceUnit * 4,
+        },
+        iconSize: {
+          small: 20,
+          middle: 24,
+          large: 28,
+        },
+      },
+    },
   },
 };
 
-export const lightTheme = {
+const lightTheme = {
   ...baseTheme,
   colors: {
     brand: {
@@ -58,9 +80,14 @@ export const lightTheme = {
     border: {
       primary: 'rgba(0, 0, 0, 0.12)',
       secondary: 'rgba(0, 0, 0, 0.08)',
+      listSeparator: 'rgba(0, 0, 0, 0.08)',
     },
     highlight: {
       default: 'rgba(0, 0, 0, 0.1)',
     },
   },
+};
+
+export const appThemes = {
+  light: lightTheme,
 };

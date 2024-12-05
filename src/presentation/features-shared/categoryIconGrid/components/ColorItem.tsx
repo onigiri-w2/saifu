@@ -42,12 +42,12 @@ const stylesheet = createStyleSheet((theme) => ({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: theme.spacing.md,
+    padding: theme.spacing.x2,
   },
   item: {
     width: '100%',
     height: '100%',
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
     variants: {
       isSelected: {
         true: {

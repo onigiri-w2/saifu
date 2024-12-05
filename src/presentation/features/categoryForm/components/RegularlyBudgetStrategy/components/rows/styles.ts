@@ -8,14 +8,14 @@ export const sharedStylesheet = createStyleSheet((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: ROW_HEIGHT,
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.x4,
   },
   label: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.secondary,
   },
   value: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     variants: {
       isSelected: {
         true: {

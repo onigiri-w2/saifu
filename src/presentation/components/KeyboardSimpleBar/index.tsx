@@ -39,7 +39,7 @@ const stylesheet = createStyleSheet((theme) => ({
   content: {
     flexDirection: 'row',
     height: '100%',
-    paddingHorizontal: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.x3,
     backgroundColor: theme.colors.background.layer2,
     borderTopWidth: 1,
     borderColor: theme.colors.border.primary,
@@ -51,7 +51,7 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
   },
   doneText: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: theme.colors.brand.primary,
     fontWeight: 'bold',
   },

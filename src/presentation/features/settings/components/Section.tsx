@@ -15,6 +15,6 @@ export default Section;
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     backgroundColor: theme.colors.background.layer2,
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
   },
 }));

@@ -28,10 +28,10 @@ export default React.memo(Item);
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     width: '100%',
-    height: 52,
-    paddingHorizontal: theme.spacing.xl,
+    height: theme.component.list.row.height.default,
+    paddingHorizontal: theme.spacing.x4,
     justifyContent: 'center',
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
     variants: {
       isActive: {
         true: {
@@ -46,7 +46,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
   },
   text: {
-    fontSize: theme.fontSize.lg,
+    fontSize: theme.fontSize.subHeading,
     color: theme.colors.text.primary,
     textAlign: 'center',
   },

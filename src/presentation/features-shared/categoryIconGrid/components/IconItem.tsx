@@ -33,14 +33,14 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
     aspectRatio: 1,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.x3,
   },
   button: {
     width: '100%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
     borderWidth: 1,
     variants: {
       isSelected: {

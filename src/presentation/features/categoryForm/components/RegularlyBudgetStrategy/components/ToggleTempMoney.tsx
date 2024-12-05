@@ -65,7 +65,7 @@ function ToggleTempMoney({ isActive }: Props) {
       }}
     >
       <Animated.View style={animatedIconStyle}>
-        <AniamtedPlusSvg width={theme.fontSize.sm} height={theme.fontSize.sm} animatedProps={animatedProps} />
+        <AniamtedPlusSvg width={theme.fontSize.subBody} height={theme.fontSize.subBody} animatedProps={animatedProps} />
       </Animated.View>
       <Animated.Text style={[styles.text, animatedTextStyle]}>一時予算</Animated.Text>
     </AnimatedPressable>
@@ -77,14 +77,14 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: theme.borderRadius.full,
+    borderRadius: theme.radius.full,
     borderWidth: 1,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    gap: theme.spacing.md,
+    paddingHorizontal: theme.spacing.x2,
+    paddingVertical: theme.spacing.x1,
+    gap: theme.spacing.x2,
   },
   text: {
     color: theme.colors.brand.primary,
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.subBody,
   },
 }));

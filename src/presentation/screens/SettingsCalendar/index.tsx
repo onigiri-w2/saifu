@@ -22,7 +22,7 @@ export default function Tab() {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
-      contentInset={{ bottom: theme.spacing['6xl'] }}
+      contentInset={{ bottom: theme.spacing['x12'] }}
     >
       <Section>
         <Row
@@ -62,7 +62,7 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   content: {
-    paddingHorizontal: theme.spacing.xl,
-    paddingVertical: theme.spacing['3xl'],
+    paddingHorizontal: theme.spacing.x4,
+    paddingVertical: theme.spacing['x6'],
   },
 }));

@@ -20,7 +20,7 @@ export default SaveButton;
 
 const stylesheet = createStyleSheet((theme) => ({
   text: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     fontWeight: 'bold',
 
     variants: {

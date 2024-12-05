@@ -28,9 +28,9 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingTop: theme.spacing['2xl'],
-    paddingBottom: theme.spacing.xl,
-    marginBottom: theme.spacing.lg,
+    paddingTop: theme.spacing['x5'],
+    paddingBottom: theme.spacing.x4,
+    marginBottom: theme.spacing.x3,
     borderBottomWidth: 1,
     borderColor: theme.colors.border.primary,
   },
@@ -39,11 +39,11 @@ const stylesheet = createStyleSheet((theme) => ({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: theme.spacing.md,
+    padding: theme.spacing.x2,
   },
   item: {
     width: '100%',
     height: '100%',
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
   },
 }));

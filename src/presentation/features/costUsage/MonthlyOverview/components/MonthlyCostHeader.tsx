@@ -73,11 +73,11 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
   },
   dates: {
-    fontSize: theme.fontSize['2xs'],
+    fontSize: theme.fontSize['subCaption'],
     color: theme.colors.text.tertiary,
   },
   cost: {
-    fontSize: theme.fontSize.xl,
+    fontSize: theme.fontSize.heading,
     color: theme.colors.text.primary,
     fontWeight: 'bold',
   },

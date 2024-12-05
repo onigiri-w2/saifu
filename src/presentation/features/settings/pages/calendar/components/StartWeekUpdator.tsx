@@ -69,8 +69,8 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   content: {
-    paddingHorizontal: theme.spacing.xl,
-    paddingVertical: theme.spacing['3xl'],
-    gap: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.x4,
+    paddingVertical: theme.spacing['x6'],
+    gap: theme.spacing.x3,
   },
 }));

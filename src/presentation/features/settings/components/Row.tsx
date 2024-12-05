@@ -51,14 +51,14 @@ const stylesheet = createStyleSheet((theme) => ({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 52,
-    paddingHorizontal: theme.spacing.xl,
+    height: theme.component.list.row.height.default,
+    paddingHorizontal: theme.spacing.x4,
   },
   title: {
     variants: {
       hasLeftIcon: {
         true: {
-          marginLeft: theme.spacing.xl,
+          marginLeft: theme.spacing.x4,
         },
         false: {
           marginLeft: 0,
@@ -66,11 +66,11 @@ const stylesheet = createStyleSheet((theme) => ({
       },
     },
     color: theme.colors.text.primary,
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     flex: 1,
   },
   value: {
     color: theme.colors.text.primary,
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
   },
 }));

@@ -37,7 +37,7 @@ const stylesheet = createStyleSheet((theme) => ({
     backgroundColor: theme.colors.background.layer1,
   },
   header: {
-    height: theme.height.pageHeader,
+    height: theme.component.navigation.header.height,
     justifyContent: 'center',
     alignItems: 'center',
   },

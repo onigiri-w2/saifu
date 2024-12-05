@@ -20,7 +20,7 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   title: {
-    fontSize: theme.fontSize.lg,
+    fontSize: theme.fontSize.subHeading,
     fontWeight: 'bold',
   },
 }));

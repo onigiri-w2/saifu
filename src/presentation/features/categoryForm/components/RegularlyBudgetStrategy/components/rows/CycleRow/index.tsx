@@ -54,6 +54,6 @@ const stylesheet = createStyleSheet((theme) => ({
   valueWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.xs,
+    gap: theme.spacing.xhalf,
   },
 }));

@@ -52,10 +52,10 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     width: '100%',
     backgroundColor: theme.colors.background.layer3,
-    padding: theme.spacing.xs,
+    padding: theme.spacing.xhalf,
     flexDirection: 'row',
-    borderRadius: theme.borderRadius.md,
-    gap: theme.spacing.xs,
+    borderRadius: theme.radius.default,
+    gap: theme.spacing.xhalf,
   },
   button: (isActive: boolean) => {
     return {
@@ -64,13 +64,13 @@ const stylesheet = createStyleSheet((theme) => ({
       height: 28,
       justifyContent: 'center',
       alignItems: 'center',
-      gap: theme.spacing.sm,
-      borderRadius: theme.borderRadius.md,
+      gap: theme.spacing.x1,
+      borderRadius: theme.radius.default,
       backgroundColor: isActive ? theme.colors.background.layer1 : theme.colors.background.layer3,
     };
   },
   buttonLabel: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.primary,
   },
 }));

@@ -42,7 +42,7 @@ export default RegularlyBudgetStrategy;
 const stylesheet = createStyleSheet((theme) => ({
   itemContainer: {
     backgroundColor: theme.colors.background.layer2,
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
     overflow: 'hidden',
   },
   separator: {
@@ -51,6 +51,6 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   toggleContainer: {
     alignItems: 'flex-end',
-    marginTop: theme.spacing.lg,
+    marginTop: theme.spacing.x3,
   },
 }));

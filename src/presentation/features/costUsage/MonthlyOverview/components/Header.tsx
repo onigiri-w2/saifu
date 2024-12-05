@@ -29,7 +29,7 @@ export default React.memo(Header);
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {
-    marginBottom: theme.spacing['3xl'],
-    paddingHorizontal: theme.spacing.xl,
+    marginBottom: theme.spacing['x6'],
+    paddingHorizontal: theme.spacing.x4,
   },
 }));

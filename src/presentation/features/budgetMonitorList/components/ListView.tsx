@@ -24,7 +24,7 @@ function ListView({ viewData }: Props) {
       data={viewData}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
-      contentInset={{ top: theme.spacing['3xl'], bottom: theme.spacing['3xl'] }}
+      contentInset={{ top: theme.spacing.x8, bottom: theme.spacing.x8 }}
     />
   );
 }
@@ -34,14 +34,10 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
     width: '100%',
-    paddingHorizontal: theme.spacing.xl,
   },
   contentContainer: {
-    gap: theme.spacing['3xl'],
+    gap: theme.spacing.x6,
     backgroundColor: theme.colors.background.layer1,
-    paddingHorizontal: theme.spacing.xl,
-    paddingVertical: theme.spacing['3xl'],
-    borderRadius: theme.borderRadius.md,
     overflow: 'hidden',
   },
 }));

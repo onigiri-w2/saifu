@@ -50,10 +50,10 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: theme.spacing.sm,
+    gap: theme.spacing.x1,
   },
   text: {
-    fontSize: theme.fontSize['2xs'],
+    fontSize: theme.fontSize['subCaption'],
     variants: {
       focused: {
         true: {

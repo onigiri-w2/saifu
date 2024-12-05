@@ -64,7 +64,7 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   header: {
-    gap: theme.spacing.md,
-    marginBottom: theme.spacing.md,
+    gap: theme.spacing.x2,
+    marginBottom: theme.spacing.x2,
   },
 }));

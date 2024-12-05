@@ -41,7 +41,7 @@ function CategoryIconGird({ initialSelected, onSelect }: Props) {
 export default CategoryIconGird;
 const stylesheet = createStyleSheet((theme) => ({
   content: {
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.x4,
   },
 }));
 

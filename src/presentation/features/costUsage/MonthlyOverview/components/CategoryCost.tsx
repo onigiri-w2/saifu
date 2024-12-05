@@ -65,34 +65,34 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 52,
-    paddingHorizontal: theme.spacing.xl,
+    height: theme.component.list.row.height.default,
+    paddingHorizontal: theme.spacing.x4,
   },
   iconWrapper: {
     width: 36,
     height: 36,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: theme.borderRadius.sm,
+    borderRadius: theme.radius.small,
     backgroundColor: theme.colors.background.layer2,
   },
   text: {
     flex: 1,
     color: theme.colors.text.primary,
-    fontSize: theme.fontSize.lg,
-    marginLeft: theme.spacing.lg,
+    fontSize: theme.fontSize.subHeading,
+    marginLeft: theme.spacing.x3,
   },
   rightArea: {
     alignItems: 'flex-end',
   },
   spending: {
     color: theme.colors.text.primary,
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     fontWeight: 700,
     textAlign: 'right',
   },
   predicated: {
     color: theme.colors.text.tertiary,
-    fontSize: theme.fontSize.xs,
+    fontSize: theme.fontSize.caption,
   },
 }));

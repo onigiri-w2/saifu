@@ -7,8 +7,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import TrashSvg from '@/assets/icons/lucide/trash.svg';
 import { useBudgetingCategoryMutation } from '@/src/presentation/usecase/mutation/budgeting-category/mutation';
 
-import { TRASH_ICON_SIZE, ROW_HEIGHT } from './constants';
-
+const TRASH_ICON_SIZE = 24;
 type Props = {
   categoryId: string;
 };
@@ -38,6 +37,6 @@ const stylesheet = createStyleSheet((theme) => ({
     backgroundColor: theme.colors.status.error,
     justifyContent: 'center',
     alignItems: 'center',
-    minWidth: ROW_HEIGHT,
+    minWidth: theme.component.list.row.height.default,
   },
 }));

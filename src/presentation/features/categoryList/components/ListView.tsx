@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { FlatList, ListRenderItemInfo } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
@@ -20,7 +20,6 @@ function ListView({ viewData, onPressAdd, onPressItem }: Props) {
     [onPressItem],
   );
   const keyExtractor = useCallback((item: BudgetingCategory) => item.category.id, []);
-  const itemSeparator = useCallback(() => <View style={styles.separator} />, [styles.separator]);
 
   return (
     <FlatList
@@ -29,29 +28,20 @@ function ListView({ viewData, onPressAdd, onPressItem }: Props) {
       data={viewData}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
-      contentInset={{ bottom: theme.spacing['6xl'] }}
+      contentInset={{ top: theme.spacing.x6, bottom: theme.spacing.x12 }}
       ListFooterComponent={<AddButton onPress={onPressAdd} />}
-      ItemSeparatorComponent={itemSeparator}
       showsVerticalScrollIndicator={false}
     />
   );
 }
 export default ListView;
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet({
   container: {
     flex: 1,
     width: '100%',
-    paddingHorizontal: theme.spacing.xl,
   },
   contentContainer: {
-    backgroundColor: theme.colors.background.layer1,
-    borderRadius: theme.borderRadius.md,
     overflow: 'hidden',
-    marginTop: theme.spacing['3xl'],
   },
-  separator: {
-    height: 1,
-    backgroundColor: theme.colors.border.secondary,
-  },
-}));
+});

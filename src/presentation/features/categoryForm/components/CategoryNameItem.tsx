@@ -39,8 +39,8 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
     height: ICON_WRAPPER_HEIGHT,
     backgroundColor: theme.colors.background.layer2,
-    borderRadius: theme.borderRadius.md,
-    fontSize: theme.fontSize.md,
-    padding: theme.spacing.lg,
+    borderRadius: theme.radius.default,
+    fontSize: theme.fontSize.body,
+    padding: theme.spacing.x3,
   },
 }));

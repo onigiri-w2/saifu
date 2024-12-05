@@ -21,7 +21,7 @@ export default function Page() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
         contentInset={{
-          bottom: theme.spacing['6xl'],
+          bottom: theme.spacing['x12'],
         }}
       >
         <Section>
@@ -49,10 +49,10 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   scrollView: {
     flex: 1,
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.x4,
   },
   scrollViewContent: {
-    paddingVertical: theme.spacing['3xl'],
-    gap: theme.spacing.xl,
+    paddingVertical: theme.spacing['x6'],
+    gap: theme.spacing.x4,
   },
 }));

@@ -20,7 +20,7 @@ type Props = {
   visual?: 'entirly' | 'today' | 'diff';
 };
 function Row({ monitor, category, visual = 'entirly' }: Props) {
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
 
   const bar = useMemo(() => {
     if (visual === 'entirly') return <EntirlyRemainingBar monitor={monitor} />;
@@ -37,7 +37,11 @@ function Row({ monitor, category, visual = 'entirly' }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.iconWrap}>
-        <CategoryIcon iconName={category.iconName} iconColor={category.iconColor} size={CATEGORY_ICON_SIZE} />
+        <CategoryIcon
+          iconName={category.iconName}
+          iconColor={category.iconColor}
+          size={theme.component.list.row.iconSize.large}
+        />
       </View>
       <View style={styles.content}>
         <Text style={styles.categoryName}>{category.name}</Text>
@@ -49,12 +53,12 @@ function Row({ monitor, category, visual = 'entirly' }: Props) {
 }
 export default React.memo(Row);
 
-const CATEGORY_ICON_SIZE = 28;
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     flexDirection: 'row',
-    height: 52,
-    gap: theme.spacing.xl,
+    height: theme.component.list.row.height.default,
+    gap: theme.spacing.x4,
+    paddingHorizontal: theme.spacing.x4,
   },
   iconWrap: {
     height: '100%',
@@ -62,7 +66,7 @@ const stylesheet = createStyleSheet((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.background.layer2,
-    borderRadius: theme.borderRadius.sm,
+    borderRadius: theme.radius.default,
   },
   content: {
     flex: 1,
@@ -70,7 +74,7 @@ const stylesheet = createStyleSheet((theme) => ({
     justifyContent: 'space-between',
   },
   categoryName: {
-    fontSize: theme.fontSize.xs,
+    fontSize: theme.fontSize.caption,
     color: theme.colors.text.primary,
   },
 }));

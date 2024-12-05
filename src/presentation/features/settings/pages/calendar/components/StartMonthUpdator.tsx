@@ -61,8 +61,8 @@ function StartMonthUpdater({ initialStartMonth, onSelected }: Props) {
       contentContainerStyle={styles.content}
       initialScrollIndex={startMonth - 1}
       getItemLayout={(_, index) => ({
-        length: 52,
-        offset: (52 + theme.spacing.lg) * index,
+        length: theme.component.list.row.height.default,
+        offset: (theme.component.list.row.height.default + theme.spacing.x3) * index,
         index,
       })}
       ListFooterComponent={<View style={{ height: 200 }} />}
@@ -76,8 +76,8 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   content: {
-    paddingHorizontal: theme.spacing.xl,
-    paddingVertical: theme.spacing['3xl'],
-    gap: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.x4,
+    paddingVertical: theme.spacing['x6'],
+    gap: theme.spacing.x3,
   },
 }));

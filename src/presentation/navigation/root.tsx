@@ -17,7 +17,14 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootStack() {
   return (
-    <Stack.Navigator initialRouteName="MainTabs">
+    <Stack.Navigator
+      initialRouteName="MainTabs"
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: '#fff',
+        },
+      }}
+    >
       <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
       <Stack.Screen
         name="CategoryDetail"

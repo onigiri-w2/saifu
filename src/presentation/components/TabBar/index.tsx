@@ -59,7 +59,7 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   tabBar: {
     flexDirection: 'row',
-    height: theme.height.tabBar,
+    height: theme.component.navigation.bottomBar.height,
   },
   buttonWrapper: {
     flex: 1,
@@ -69,7 +69,7 @@ const stylesheet = createStyleSheet((theme) => ({
   button: {
     width: 36,
     height: 36,
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.radius.default,
     borderWidth: 1.5,
     borderColor: theme.colors.text.secondary,
     justifyContent: 'center',

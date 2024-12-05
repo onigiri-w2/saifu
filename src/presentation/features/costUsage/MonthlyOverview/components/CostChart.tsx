@@ -27,7 +27,7 @@ function CostChart({ stock, today, focusDate }: Props) {
       today={today.date}
       appearance={{
         color: 'red',
-        dimensions: { width: DEVICE_LAYOUT.width - theme.spacing.xl * 2, height: 180 },
+        dimensions: { width: DEVICE_LAYOUT.width - theme.spacing.x4 * 2, height: 180 },
       }}
       focusDate={focusDate}
     />

@@ -53,25 +53,25 @@ const stylesheet = createStyleSheet((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: theme.spacing.lg,
-    height: 52,
+    gap: theme.spacing.x3,
+    height: theme.component.list.row.height.default,
     borderBottomWidth: 1,
     borderColor: theme.colors.border.secondary,
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.x4,
   },
   middle: {
     flex: 1,
   },
   categoryName: {
-    fontSize: theme.fontSize.lg,
+    fontSize: theme.fontSize.subHeading,
     color: theme.colors.text.primary,
   },
   memo: {
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.subBody,
     color: theme.colors.text.tertiary,
   },
   money: {
-    fontSize: theme.fontSize.lg,
+    fontSize: theme.fontSize.subHeading,
     color: theme.colors.text.primary,
   },
 }));

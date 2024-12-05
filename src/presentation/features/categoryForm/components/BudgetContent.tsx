@@ -32,17 +32,17 @@ export default React.memo(BudgetContent);
 
 const stylesheet = createStyleSheet((theme) => ({
   budgetAreaTitle: {
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.primary,
-    marginBottom: theme.spacing.xs,
+    marginBottom: theme.spacing.xhalf,
   },
   budgetAreaSubTitle: {
-    fontSize: theme.fontSize.xs,
+    fontSize: theme.fontSize.caption,
     color: theme.colors.text.tertiary,
-    marginBottom: theme.spacing.lg,
+    marginBottom: theme.spacing.x3,
   },
   budgetContent: {
-    marginTop: theme.spacing.lg,
+    marginTop: theme.spacing.x3,
   },
   showContent: (show: boolean) => ({
     display: show ? 'flex' : 'none',

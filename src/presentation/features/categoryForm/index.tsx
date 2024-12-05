@@ -92,7 +92,7 @@ const CategoryBudgetForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref)
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={offset + 40}>
         <ScrollView
           style={styles.container}
-          contentInset={{ bottom: theme.spacing['6xl'] }}
+          contentInset={{ bottom: theme.spacing['x12'] }}
           keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false}
         >
@@ -129,15 +129,15 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background.layer1,
-    paddingHorizontal: theme.spacing.xl,
-    paddingVertical: theme.spacing['3xl'],
+    paddingHorizontal: theme.spacing.x4,
+    paddingVertical: theme.spacing['x6'],
   },
   upperArea: {
     flexDirection: 'row',
-    gap: theme.spacing.md,
+    gap: theme.spacing.x2,
   },
   budgetArea: {
-    marginTop: theme.spacing['4xl'],
+    marginTop: theme.spacing['x7'],
   },
   toolbar: {
     width: '100%',

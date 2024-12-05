@@ -30,14 +30,14 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
   },
   moneyText: {
-    fontSize: theme.fontSize.lg,
+    fontSize: theme.fontSize.subHeading,
     color: theme.colors.text.primary,
     fontWeight: 'bold',
   },
   dayWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.xs,
+    gap: theme.spacing.xhalf,
   },
   dayText: {
     fontSize: DAY_ICON_SIZE,
