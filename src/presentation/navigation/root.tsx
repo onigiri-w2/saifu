@@ -1,5 +1,5 @@
 import { NavigationProp } from '@react-navigation/native';
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useStyles } from 'react-native-unistyles';
 
 import CategoryForm from '@/src/presentation/screens/CategoryForm';
@@ -14,7 +14,7 @@ export type RootStackParamList = {
 };
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootStack() {
   const { theme } = useStyles();
@@ -22,13 +22,10 @@ export default function RootStack() {
     <Stack.Navigator
       initialRouteName="MainTabs"
       screenOptions={{
-        headerStyle: {
-          shadowColor: 'transparent', // iOS用
-          elevation: 0, // Android用
+        contentStyle: {
+          backgroundColor: theme.colors.background.ground,
         },
-        cardStyle: {
-          backgroundColor: '#fff',
-        },
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
@@ -37,14 +34,7 @@ export default function RootStack() {
         component={CategoryForm}
         options={{
           presentation: 'modal',
-          cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
           headerLeft: () => null,
-          headerRightContainerStyle: {
-            paddingRight: theme.component.navigation.header.padding.horizontal,
-          },
-          headerLeftContainerStyle: {
-            paddingLeft: theme.component.navigation.header.padding.horizontal,
-          },
         }}
       />
       <Stack.Screen name="CategoryIconSelector" component={CategoryIconSelector} options={{ headerShown: false }} />

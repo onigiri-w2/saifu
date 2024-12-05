@@ -7,12 +7,12 @@ import { useStyles, createStyleSheet } from 'react-native-unistyles';
 
 import ErrorFallback from '../../components/ErrorFallback';
 import { SaveButton } from '../../components/PageHeader';
-import CategoryBudgetFormWrapper from '../../features/categoryForm';
+import CategoryForm from '../../features/categoryForm';
 import { CategoryBudgetFormRef } from '../../features/categoryForm/types';
 import { RootStackParamList } from '../../navigation/root';
 
 type CategoryDetailRouteProp = RouteProp<RootStackParamList, 'CategoryDetail'>;
-function Page() {
+export default function Page() {
   const route = useRoute<CategoryDetailRouteProp>();
   const params = route.params;
 
@@ -75,15 +75,11 @@ function Page() {
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <View style={styles.container}>
-        {!isLoading && (
-          <CategoryBudgetFormWrapper ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />
-        )}
+        {!isLoading && <CategoryForm ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />}
       </View>
     </ErrorBoundary>
   );
 }
-
-export default Page;
 
 const stylesheet = createStyleSheet(() => ({
   container: {

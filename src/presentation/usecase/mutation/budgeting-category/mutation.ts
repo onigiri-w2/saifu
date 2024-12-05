@@ -1,6 +1,6 @@
 import { QueryClient, useMutation } from '@tanstack/react-query';
 
-import { budgetingCategoryKeys } from '../../query/budgeting-category/keys';
+import { keys } from '../../query';
 
 import { addBudgetingCategory, deleteBudgetingCategory, updateBudgetingCategory } from './functions';
 
@@ -9,7 +9,9 @@ export const useBudgetingCategoryMutation = {
     return useMutation({
       mutationFn: addBudgetingCategory,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: budgetingCategoryKeys.list });
+        queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
+        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+        queryClient.invalidateQueries({ queryKey: keys.costStock.root });
       },
     });
   },
@@ -17,7 +19,9 @@ export const useBudgetingCategoryMutation = {
     return useMutation({
       mutationFn: updateBudgetingCategory,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: budgetingCategoryKeys.list });
+        queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
+        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+        queryClient.invalidateQueries({ queryKey: keys.costStock.root });
       },
     });
   },
@@ -25,7 +29,9 @@ export const useBudgetingCategoryMutation = {
     return useMutation({
       mutationFn: deleteBudgetingCategory,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: budgetingCategoryKeys.list });
+        queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
+        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+        queryClient.invalidateQueries({ queryKey: keys.costStock.root });
       },
     });
   },
