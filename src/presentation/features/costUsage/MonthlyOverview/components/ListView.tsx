@@ -43,7 +43,7 @@ function ListView({ stocks, aggregatedStock, timeline, today, focusDate, stocksO
     return item.categoryId;
   }, []);
 
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
 
   return (
     <FlatList
@@ -53,18 +53,15 @@ function ListView({ stocks, aggregatedStock, timeline, today, focusDate, stocksO
       ListHeaderComponent={<Header stock={aggregatedStock} today={today} focusDate={focusDate} />}
       keyExtractor={keyExtractor}
       showsVerticalScrollIndicator={false}
+      contentInset={{ top: theme.spacing.x3 }}
     />
   );
 }
 
 export default ListView;
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet(() => ({
   container: {
     flex: 1,
-  },
-  header: {
-    gap: theme.spacing.x2,
-    marginBottom: theme.spacing.x2,
   },
 }));

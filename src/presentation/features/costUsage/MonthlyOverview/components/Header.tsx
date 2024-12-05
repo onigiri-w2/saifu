@@ -9,7 +9,7 @@ import { DailyStock } from '@/src/domain/valueobject/timeseries';
 import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 import CostChart from './CostChart';
-import MonthlyCostHeader from './MonthlyCostHeader';
+import Title from './Title';
 
 type Props = {
   stock: DailyStock;
@@ -20,7 +20,7 @@ function Header({ stock, focusDate, today }: Props) {
   const { styles } = useStyles(stylesheet);
   return (
     <View style={styles.container}>
-      <MonthlyCostHeader stock={stock} focusDate={focusDate} />
+      <Title stock={stock} focusDate={focusDate} />
       <CostChart stock={stock} today={today} focusDate={focusDate} />
     </View>
   );
@@ -29,7 +29,7 @@ export default React.memo(Header);
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {
-    marginBottom: theme.spacing['x6'],
+    marginBottom: theme.spacing.x3,
     paddingHorizontal: theme.spacing.x4,
   },
 }));

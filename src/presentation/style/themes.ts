@@ -33,7 +33,12 @@ const baseTheme = {
 
   component: {
     navigation: {
-      header: { height: 56 },
+      header: {
+        height: 56,
+        padding: {
+          horizontal: spaceUnit * 4,
+        },
+      },
       bottomBar: { height: 60 },
     },
     list: {

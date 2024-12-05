@@ -15,7 +15,7 @@ type Props = {
   stock: DailyStock;
   focusDate: SharedValue<JsonLocalDate>;
 };
-function MonthlyCostHeader({ stock, focusDate }: Props) {
+function Title({ stock, focusDate }: Props) {
   const dailyCosts = useMemo(() => {
     return stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
   }, [stock]);
@@ -60,7 +60,7 @@ function MonthlyCostHeader({ stock, focusDate }: Props) {
     </View>
   );
 }
-export default MonthlyCostHeader;
+export default Title;
 
 const formatDateOnWorklet = (date: JsonLocalDate) => {
   'worklet';
@@ -80,5 +80,6 @@ const stylesheet = createStyleSheet((theme) => ({
     fontSize: theme.fontSize.heading,
     color: theme.colors.text.primary,
     fontWeight: 'bold',
+    marginBottom: theme.spacing.x1,
   },
 }));

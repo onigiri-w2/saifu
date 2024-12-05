@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
 import { DEVICE_LAYOUT } from '@/src/presentation/utils/const';
@@ -28,6 +29,7 @@ export default function MonthlyCarousel({ initialYearmonth }: Props) {
     );
   }, []);
   const keyExtractor = useCallback((item: number) => item.toString(), []);
+  const { styles } = useStyles(stylesheet);
 
   return (
     <View style={styles.container}>
@@ -50,7 +52,7 @@ export default function MonthlyCarousel({ initialYearmonth }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet({
   container: {
     flex: 1,
   },
