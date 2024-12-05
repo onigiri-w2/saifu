@@ -3,19 +3,18 @@ import { Alert, View } from 'react-native';
 
 import { RouteProp, useNavigation, usePreventRemove, useRoute } from '@react-navigation/native';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useStyles } from 'react-native-unistyles';
+import { useStyles, createStyleSheet } from 'react-native-unistyles';
 
 import ErrorFallback from '../../components/ErrorFallback';
 import { SaveButton } from '../../components/PageHeader';
-import CategoryBudgetFormWrapper, { CategoryBudgetFormRef } from '../../features/categoryForm';
+import CategoryBudgetFormWrapper from '../../features/categoryForm';
+import { CategoryBudgetFormRef } from '../../features/categoryForm/types';
 import { RootStackParamList } from '../../navigation/root';
-import { utilStyleSheet } from '../../style/utilStyleSheet';
 
 type CategoryDetailRouteProp = RouteProp<RootStackParamList, 'CategoryDetail'>;
 function Page() {
   const route = useRoute<CategoryDetailRouteProp>();
   const params = route.params;
-  const { styles } = useStyles(utilStyleSheet);
 
   const navigation = useNavigation();
   const ref = useRef<CategoryBudgetFormRef>(null);
@@ -63,13 +62,31 @@ function Page() {
     setIsValid(isValid);
   }, []);
 
+  const { styles } = useStyles(stylesheet);
+
+  // iOSでこのスクリーン表示する際、以下がないと開くの200msくらい遅れるので追加
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 0);
+  }, []);
+
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
-      <View style={styles.screen}>
-        <CategoryBudgetFormWrapper ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />
+      <View style={styles.container}>
+        {!isLoading && (
+          <CategoryBudgetFormWrapper ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />
+        )}
       </View>
     </ErrorBoundary>
   );
 }
 
 export default Page;
+
+const stylesheet = createStyleSheet(() => ({
+  container: {
+    flex: 1,
+  },
+}));

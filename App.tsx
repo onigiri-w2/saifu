@@ -6,6 +6,7 @@ import React, { useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { AppBootstrap } from './src/bootstrap/provider';
 import RootStack from './src/presentation/navigation/root';
@@ -32,17 +33,19 @@ Sentry.init({
 export default function App() {
   const containerRef = useRef(null);
   return (
-    <AppBootstrap>
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer
-          ref={containerRef}
-          onReady={() => {
-            navigationIntegration.registerNavigationContainer(containerRef);
-          }}
-        >
-          <RootStack />
-        </NavigationContainer>
-      </QueryClientProvider>
-    </AppBootstrap>
+    <KeyboardProvider>
+      <AppBootstrap>
+        <QueryClientProvider client={queryClient}>
+          <NavigationContainer
+            ref={containerRef}
+            onReady={() => {
+              navigationIntegration.registerNavigationContainer(containerRef);
+            }}
+          >
+            <RootStack />
+          </NavigationContainer>
+        </QueryClientProvider>
+      </AppBootstrap>
+    </KeyboardProvider>
   );
 }
