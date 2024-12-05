@@ -20,6 +20,10 @@ export default function RootStack() {
     <Stack.Navigator
       initialRouteName="MainTabs"
       screenOptions={{
+        headerStyle: {
+          shadowColor: 'transparent', // iOS用
+          elevation: 0, // Android用
+        },
         cardStyle: {
           backgroundColor: '#fff',
         },

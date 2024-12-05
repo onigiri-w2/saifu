@@ -17,7 +17,7 @@ export default function Page() {
 
   return (
     <View style={styles.screen}>
-      <StartMonthUpdater initialStartMonth={startMonth} onSelected={navigation.goBack} />;
+      <StartMonthUpdater initialStartMonth={startMonth} onSelected={navigation.goBack} />
     </View>
   );
 }

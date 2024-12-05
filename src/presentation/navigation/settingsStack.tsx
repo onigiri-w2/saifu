@@ -21,23 +21,31 @@ const Stack = createStackNavigator<SettingsStackParamList>();
 
 export default function SettingsStack() {
   return (
-    <Stack.Navigator initialRouteName="SettingsHome">
-      <Stack.Screen name="SettingsHome" component={SettingsHome} options={{ headerShown: false }} />
-      <Stack.Screen name="SettingsCalendar" component={SettingsCalendar} options={{ headerShown: false }} />
+    <Stack.Navigator
+      initialRouteName="SettingsHome"
+      screenOptions={{
+        headerStyle: {
+          shadowColor: 'transparent', // iOS用
+          elevation: 0, // Android用
+        },
+      }}
+    >
+      <Stack.Screen name="SettingsHome" component={SettingsHome} options={{ title: '設定' }} />
+      <Stack.Screen name="SettingsCalendar" component={SettingsCalendar} options={{ title: 'カレンダー設定' }} />
       <Stack.Screen
         name="SettingsCalendarStartYear"
         component={SettingsCalendarStartYear}
-        options={{ headerShown: false }}
+        options={{ title: '開始月' }}
       />
       <Stack.Screen
         name="SettingsCalendarStartMonth"
         component={SettingsCalendarStartMonth}
-        options={{ headerShown: false }}
+        options={{ title: '開始日' }}
       />
       <Stack.Screen
         name="SettingsCalendarStartWeek"
         component={SettingsCalendarStartWeek}
-        options={{ headerShown: false }}
+        options={{ title: '開始曜日' }}
       />
     </Stack.Navigator>
   );
