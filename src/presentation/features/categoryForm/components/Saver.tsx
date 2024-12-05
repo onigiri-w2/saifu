@@ -2,7 +2,7 @@ import { forwardRef, useImperativeHandle } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import { useBudgetingCategoryMutation } from '@/src/presentation/usecase/mutation/budgeting-category/mutation';
+import { useMutations } from '@/src/presentation/usecase/mutation';
 import { BudgetStrategyBase } from '@/src/presentation/usecase/mutation/budgeting-category/types';
 
 import { useStoreContext } from '../context/StoreContext';
@@ -12,8 +12,8 @@ const Saver = forwardRef<CategoryBudgetFormRef, object>((_, ref) => {
   const { formDataStore } = useStoreContext();
 
   const queryClient = useQueryClient();
-  const createCategoryMutation = useBudgetingCategoryMutation.create(queryClient);
-  const updateCategoryMutation = useBudgetingCategoryMutation.update(queryClient);
+  const createMutation = useMutations.category.create(queryClient);
+  const updateMutation = useMutations.category.update(queryClient);
 
   useImperativeHandle(ref, () => ({
     save: () => {
@@ -34,7 +34,7 @@ const Saver = forwardRef<CategoryBudgetFormRef, object>((_, ref) => {
       }
 
       if (context.mode === 'update') {
-        updateCategoryMutation.mutate({
+        updateMutation.mutate({
           category: {
             id: context.categoryId,
             name: formData.categoryName,
@@ -47,7 +47,7 @@ const Saver = forwardRef<CategoryBudgetFormRef, object>((_, ref) => {
           },
         });
       } else {
-        createCategoryMutation.mutate({
+        createMutation.mutate({
           category: {
             name: formData.categoryName,
             iconName: formData.iconName,

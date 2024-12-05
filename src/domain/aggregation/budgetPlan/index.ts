@@ -23,8 +23,16 @@ class BudgetPlan {
   static withNone(categoryId: string) {
     return new BudgetPlan(uuid.v4().toString(), categoryId, BudgetNoneStrategy.build());
   }
-  static withRegularly(categoryId: string, cycle: BudgetCycle, amount: number) {
-    return new BudgetPlan(uuid.v4().toString(), categoryId, BudgetRegularlyStrategy.build(Money.build(amount), cycle));
+  static withRegularly(categoryId: string, cycle: BudgetCycle, amount: number, tempAmount?: number) {
+    return new BudgetPlan(
+      uuid.v4().toString(),
+      categoryId,
+      BudgetRegularlyStrategy.build(
+        Money.build(amount),
+        cycle,
+        tempAmount !== undefined ? Money.build(tempAmount) : undefined,
+      ),
+    );
   }
 }
 

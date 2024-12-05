@@ -2,8 +2,8 @@ import BudgetPlan from '@/src/domain/aggregation/budgetPlan';
 import BudgetNoneStrategy from '@/src/domain/aggregation/budgetPlan/strategy/none';
 import BudgetRegularlyStrategy from '@/src/domain/aggregation/budgetPlan/strategy/regularly';
 import Category from '@/src/domain/aggregation/category';
-import Money from '@/src/domain/valueobject/money';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
+import Money from '@/src/domain/valueobject/money';
 
 import { AddRequest, UpdateRequest } from './types';
 
@@ -20,6 +20,7 @@ export const addBudgetingCategory = async (request: AddRequest) => {
       category.id,
       request.budgetPlan.strategy.cycle,
       request.budgetPlan.strategy.amount,
+      request.budgetPlan.strategy.tempAmount,
     );
   }
 
@@ -36,9 +37,11 @@ export const updateBudgetingCategory = async (request: UpdateRequest) => {
 
   let strategy: BudgetNoneStrategy | BudgetRegularlyStrategy = BudgetNoneStrategy.build();
   if (request.budgetPlan.strategy.type === 'regularly') {
+    const tempAmount = request.budgetPlan.strategy.tempAmount;
     strategy = BudgetRegularlyStrategy.build(
       Money.build(request.budgetPlan.strategy.amount),
       request.budgetPlan.strategy.cycle,
+      tempAmount !== undefined ? Money.build(tempAmount) : undefined,
     );
   }
   const budgetPlan = BudgetPlan.build(request.budgetPlan.id, request.category.id, strategy);
