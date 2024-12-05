@@ -10,6 +10,7 @@ import { IconName } from '@/src/domain/aggregation/category/types/iconName';
 import CategoryIcon from '../../features-shared/categoryIcon';
 import CategoryIconGird from '../../features-shared/categoryIconGrid';
 import { selectedIconGlobalStore } from '../../store/selectedIcon.store';
+import { utilStyleSheet } from '../../style/utilStyleSheet';
 
 export default function Page() {
   const { styles } = useStyles(stylesheet);
@@ -21,7 +22,7 @@ export default function Page() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.screen}>
       <View style={styles.header}>
         <CategoryIcon iconName={selected.iconName} iconColor={selected.iconColor} size={ICON_SIZE} />
       </View>
@@ -32,10 +33,7 @@ export default function Page() {
 
 const ICON_SIZE = 32;
 const stylesheet = createStyleSheet((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background.layer1,
-  },
+  ...utilStyleSheet(theme),
   header: {
     height: theme.component.navigation.header.height,
     justifyContent: 'center',

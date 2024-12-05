@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 
 import React, { useRef } from 'react';
 
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -29,14 +29,6 @@ Sentry.init({
   enabled: !__DEV__,
 });
 
-const navTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: 'transparent',
-  },
-};
-
 export default function App() {
   const containerRef = useRef(null);
   return (
@@ -47,7 +39,6 @@ export default function App() {
           onReady={() => {
             navigationIntegration.registerNavigationContainer(containerRef);
           }}
-          theme={navTheme}
         >
           <RootStack />
         </NavigationContainer>

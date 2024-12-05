@@ -3,18 +3,19 @@ import { Alert, View } from 'react-native';
 
 import { RouteProp, useNavigation, usePreventRemove, useRoute } from '@react-navigation/native';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useStyles, createStyleSheet } from 'react-native-unistyles';
+import { useStyles } from 'react-native-unistyles';
 
 import ErrorFallback from '../../components/ErrorFallback';
 import { SaveButton } from '../../components/PageHeader';
 import CategoryBudgetFormWrapper, { CategoryBudgetFormRef } from '../../features/categoryForm';
 import { RootStackParamList } from '../../navigation/root';
+import { utilStyleSheet } from '../../style/utilStyleSheet';
 
 type CategoryDetailRouteProp = RouteProp<RootStackParamList, 'CategoryDetail'>;
 function Page() {
   const route = useRoute<CategoryDetailRouteProp>();
   const params = route.params;
-  const { styles } = useStyles(stylesheet);
+  const { styles } = useStyles(utilStyleSheet);
 
   const navigation = useNavigation();
   const ref = useRef<CategoryBudgetFormRef>(null);
@@ -26,7 +27,7 @@ function Page() {
 
   const saveButton = useCallback(() => {
     const handleSave = async () => {
-      const result = await ref.current?.save();
+      const result = ref.current?.save();
       if (result) {
         setForceBack(true);
         setTimeout(navigation.goBack, 0);
@@ -64,7 +65,7 @@ function Page() {
 
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
-      <View style={styles.container}>
+      <View style={styles.screen}>
         <CategoryBudgetFormWrapper ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />
       </View>
     </ErrorBoundary>
@@ -72,9 +73,3 @@ function Page() {
 }
 
 export default Page;
-
-const stylesheet = createStyleSheet(() => ({
-  container: {
-    flex: 1,
-  },
-}));

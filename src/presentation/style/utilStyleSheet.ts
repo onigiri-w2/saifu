@@ -1,8 +1,8 @@
 import { createStyleSheet } from 'react-native-unistyles';
 
 export const utilStyleSheet = createStyleSheet((theme) => ({
-  pageContainer: {
+  screen: {
     flex: 1,
-    padding: theme.spacing.x3,
+    backgroundColor: theme.colors.background.ground,
   },
 }));

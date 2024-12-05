@@ -128,7 +128,6 @@ export default CategoryBudgetFormWrapper;
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background.layer1,
     paddingHorizontal: theme.spacing.x4,
     paddingVertical: theme.spacing['x6'],
   },

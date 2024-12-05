@@ -59,8 +59,6 @@ const stylesheet = createStyleSheet((theme) => ({
     backgroundColor: 'rgba(0, 0, 0, 0.25)',
   },
   modalContent: {
-    backgroundColor: theme.colors.background.layer1,
-    borderRadius: theme.radius.default,
     padding: theme.spacing.x4,
     width: '88%',
   },

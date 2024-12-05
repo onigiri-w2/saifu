@@ -66,7 +66,7 @@ const stylesheet = createStyleSheet((theme) => ({
       alignItems: 'center',
       gap: theme.spacing.x1,
       borderRadius: theme.radius.default,
-      backgroundColor: isActive ? theme.colors.background.layer1 : theme.colors.background.layer3,
+      backgroundColor: isActive ? 'transparent' : theme.colors.background.layer3,
     };
   },
   buttonLabel: {

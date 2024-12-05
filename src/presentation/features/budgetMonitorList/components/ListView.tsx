@@ -37,7 +37,7 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   contentContainer: {
     gap: theme.spacing.x6,
-    backgroundColor: theme.colors.background.layer1,
+    backgroundColor: 'transparent',
     overflow: 'hidden',
   },
 }));

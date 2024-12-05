@@ -55,7 +55,6 @@ const stylesheet = createStyleSheet((theme) => ({
   safeAreaView: {
     borderTopWidth: 1,
     borderColor: theme.colors.border.primary,
-    backgroundColor: theme.colors.background.layer1,
   },
   tabBar: {
     flexDirection: 'row',

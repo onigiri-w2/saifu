@@ -11,6 +11,7 @@ import { calendarQueryOptions } from '@/src/presentation/usecase/query/calendar/
 import Row from '../../features/settings/components/Row';
 import Section from '../../features/settings/components/Section';
 import { SettingsStackNavigationProp } from '../../navigation/settingsStack';
+import { utilStyleSheet } from '../../style/utilStyleSheet';
 
 export default function Tab() {
   const { styles, theme } = useStyles(stylesheet);
@@ -20,7 +21,7 @@ export default function Tab() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={styles.screen}
       contentContainerStyle={styles.content}
       contentInset={{ bottom: theme.spacing['x12'] }}
     >
@@ -58,9 +59,7 @@ export default function Tab() {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-  container: {
-    flex: 1,
-  },
+  ...utilStyleSheet(theme),
   content: {
     paddingHorizontal: theme.spacing.x4,
     paddingVertical: theme.spacing['x6'],

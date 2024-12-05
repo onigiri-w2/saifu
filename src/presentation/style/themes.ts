@@ -60,8 +60,7 @@ const lightTheme = {
       primaryTint: '#E4EFFB',
     },
     background: {
-      ground: '#F1F1F6',
-      layer1: '#FFFFFF',
+      ground: '#FFFFFF',
       layer2: '#f5f5f5',
       layer3: '#E5E5E5',
     },

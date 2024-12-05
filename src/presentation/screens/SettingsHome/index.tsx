@@ -10,13 +10,14 @@ import ShieldAlertSvg from '@/assets/icons/lucide/shield-alert.svg';
 import Row from '../../features/settings/components/Row';
 import Section from '../../features/settings/components/Section';
 import { SettingsStackNavigationProp } from '../../navigation/settingsStack';
+import { utilStyleSheet } from '../../style/utilStyleSheet';
 
 export default function Page() {
   const { styles, theme } = useStyles(stylesheet);
   const navigation = useNavigation<SettingsStackNavigationProp>();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.screen}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
@@ -44,9 +45,7 @@ export default function Page() {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-  container: {
-    flex: 1,
-  },
+  ...utilStyleSheet(theme),
   scrollView: {
     flex: 1,
     paddingHorizontal: theme.spacing.x4,
