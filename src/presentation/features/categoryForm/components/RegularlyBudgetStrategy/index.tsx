@@ -7,9 +7,9 @@ import { useSnapshot } from 'valtio';
 import { useStoreContext } from '../../context/StoreContext';
 
 import AnimatedRow from './components/AniamtedRow';
-import CycleRow from './components/rows/CycleRow';
-import MoneyRow from './components/rows/MoneyRow';
-import TempMoneyRow from './components/rows/TempMoneyRow';
+import CycleItem from './components/items/CycleItem';
+import MoneyItem from './components/items/MoneyItem';
+import TempMoneyItem from './components/items/TempMoneyItem';
 import ToggleTempMoney from './components/ToggleTempMoney';
 
 type Props = {
@@ -17,19 +17,20 @@ type Props = {
 };
 function RegularlyBudgetStrategy({ style }: Props) {
   const { styles } = useStyles(stylesheet);
-  const { formStore } = useStoreContext();
-  const isActiveTempAmount = useSnapshot(formStore.form.budgetPlan.strategyInputs.regularly).tempAmount !== undefined;
+  const { formDataStore } = useStoreContext();
+  const isActiveTempAmount =
+    useSnapshot(formDataStore.form.budgetPlan.strategyInputs.regularly).tempAmount !== undefined;
 
   return (
     <View style={style}>
       <View style={styles.itemContainer}>
-        <MoneyRow />
+        <MoneyItem />
         {isActiveTempAmount && <View style={styles.separator} />}
         <AnimatedRow isActive={isActiveTempAmount}>
-          <TempMoneyRow />
+          <TempMoneyItem />
         </AnimatedRow>
         <View style={styles.separator} />
-        <CycleRow />
+        <CycleItem />
       </View>
       <View style={styles.toggleContainer}>
         <ToggleTempMoney isActive={isActiveTempAmount} />

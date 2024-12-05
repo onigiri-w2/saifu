@@ -6,21 +6,21 @@ import { useSnapshot } from 'valtio';
 
 import { useStoreContext } from '../context/StoreContext';
 
-import BudgetSelectController from './BudgetSelectController';
+import StrategySwitcher from './StrategySwitcher';
 import NoBudgetStrategy from './NoBudgetStrategy';
 import RegularlyBudgetStrategy from './RegularlyBudgetStrategy';
 
 function BudgetContent() {
   const { styles } = useStyles(stylesheet);
 
-  const { formStore } = useStoreContext();
-  const selectedStrategy = useSnapshot(formStore.form.budgetPlan).selectedStrategyType;
+  const { formDataStore } = useStoreContext();
+  const selectedStrategy = useSnapshot(formDataStore.form.budgetPlan).selectedStrategyType;
 
   return (
     <View>
       <Text style={styles.budgetAreaTitle}>予算設定</Text>
       <Text style={styles.budgetAreaSubTitle}>予算管理方法を選択してください</Text>
-      <BudgetSelectController />
+      <StrategySwitcher />
       <View style={styles.budgetContent}>
         <NoBudgetStrategy style={styles.showContent(selectedStrategy === 'none')} />
         <RegularlyBudgetStrategy style={styles.showContent(selectedStrategy === 'regularly')} />

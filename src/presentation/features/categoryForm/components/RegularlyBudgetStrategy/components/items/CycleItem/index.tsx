@@ -15,9 +15,9 @@ import ModalEditor from './ModalEditor';
 
 const itemName = 'strategy/regularly/cycle';
 function CycleRow() {
-  const { formStore, selectedItemStore } = useStoreContext();
-  const data = useSnapshot(formStore.form.budgetPlan.strategyInputs.regularly);
-  const selectedItem = useSnapshot(selectedItemStore).selected;
+  const { formDataStore, formFocusStore } = useStoreContext();
+  const data = useSnapshot(formDataStore.form.budgetPlan.strategyInputs.regularly);
+  const selectedItem = useSnapshot(formFocusStore).focused;
 
   const { styles, theme } = useStyles(stylesheet, {
     isSelected: selectedItem === itemName,
@@ -29,7 +29,7 @@ function CycleRow() {
       style={styles.container}
       onPress={() => {
         KeyboardController.dismiss();
-        selectedItemStore.selected = itemName;
+        formFocusStore.focused = itemName;
         open();
       }}
     >

@@ -1,12 +1,10 @@
 import { proxy } from 'valtio';
 
-export type SelectedItem = 'strategy/regularly/amount' | 'strategy/regularly/cycle' | 'strategy/regularly/tempAmount';
-export type SelectedItemStore = {
-  selected?: SelectedItem;
-};
+export type FocusedItem = 'strategy/regularly/amount' | 'strategy/regularly/cycle' | 'strategy/regularly/tempAmount';
+export type FormFocusStore = { focused?: FocusedItem };
 
-export const createSelectedItemStore = () => {
-  return proxy<SelectedItemStore>({
-    selected: undefined,
+export const createFormFocusStore = () => {
+  return proxy<FormFocusStore>({
+    focused: undefined,
   });
 };

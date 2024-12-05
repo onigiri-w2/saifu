@@ -15,8 +15,8 @@ import { useStoreContext } from '../context/StoreContext';
 function IconItem() {
   const { styles } = useStyles(stylesheet);
 
-  const { formStore } = useStoreContext();
-  const { iconName, iconColor } = useSnapshot(formStore.form);
+  const { formDataStore } = useStoreContext();
+  const { iconName, iconColor } = useSnapshot(formDataStore.form);
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const handlePress = () => {
@@ -27,8 +27,8 @@ function IconItem() {
 
   useEffect(() => {
     const unsubscribe = subscribe(selectedIconGlobalStore.selected, () => {
-      formStore.form.iconName = selectedIconGlobalStore.selected.iconName;
-      formStore.form.iconColor = selectedIconGlobalStore.selected.iconColor;
+      formDataStore.form.iconName = selectedIconGlobalStore.selected.iconName;
+      formDataStore.form.iconColor = selectedIconGlobalStore.selected.iconColor;
     });
     return () => {
       unsubscribe();

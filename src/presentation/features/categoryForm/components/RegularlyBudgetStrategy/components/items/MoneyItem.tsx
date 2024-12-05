@@ -14,9 +14,9 @@ const itemName = 'strategy/regularly/amount';
 function MoneyRow() {
   const textRef = useRef<TextInput>(null);
 
-  const { formStore, selectedItemStore } = useStoreContext();
-  const data = useSnapshot(formStore.form.budgetPlan.strategyInputs.regularly);
-  const selectedItem = useSnapshot(selectedItemStore).selected;
+  const { formDataStore, formFocusStore } = useStoreContext();
+  const data = useSnapshot(formDataStore.form.budgetPlan.strategyInputs.regularly);
+  const selectedItem = useSnapshot(formFocusStore).focused;
 
   const { styles } = useStyles(stylesheet, {
     isSelected: selectedItem === itemName,
@@ -26,7 +26,7 @@ function MoneyRow() {
     <Pressable
       style={styles.container}
       onPress={() => {
-        selectedItemStore.selected = itemName;
+        formFocusStore.focused = itemName;
         textRef.current?.focus();
       }}
     >
@@ -42,7 +42,7 @@ function MoneyRow() {
           const num = Number(text);
           if (Number.isNaN(num)) return;
 
-          formStore.form.budgetPlan.strategyInputs.regularly.amount = num;
+          formDataStore.form.budgetPlan.strategyInputs.regularly.amount = num;
         }}
       />
     </Pressable>

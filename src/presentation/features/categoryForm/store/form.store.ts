@@ -5,9 +5,9 @@ import { isRegularlyStrategy } from '@/src/domain/aggregation/budgetPlan/strateg
 import { BudgetCycle, StrategyType } from '@/src/domain/aggregation/budgetPlan/types';
 import { IconColor } from '@/src/domain/aggregation/category/types/iconColor';
 import { IconName } from '@/src/domain/aggregation/category/types/iconName';
-import { EnrichedCategoryQueryResult } from '@/src/domain/usecase/types';
+import { BudgetingCategory } from '@/src/presentation/usecase/query/budgeting-category/functions';
 
-export const createFormStore = (source?: EnrichedCategoryQueryResult) => {
+export const createFormDataStore = (source?: BudgetingCategory) => {
   const initialState = createInitialState(source);
 
   const subscribers: Set<(isDirty: boolean, isValid: boolean) => void> = new Set();
@@ -25,7 +25,7 @@ export const createFormStore = (source?: EnrichedCategoryQueryResult) => {
       budgetPlanId: undefined,
     } as const);
 
-  const store = proxy<FormStore>({
+  const store = proxy<FormDataStore>({
     form: deepClone(initialState),
 
     isDirty() {
@@ -66,10 +66,10 @@ export const createFormStore = (source?: EnrichedCategoryQueryResult) => {
   return store;
 };
 
-const createInitialState = (source?: EnrichedCategoryQueryResult): FormState => {
+const createInitialState = (source?: BudgetingCategory): FormDataState => {
   if (!source) return deepClone(DEFAULT_STATE);
 
-  const baseState: FormState = {
+  const baseState: FormDataState = {
     categoryName: source.category.name,
     iconName: source.category.iconName,
     iconColor: source.category.iconColor,
@@ -94,7 +94,7 @@ const createInitialState = (source?: EnrichedCategoryQueryResult): FormState => 
   return baseState;
 };
 
-const isEqual = (a: FormState, b: FormState): boolean => {
+const isEqual = (a: FormDataState, b: FormDataState): boolean => {
   // 基本フィールドの比較
   if (
     a.categoryName !== b.categoryName ||
@@ -123,12 +123,12 @@ const isEqual = (a: FormState, b: FormState): boolean => {
   return true;
 };
 
-const validate = (form: FormState): boolean => {
+const validate = (form: FormDataState): boolean => {
   if (!form.categoryName) return false;
   return true;
 };
 
-export type FormState = {
+export type FormDataState = {
   categoryName: string;
   iconName: IconName;
   iconColor: IconColor;
@@ -146,15 +146,15 @@ export type FormState = {
 export type FormContext =
   | { mode: 'create'; categoryId: undefined; budgetPlanId: undefined }
   | { mode: 'update'; categoryId: string; budgetPlanId: string };
-export type FormStore = {
-  form: FormState;
+export type FormDataStore = {
+  form: FormDataState;
   subscribe: (callback: (isDirty: boolean, isValid: boolean) => void) => void;
   isDirty: () => boolean;
   isValid: () => boolean;
   toggleTempAmount: () => void;
   getContext: () => FormContext;
 };
-const DEFAULT_STATE: FormState = {
+const DEFAULT_STATE: FormDataState = {
   categoryName: '',
   iconName: 'fork',
   iconColor: '#E53E3E',

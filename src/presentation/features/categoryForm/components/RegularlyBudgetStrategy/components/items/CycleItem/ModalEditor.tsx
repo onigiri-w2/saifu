@@ -13,9 +13,9 @@ type Props = {
 };
 function ModalEditor({ isOpen, close }: Props) {
   const { styles } = useStyles(stylesheet);
-  const { formStore, selectedItemStore } = useStoreContext();
+  const { formDataStore, formFocusStore } = useStoreContext();
 
-  const selectedCycle = useSnapshot(formStore.form.budgetPlan.strategyInputs.regularly).cycle;
+  const selectedCycle = useSnapshot(formDataStore.form.budgetPlan.strategyInputs.regularly).cycle;
 
   return (
     <Modal visible={isOpen} transparent animationType="fade">
@@ -23,7 +23,7 @@ function ModalEditor({ isOpen, close }: Props) {
         style={styles.modal}
         onPress={() => {
           close();
-          selectedItemStore.selected = undefined;
+          formFocusStore.focused = undefined;
         }}
       >
         <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
@@ -35,8 +35,8 @@ function ModalEditor({ isOpen, close }: Props) {
                   key={cycle}
                   style={styles.button(selectedCycle === cycle)}
                   onPress={() => {
-                    formStore.form.budgetPlan.strategyInputs.regularly.cycle = cycle;
-                    selectedItemStore.selected = undefined;
+                    formDataStore.form.budgetPlan.strategyInputs.regularly.cycle = cycle;
+                    formFocusStore.focused = undefined;
                   }}
                 >
                   <Text style={styles.buttonText(selectedCycle === cycle)}>{budgetCycleLabels[cycle]}</Text>

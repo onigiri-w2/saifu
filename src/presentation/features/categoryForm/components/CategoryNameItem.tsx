@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TextInput } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -8,14 +8,16 @@ import { ICON_WRAPPER_HEIGHT } from '../constants';
 import { useStoreContext } from '../context/StoreContext';
 
 function CategoryNameItem() {
-  const { formStore, selectedItemStore } = useStoreContext();
-  const categoryName = useSnapshot(formStore.form).categoryName;
-
   const { styles, theme } = useStyles(stylesheet);
+  const { formDataStore, formFocusStore } = useStoreContext();
+  const categoryName = useSnapshot(formDataStore.form).categoryName;
 
-  const handleChangeText = (text: string) => {
-    formStore.form.categoryName = text;
-  };
+  const handleChangeText = useCallback((text: string) => {
+    formDataStore.form.categoryName = text;
+  }, []);
+  const handleFocus = useCallback(() => {
+    formFocusStore.focused = undefined;
+  }, []);
 
   return (
     <TextInput
@@ -26,9 +28,7 @@ function CategoryNameItem() {
       returnKeyType="done"
       placeholder="名前を入力"
       placeholderTextColor={theme.colors.text.placeholder}
-      onFocus={() => {
-        selectedItemStore.selected = undefined;
-      }}
+      onFocus={handleFocus}
     />
   );
 }

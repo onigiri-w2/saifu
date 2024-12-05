@@ -1,152 +1,43 @@
-import React, { forwardRef, Suspense, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { forwardRef, useEffect, useRef } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import KeyboardAwareLayout, { useKeyboardOffsetContext } from '../../components/KeyboardAwareLayout';
-import KeyboardSimpleBar from '../../components/KeyboardSimpleBar';
-import { useBudgetingCategoryMutation } from '../../usecase/mutation/budgeting-category/mutation';
-import { BudgetStrategyBase } from '../../usecase/mutation/budgeting-category/types';
+import { withSuspenseRef } from '../../components/hoc/withSuspense';
+import KeyboardAwareLayout from '../../components/KeyboardAwareLayout';
+import { queryOptions } from '../../usecase/query';
 
-import BudgetContent from './components/BudgetContent';
-import CategoryNameItem from './components/CategoryNameItem';
-import IconItem from './components/IconItem';
-import { StoreProvider, useStoreContext } from './context/StoreContext';
+import FormView from './components/FormView';
+import Saver from './components/Saver';
+import { StoreContext } from './context/StoreContext';
+import { FormDataStore, createFormDataStore } from './store/form.store';
+import { createFormFocusStore, FormFocusStore } from './store/selectedItem.store';
+import { CategoryBudgetFormRef } from './types';
 
-export type CategoryBudgetFormRef = {
-  save: () => boolean;
-};
 type Props = {
   categoryId?: string;
   onStateChange?: (isDirty: boolean, isValid: boolean) => void;
 };
-const CategoryBudgetForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
-  const { styles, theme } = useStyles(stylesheet);
-  const offset = useKeyboardOffsetContext();
-  const { selectedItemStore, formStore } = useStoreContext();
+const CategoryForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
+  const { data } = useSuspenseQuery(queryOptions.category.detail(props.categoryId ?? ''));
 
-  const queryClient = useQueryClient();
-  const createCategoryMutation = useBudgetingCategoryMutation.create(queryClient);
-  const updateCategoryMutation = useBudgetingCategoryMutation.update(queryClient);
+  const formDataStore = useRef<FormDataStore>();
+  if (!formDataStore.current) formDataStore.current = createFormDataStore(data ?? undefined);
 
-  useImperativeHandle(ref, () => ({
-    save: () => {
-      const canSave = formStore.isDirty() && formStore.isValid();
-      const context = formStore.getContext();
-      const formData = formStore.form;
-      if (!canSave) return false;
-
-      const strategyType = formData.budgetPlan.selectedStrategyType;
-      let strategy: BudgetStrategyBase = { type: 'none' };
-      if (strategyType === 'regularly') {
-        strategy = {
-          type: 'regularly',
-          cycle: formData.budgetPlan.strategyInputs.regularly.cycle,
-          amount: formData.budgetPlan.strategyInputs.regularly.amount,
-          tempAmount: formData.budgetPlan.strategyInputs.regularly.tempAmount,
-        };
-      }
-
-      if (context.mode === 'update') {
-        updateCategoryMutation.mutate({
-          category: {
-            id: context.categoryId,
-            name: formData.categoryName,
-            iconName: formData.iconName,
-            iconColor: formData.iconColor,
-          },
-          budgetPlan: {
-            id: context.budgetPlanId,
-            strategy,
-          },
-        });
-      } else {
-        createCategoryMutation.mutate({
-          category: {
-            name: formData.categoryName,
-            iconName: formData.iconName,
-            iconColor: formData.iconColor,
-          },
-          budgetPlan: {
-            strategy,
-          },
-        });
-      }
-
-      return true;
-    },
-  }));
+  const formFocusStore = useRef<FormFocusStore>();
+  if (!formFocusStore.current) formFocusStore.current = createFormFocusStore();
 
   useEffect(() => {
-    props.onStateChange && formStore.subscribe(props.onStateChange);
+    props.onStateChange && formDataStore.current?.subscribe(props.onStateChange);
   }, []);
 
-  const onPressDone = useCallback(() => {
-    selectedItemStore.selected = undefined;
-  }, []);
-
-  return (
-    <>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={offset + 40}>
-        <ScrollView
-          style={styles.container}
-          contentInset={{ bottom: theme.spacing['x12'] }}
-          keyboardShouldPersistTaps="always"
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.upperArea}>
-            <IconItem />
-            <CategoryNameItem />
-          </View>
-          <View style={styles.budgetArea}>
-            <BudgetContent />
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-      <KeyboardSimpleBar offset={offset} onPressDone={onPressDone} />
-    </>
-  );
-});
-
-const CategoryBudgetFormWrapper = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
-  const instanceKey = useRef(Math.random());
   return (
     <KeyboardAwareLayout>
-      <Suspense>
-        <StoreProvider categoryId={props.categoryId} refreshKey={instanceKey.current}>
-          <CategoryBudgetForm ref={ref} {...props} />
-        </StoreProvider>
-      </Suspense>
+      <StoreContext.Provider value={{ formDataStore: formDataStore.current, formFocusStore: formFocusStore.current }}>
+        <FormView />
+        <Saver ref={ref} />
+      </StoreContext.Provider>
     </KeyboardAwareLayout>
   );
 });
 
-export default CategoryBudgetFormWrapper;
-
-const stylesheet = createStyleSheet((theme) => ({
-  container: {
-    flex: 1,
-    paddingHorizontal: theme.spacing.x4,
-    paddingVertical: theme.spacing['x6'],
-  },
-  upperArea: {
-    flexDirection: 'row',
-    gap: theme.spacing.x2,
-  },
-  budgetArea: {
-    marginTop: theme.spacing['x7'],
-  },
-  toolbar: {
-    width: '100%',
-    height: 44,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-  },
-  toolbarContent: {
-    backgroundColor: 'red',
-    height: '100%',
-  },
-}));
+export default withSuspenseRef(CategoryForm);

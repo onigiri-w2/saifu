@@ -11,13 +11,13 @@ import { StrategyType } from '@/src/domain/aggregation/budgetPlan/types';
 
 import { useStoreContext } from '../context/StoreContext';
 
-function BudgetSelectController() {
+function StrategySwitcher() {
   const { styles, theme } = useStyles(stylesheet);
-  const { formStore } = useStoreContext();
-  const selectedType = useSnapshot(formStore.form.budgetPlan).selectedStrategyType;
+  const { formDataStore } = useStoreContext();
+  const selectedType = useSnapshot(formDataStore.form.budgetPlan).selectedStrategyType;
 
   const handlePress = (value: StrategyType) => {
-    formStore.form.budgetPlan.selectedStrategyType = value;
+    formDataStore.form.budgetPlan.selectedStrategyType = value;
   };
 
   return (
@@ -35,7 +35,7 @@ function BudgetSelectController() {
     </View>
   );
 }
-export default React.memo(BudgetSelectController);
+export default React.memo(StrategySwitcher);
 
 type Option = {
   label: string;

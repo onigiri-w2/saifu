@@ -19,3 +19,7 @@ export type FormState = {
   };
 };
 export type SelectedItem = 'strategy/regularly/amount' | 'strategy/regularly/cycle' | 'strategy/regularly/tempAmount';
+
+export type CategoryBudgetFormRef = {
+  save: () => boolean;
+};

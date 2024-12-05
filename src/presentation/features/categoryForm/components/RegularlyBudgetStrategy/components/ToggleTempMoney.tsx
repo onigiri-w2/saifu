@@ -20,7 +20,7 @@ const AniamtedPlusSvg = withAnimatedFc(PlusSvg);
 type Props = { isActive: boolean };
 function ToggleTempMoney({ isActive }: Props) {
   const { styles, theme } = useStyles(stylesheet);
-  const { formStore } = useStoreContext();
+  const { formDataStore } = useStoreContext();
 
   const transition = useSharedValue(0);
 
@@ -61,7 +61,7 @@ function ToggleTempMoney({ isActive }: Props) {
     <AnimatedPressable
       style={[styles.container, animatedContainerStyle]}
       onPress={() => {
-        formStore.toggleTempAmount();
+        formDataStore.toggleTempAmount();
       }}
     >
       <Animated.View style={animatedIconStyle}>
