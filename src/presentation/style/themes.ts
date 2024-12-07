@@ -3,6 +3,38 @@ const fontSizeBase = 17;
 const fontSizeUnit = 2;
 const radiusUnit = 4;
 
+const pallet = {
+  brand: {
+    primary: '#2077DE',
+    primaryTint: '#E4EFFB',
+  },
+  background: {
+    ground: '#FFFFFF',
+    layer2: '#f5f5f5',
+    layer3: '#E5E5E5',
+  },
+  text: {
+    primary: 'rgba(0, 0, 0, 0.87)', // より標準的な不透明度
+    secondary: 'rgba(0, 0, 0, 0.6)', // これは良いバランス
+    tertiary: 'rgba(0, 0, 0, 0.38)', // 0.3は少し薄すぎるかも
+    placeholder: 'rgba(0, 0, 0, 0.30)', // 0.38は少し濃すぎるかも
+    oposite: '#FFFFFF',
+  },
+  status: {
+    success: '#289150',
+    warning: '#EBC816',
+    error: '#E71B34',
+  },
+  border: {
+    primary: 'rgba(0, 0, 0, 0.12)',
+    secondary: 'rgba(0, 0, 0, 0.08)',
+    listSeparator: 'rgba(0, 0, 0, 0.08)',
+  },
+  highlight: {
+    default: 'rgba(0, 0, 0, 0.1)',
+  },
+};
+
 const baseTheme = {
   spacing: {
     xhalf: spaceUnit / 2,
@@ -43,11 +75,11 @@ const baseTheme = {
         title: {
           fontSize: fontSizeBase,
           fontWeight: '500' as const,
-          color: 'rgba(0, 0, 0, 0.87)',
+          color: pallet.text.primary,
         },
         icon: {
           size: fontSizeBase + fontSizeUnit * 2,
-          basecolor: 'rgba(0, 0, 0, 0.87)',
+          basecolor: pallet.text.primary,
           padding: spaceUnit * 1.5,
         },
       },
@@ -71,37 +103,7 @@ const baseTheme = {
 
 const lightTheme = {
   ...baseTheme,
-  colors: {
-    brand: {
-      primary: '#2077DE',
-      primaryTint: '#E4EFFB',
-    },
-    background: {
-      ground: '#FFFFFF',
-      layer2: '#f5f5f5',
-      layer3: '#E5E5E5',
-    },
-    text: {
-      primary: 'rgba(0, 0, 0, 0.87)', // より標準的な不透明度
-      secondary: 'rgba(0, 0, 0, 0.6)', // これは良いバランス
-      tertiary: 'rgba(0, 0, 0, 0.38)', // 0.3は少し薄すぎるかも
-      placeholder: 'rgba(0, 0, 0, 0.30)', // 0.38は少し濃すぎるかも
-      oposite: '#FFFFFF',
-    },
-    status: {
-      success: '#289150',
-      warning: '#EBC816',
-      error: '#E71B34',
-    },
-    border: {
-      primary: 'rgba(0, 0, 0, 0.12)',
-      secondary: 'rgba(0, 0, 0, 0.08)',
-      listSeparator: 'rgba(0, 0, 0, 0.08)',
-    },
-    highlight: {
-      default: 'rgba(0, 0, 0, 0.1)',
-    },
-  },
+  colors: { ...pallet },
 };
 
 export const appThemes = {
