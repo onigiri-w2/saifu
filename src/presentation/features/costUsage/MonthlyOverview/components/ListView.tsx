@@ -52,16 +52,20 @@ function ListView({ stocks, aggregatedStock, timeline, today, focusDate, stocksO
       renderItem={renderItem}
       ListHeaderComponent={<Header stock={aggregatedStock} today={today} focusDate={focusDate} />}
       keyExtractor={keyExtractor}
+      contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
-      contentInset={{ top: theme.spacing.x3 }}
+      contentInset={{ bottom: theme.spacing.x6 }}
     />
   );
 }
 
 export default ListView;
 
-const stylesheet = createStyleSheet(() => ({
+const stylesheet = createStyleSheet((theme) => ({
   container: {
     flex: 1,
+  },
+  content: {
+    paddingTop: theme.spacing.x6,
   },
 }));

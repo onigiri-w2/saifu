@@ -24,7 +24,7 @@ function Title({ stock, focusDate }: Props) {
     const index = dailyCosts.findIndex((d) => compareOnWorklet(d.date, focusDate.value) === 0);
     const safeIndex =
       index !== -1 ? index : compareOnWorklet(dailyCosts[0].date, focusDate.value) > 0 ? 0 : dailyCosts.length - 1;
-    const value = numberFormatOnWorklet(dailyCosts[safeIndex].cost);
+    const value = numberFormatOnWorklet(-dailyCosts[safeIndex].cost);
     return {
       text: value,
       defaultValue: value,
@@ -73,12 +73,12 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
   },
   dates: {
-    fontSize: theme.fontSize['subCaption'],
+    fontSize: theme.fontSize.subCaption,
     color: theme.colors.text.tertiary,
   },
   cost: {
-    fontSize: theme.fontSize.heading,
-    color: theme.colors.text.primary,
+    fontSize: theme.fontSize.subTitle,
+    color: theme.colors.status.error,
     fontWeight: 'bold',
     marginBottom: theme.spacing.x1,
   },

@@ -22,6 +22,10 @@ export default class Yearmonth {
     return this.addMonths(-months);
   }
 
+  compare(other: Yearmonth) {
+    return this.year * 12 + this.month - (other.year * 12 + other.month);
+  }
+
   toString() {
     return `${this.year}-${this.month.toString().padStart(2, '0')}`;
   }

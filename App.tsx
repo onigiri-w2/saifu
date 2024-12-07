@@ -14,7 +14,6 @@ import RootStack from './src/presentation/navigation/root';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: Infinity,
       staleTime: Infinity,
       refetchOnWindowFocus: false,
       refetchOnMount: false,

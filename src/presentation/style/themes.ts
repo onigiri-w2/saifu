@@ -1,5 +1,5 @@
 const spaceUnit = 4;
-const fontSizeBase = 16;
+const fontSizeBase = 17;
 const fontSizeUnit = 2;
 const radiusUnit = 4;
 
@@ -24,6 +24,8 @@ const baseTheme = {
     body: fontSizeBase,
     subHeading: fontSizeBase + fontSizeUnit,
     heading: fontSizeBase + fontSizeUnit * 2,
+    subTitle: fontSizeBase + fontSizeUnit * 3.5,
+    title: fontSizeBase + fontSizeUnit * 5,
   },
   radius: {
     small: radiusUnit,
@@ -37,6 +39,16 @@ const baseTheme = {
         height: 56,
         padding: {
           horizontal: spaceUnit * 4,
+        },
+        title: {
+          fontSize: fontSizeBase,
+          fontWeight: '500' as const,
+          color: 'rgba(0, 0, 0, 0.87)',
+        },
+        icon: {
+          size: fontSizeBase + fontSizeUnit * 2,
+          basecolor: 'rgba(0, 0, 0, 0.87)',
+          padding: spaceUnit * 1.5,
         },
       },
       bottomBar: { height: 60 },

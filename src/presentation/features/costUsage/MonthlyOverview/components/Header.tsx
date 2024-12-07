@@ -31,5 +31,6 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     marginBottom: theme.spacing.x3,
     paddingHorizontal: theme.spacing.x4,
+    gap: theme.spacing.x6,
   },
 }));

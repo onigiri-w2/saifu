@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useStyles } from 'react-native-unistyles';
 
 import GraphSvg from '@/assets/icons/lucide/chart-line_1.75px.svg';
 import GridSvg from '@/assets/icons/lucide/layout-grid_1.75px.svg';
@@ -7,6 +8,8 @@ import WalletSvg from '@/assets/icons/lucide/wallet_1.75px.svg';
 import BudgetMonitorList from '@/src/presentation/screens/BudgetMonitorList';
 import CashFlow from '@/src/presentation/screens/CashFlow';
 import CategoryList from '@/src/presentation/screens/CategoryList';
+
+import HeaderRightActions from '../screens/CashFlow/components/HeaderRightActions';
 
 import SettingsStack from './settingsStack';
 
@@ -20,12 +23,19 @@ export type MainTabParamList = {
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export default function MainTabs() {
+  const { theme } = useStyles();
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerStyle: {
           shadowColor: 'transparent', // iOS用
           elevation: 0, // Android用
+        },
+        headerTitleStyle: {
+          fontWeight: theme.component.navigation.header.title.fontWeight,
+          fontSize: theme.component.navigation.header.title.fontSize,
+          color: theme.component.navigation.header.title.color,
         },
       }}
     >
@@ -39,14 +49,19 @@ export default function MainTabs() {
         }}
       />
       <Tab.Screen
+        name="CashFlow"
+        component={CashFlow}
+        options={{
+          tabBarLabel: '支出',
+          title: '',
+          tabBarIcon: CashFlowIcon,
+          headerRight: () => <HeaderRightActions />,
+        }}
+      />
+      <Tab.Screen
         name="CategoryList"
         component={CategoryList}
         options={{ tabBarLabel: 'カテゴリ', title: 'カテゴリ', tabBarIcon: CategoryListIcon }}
-      />
-      <Tab.Screen
-        name="CashFlow"
-        component={CashFlow}
-        options={{ tabBarLabel: '支出', title: '支出', tabBarIcon: CashFlowIcon }}
       />
       <Tab.Screen
         name="SettingsHome"

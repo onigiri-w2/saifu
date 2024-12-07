@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { View } from 'react-native';
 
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
@@ -15,10 +15,13 @@ const CENTER_POSITION = 1000;
 
 type Props = {
   initialYearmonth: Yearmonth;
+  onChangeYearmonth?: (yearmonth: Yearmonth) => void;
 };
 
-export default function MonthlyCarousel({ initialYearmonth }: Props) {
+export default function MonthlyCarousel({ initialYearmonth, onChangeYearmonth }: Props) {
   const { switchMode } = useRenderingModeSwitchContext();
+  const focusYearmonth = useRef(initialYearmonth);
+
   const renderItem = useCallback((item: ListRenderItemInfo<number>) => {
     const position = item.index;
     const yearmonth = initialYearmonth.addMonths(position - CENTER_POSITION);
@@ -42,6 +45,14 @@ export default function MonthlyCarousel({ initialYearmonth }: Props) {
         showsHorizontalScrollIndicator={false}
         initialScrollIndex={CENTER_POSITION}
         estimatedItemSize={DEVICE_LAYOUT.width}
+        onScroll={(event) => {
+          const position = Math.round(event.nativeEvent.contentOffset.x / DEVICE_LAYOUT.width);
+          const yearmonth = initialYearmonth.addMonths(position - CENTER_POSITION);
+          if (focusYearmonth.current?.compare(yearmonth) !== 0) {
+            focusYearmonth.current = yearmonth;
+            onChangeYearmonth && onChangeYearmonth(yearmonth);
+          }
+        }}
         onMomentumScrollEnd={(event) => {
           const position = Math.round(event.nativeEvent.contentOffset.x / DEVICE_LAYOUT.width);
           const yearmonth = initialYearmonth.addMonths(position - CENTER_POSITION);
