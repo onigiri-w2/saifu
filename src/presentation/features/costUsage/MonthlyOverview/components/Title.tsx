@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { TextInput, View } from 'react-native';
 
-import Animated, { SharedValue, useAnimatedProps } from 'react-native-reanimated';
+import Animated, { SharedValue, useAnimatedProps, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import { DailyStock } from '@/src/domain/valueobject/timeseries';
@@ -19,29 +19,35 @@ function Title({ stock, focusDate }: Props) {
   const dailyCosts = useMemo(() => {
     return stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
   }, [stock]);
+  const { styles, theme } = useStyles(stylesheet);
 
-  const costTextProps = useAnimatedProps(() => {
+  const index = useDerivedValue(() => {
     const index = dailyCosts.findIndex((d) => compareOnWorklet(d.date, focusDate.value) === 0);
     const safeIndex =
       index !== -1 ? index : compareOnWorklet(dailyCosts[0].date, focusDate.value) > 0 ? 0 : dailyCosts.length - 1;
-    const value = numberFormatOnWorklet(-dailyCosts[safeIndex].cost);
+    return safeIndex;
+  });
+
+  const costTextProps = useAnimatedProps(() => {
+    const value = dailyCosts[index.value].cost;
+    const label = numberFormatOnWorklet(value > 0 ? -value : 0);
     return {
-      text: value,
-      defaultValue: value,
+      text: label,
+      defaultValue: label,
     };
   });
 
+  const costTextStyles = useAnimatedStyle(() => {
+    const isZero = dailyCosts[index.value].cost === 0;
+    return { color: isZero ? theme.colors.text.primary : theme.colors.status.error };
+  });
+
   const dateRangeTextProps = useAnimatedProps(() => {
-    const index = dailyCosts.findIndex((d) => compareOnWorklet(d.date, focusDate.value) === 0);
-    const safeIndex =
-      index !== -1 ? index : compareOnWorklet(dailyCosts[0].date, focusDate.value) > 0 ? 0 : dailyCosts.length - 1;
     const start = formatDateOnWorklet(dailyCosts[0].date);
-    const end = formatDateOnWorklet(dailyCosts[safeIndex].date);
+    const end = formatDateOnWorklet(dailyCosts[index.value].date);
     const text = `${start} - ${end}`;
     return { text, defaultValue: text };
   });
-
-  const { styles } = useStyles(stylesheet);
 
   return (
     <View style={styles.container}>
@@ -52,7 +58,7 @@ function Title({ stock, focusDate }: Props) {
         editable={false}
       />
       <AnimatedInput
-        style={styles.cost}
+        style={[styles.cost, costTextStyles]}
         animatedProps={costTextProps}
         underlineColorAndroid="transparent"
         editable={false}
@@ -78,7 +84,6 @@ const stylesheet = createStyleSheet((theme) => ({
   },
   cost: {
     fontSize: theme.fontSize.subTitle,
-    color: theme.colors.status.error,
     fontWeight: 'bold',
     marginBottom: theme.spacing.x1,
   },
