@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { View } from 'react-native';
 
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { StackActions, useIsFocused, useNavigation } from '@react-navigation/native';
 import { useStyles } from 'react-native-unistyles';
 
 import CategoryList from '../../features/categoryList';
@@ -14,15 +14,16 @@ export default function Page() {
   const { styles } = useStyles(utilStyleSheet);
 
   const handlePressAdd = useCallback(() => {
-    navigation.navigate('CategoryDetail', { categoryId: undefined });
+    navigation.dispatch(StackActions.push('CategoryDetail', { categoryId: undefined }));
   }, []);
-  const handpePressItem = useCallback((categoryId: string) => {
-    navigation.navigate('CategoryDetail', { categoryId });
+
+  const handlePressItem = useCallback((categoryId: string) => {
+    navigation.dispatch(StackActions.push('CategoryDetail', { categoryId, timestamp: Date.now().toString() }));
   }, []);
 
   return (
     <View style={styles.screen}>
-      <CategoryList onPressAdd={handlePressAdd} onPressItem={handpePressItem} useDeferredRender={isFocused} />
+      <CategoryList onPressAdd={handlePressAdd} onPressItem={handlePressItem} useDeferredRender={isFocused} />
     </View>
   );
 }

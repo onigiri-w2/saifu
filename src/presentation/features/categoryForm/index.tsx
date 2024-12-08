@@ -24,7 +24,9 @@ const CategoryForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
     : { data: undefined };
 
   const formDataStore = useRef<FormDataStore>();
-  if (!formDataStore.current) formDataStore.current = createFormDataStore(props.categoryId ? data : undefined);
+  if (!formDataStore.current) {
+    formDataStore.current = createFormDataStore(props.categoryId ? data : undefined);
+  }
 
   const formFocusStore = useRef<FormFocusStore>();
   if (!formFocusStore.current) formFocusStore.current = createFormFocusStore();
@@ -43,4 +45,4 @@ const CategoryForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
   );
 });
 
-export default withSuspenseRef(CategoryForm);
+export default React.memo(withSuspenseRef(CategoryForm));

@@ -37,25 +37,13 @@ export default function Page() {
   }, [canSave]);
 
   useEffect(() => {
-    navigation.setOptions({
-      title: params.categoryId ? 'カテゴリ更新' : '新規カテゴリ',
-      headerRight: saveButton,
-    });
+    setTimeout(() => {
+      navigation.setOptions({
+        title: params.categoryId ? 'カテゴリ更新' : '新規カテゴリ',
+        headerRight: saveButton,
+      });
+    }, 0);
   }, [saveButton]);
-
-  usePreventRemove(!forceBack && isDirty, () => {
-    Alert.alert('変更内容を破棄しますか？', '', [
-      {
-        text: '破棄する',
-        onPress: () => {
-          setForceBack(true);
-          navigation.goBack();
-        },
-        style: 'destructive',
-      },
-      { text: 'キャンセル' },
-    ]);
-  });
 
   const handleStateChange = useCallback((isDirty: boolean, isValid: boolean) => {
     setIsDirty(isDirty);
@@ -72,10 +60,31 @@ export default function Page() {
     }, 0);
   }, []);
 
+  usePreventRemove(!forceBack && isDirty, () => {
+    Alert.alert('変更内容を破棄しますか？', '', [
+      {
+        text: '破棄する',
+        onPress: () => {
+          setForceBack(true);
+          navigation.goBack();
+        },
+        style: 'destructive',
+      },
+      { text: 'キャンセル' },
+    ]);
+  });
+
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <View style={styles.container}>
-        {!isLoading && <CategoryForm ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />}
+        {!isLoading && (
+          <CategoryForm
+            key={params.categoryId ?? 'new' + params.timestamp}
+            ref={ref}
+            categoryId={params.categoryId}
+            onStateChange={handleStateChange}
+          />
+        )}
       </View>
     </ErrorBoundary>
   );

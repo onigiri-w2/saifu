@@ -9,7 +9,7 @@ import MainTabs from './mainTabs';
 
 export type RootStackParamList = {
   MainTabs: undefined;
-  CategoryDetail: { categoryId: string | undefined };
+  CategoryDetail: { categoryId: string | undefined; timestamp: string };
   CategoryIconSelector: undefined;
 };
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;
