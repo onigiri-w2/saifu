@@ -49,8 +49,8 @@ const stylesheet = createStyleSheet((theme) => ({
           backgroundColor: theme.colors.brand.primaryTint,
         },
         false: {
-          borderColor: theme.colors.background.layer2,
-          backgroundColor: theme.colors.background.layer2,
+          borderColor: theme.colors.background.layer1,
+          backgroundColor: theme.colors.background.layer1,
         },
       },
     },

@@ -76,9 +76,9 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
     padding: theme.spacing.x3,
     borderRadius: theme.radius.default,
-    backgroundColor: isActive ? theme.colors.brand.primaryTint : theme.colors.background.layer2,
+    backgroundColor: isActive ? theme.colors.brand.primaryTint : theme.colors.background.layer1,
     borderWidth: 1,
-    borderColor: isActive ? theme.colors.brand.primary : theme.colors.background.layer2,
+    borderColor: isActive ? theme.colors.brand.primary : theme.colors.background.layer1,
   }),
   buttonText: (isActive: boolean) => ({
     fontSize: theme.fontSize.body,

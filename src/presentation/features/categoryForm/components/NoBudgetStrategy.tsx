@@ -22,7 +22,7 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
     paddingVertical: theme.spacing['x7'],
     borderRadius: theme.radius.default,
-    backgroundColor: theme.colors.background.layer2,
+    backgroundColor: theme.colors.background.layer1,
   },
   description: {
     fontSize: theme.fontSize.body,

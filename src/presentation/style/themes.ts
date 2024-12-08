@@ -10,7 +10,8 @@ const pallet = {
   },
   background: {
     ground: '#FFFFFF',
-    layer2: '#f5f5f5',
+    layer1: '#f5f5f5',
+    layer2: '#EcEcEc',
     layer3: '#E5E5E5',
   },
   text: {
@@ -83,7 +84,7 @@ const baseTheme = {
           padding: spaceUnit * 1.5,
         },
       },
-      bottomBar: { height: 60 },
+      bottomBar: { height: 60, icon: { size: 36 } },
     },
     list: {
       row: {
@@ -96,6 +97,12 @@ const baseTheme = {
           middle: 24,
           large: 28,
         },
+      },
+    },
+    button: {
+      middle: {
+        height: 42,
+        fontSize: fontSizeBase + fontSizeUnit,
       },
     },
   },

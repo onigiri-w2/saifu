@@ -40,7 +40,7 @@ const stylesheet = createStyleSheet((theme) => ({
           borderColor: theme.colors.brand.primary,
         },
         false: {
-          backgroundColor: theme.colors.background.layer2,
+          backgroundColor: theme.colors.background.layer1,
         },
       },
     },

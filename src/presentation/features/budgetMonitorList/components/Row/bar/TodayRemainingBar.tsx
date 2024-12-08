@@ -26,7 +26,7 @@ function Bar({ monitor }: Props) {
         y={(BORDER_HEIGHT - BAR_HEIGHT) / 2}
         width="100%"
         height={BAR_HEIGHT}
-        fill={theme.colors.background.layer2}
+        fill={theme.colors.background.layer1}
       />
       <Rect
         y={(BORDER_HEIGHT - BAR_HEIGHT) / 2}

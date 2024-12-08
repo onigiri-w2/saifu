@@ -7,3 +7,5 @@ export class CategoryRepositoryError extends RepositoryError {}
 export class BudgetPlanRepositoryError extends RepositoryError {}
 export class CalendarRepositoryError extends RepositoryError {}
 export class ExpenseRepositoryError extends RepositoryError {}
+
+export class NotFoundExpenseError extends BaseError {}

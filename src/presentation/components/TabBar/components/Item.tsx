@@ -12,7 +12,7 @@ function Item({ index, state, descriptors, navigation }: Props) {
   const route = state.routes[index];
 
   const { options } = descriptors[route.key];
-  const label = options.title !== undefined ? options.title : route.name;
+  const label = typeof options.tabBarLabel === 'string' ? options.tabBarLabel : route.name;
   const isFocused = state.index === index;
   const onPress = () => {
     const event = navigation.emit({

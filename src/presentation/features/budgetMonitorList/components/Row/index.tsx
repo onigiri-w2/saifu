@@ -65,7 +65,7 @@ const stylesheet = createStyleSheet((theme) => ({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.background.layer2,
+    backgroundColor: theme.colors.background.layer1,
     borderRadius: theme.radius.default,
   },
   content: {

@@ -9,6 +9,7 @@ import BudgetMonitorList from '@/src/presentation/screens/BudgetMonitorList';
 import CashFlow from '@/src/presentation/screens/CashFlow';
 import CategoryList from '@/src/presentation/screens/CategoryList';
 
+import TabBar from '../components/TabBar';
 import HeaderRightActions from '../screens/CashFlow/components/HeaderRightActions';
 
 import SettingsStack from './settingsStack';
@@ -38,6 +39,7 @@ export default function MainTabs() {
           color: theme.component.navigation.header.title.color,
         },
       }}
+      tabBar={(props) => <TabBar {...props} />}
     >
       <Tab.Screen
         name="BudgetMonitorList"
@@ -45,7 +47,6 @@ export default function MainTabs() {
         options={{
           tabBarLabel: '予算',
           title: '予算',
-          tabBarIcon: BudgetTabIcon,
         }}
       />
       <Tab.Screen
@@ -54,20 +55,15 @@ export default function MainTabs() {
         options={{
           tabBarLabel: '支出',
           title: '',
-          tabBarIcon: CashFlowIcon,
           headerRight: () => <HeaderRightActions />,
         }}
       />
       <Tab.Screen
         name="CategoryList"
         component={CategoryList}
-        options={{ tabBarLabel: 'カテゴリ', title: 'カテゴリ', tabBarIcon: CategoryListIcon }}
+        options={{ tabBarLabel: 'カテゴリ', title: 'カテゴリ' }}
       />
-      <Tab.Screen
-        name="SettingsHome"
-        component={SettingsStack}
-        options={{ tabBarLabel: '設定', headerShown: false, tabBarIcon: SettingsIcon }}
-      />
+      <Tab.Screen name="SettingsHome" component={SettingsStack} options={{ tabBarLabel: '設定', headerShown: false }} />
     </Tab.Navigator>
   );
 }

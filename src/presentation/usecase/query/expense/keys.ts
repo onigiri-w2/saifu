@@ -10,4 +10,5 @@ export const expenseQueryKeys = {
     { asc },
   ],
   monthly: (yearmonth: Yearmonth) => [root, 'monthly', yearmonth.toString()],
+  detail: (id: string) => [root, 'detail', id],
 };

@@ -21,7 +21,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const parentNavigation = navigation.getParent();
     if (parentNavigation) {
       // 親のStackNavigatorの'/expense'に遷移
-      parentNavigation.navigate('expense');
+      parentNavigation.navigate('ExpenseForm');
     }
   };
 
@@ -66,8 +66,8 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
   },
   button: {
-    width: 36,
-    height: 36,
+    width: theme.component.navigation.bottomBar.icon.size,
+    height: theme.component.navigation.bottomBar.icon.size,
     borderRadius: theme.radius.default,
     borderWidth: 1.5,
     borderColor: theme.colors.text.secondary,

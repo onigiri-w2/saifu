@@ -42,7 +42,7 @@ export default RegularlyBudgetStrategy;
 
 const stylesheet = createStyleSheet((theme) => ({
   itemContainer: {
-    backgroundColor: theme.colors.background.layer2,
+    backgroundColor: theme.colors.background.layer1,
     borderRadius: theme.radius.default,
     overflow: 'hidden',
   },

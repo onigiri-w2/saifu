@@ -1,4 +1,5 @@
 import Expense from '@/src/domain/aggregation/expense';
+import { NotFoundExpenseError } from '@/src/domain/error';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 import LocalDate from '@/src/domain/valueobject/localdate';
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
@@ -44,4 +45,11 @@ export const loadMonthlyTimeline = async (yearmonth: Yearmonth, asc: boolean): P
 
   if (asc) return result;
   else return result.reverse();
+};
+
+export const loadExpense = async (id: string): Promise<Expense> => {
+  const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
+  const expense = await expenseRepo.find(id);
+  if (!expense) throw new NotFoundExpenseError('指定の支出が見つかりません');
+  return expense;
 };

@@ -5,12 +5,15 @@ import { useStyles } from 'react-native-unistyles';
 import CategoryForm from '@/src/presentation/screens/CategoryForm';
 import CategoryIconSelector from '@/src/presentation/screens/CategoryIconSelector';
 
+import ExpenseForm from '../screens/ExpenseForm';
+
 import MainTabs from './mainTabs';
 
 export type RootStackParamList = {
   MainTabs: undefined;
   CategoryDetail: { categoryId: string | undefined; timestamp: string };
   CategoryIconSelector: undefined;
+  ExpenseForm: undefined;
 };
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -38,6 +41,14 @@ export default function RootStack() {
         }}
       />
       <Stack.Screen name="CategoryIconSelector" component={CategoryIconSelector} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="ExpenseForm"
+        component={ExpenseForm}
+        options={{
+          presentation: 'modal',
+          title: '支出',
+        }}
+      />
     </Stack.Navigator>
   );
 }

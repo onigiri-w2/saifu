@@ -47,7 +47,7 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     height: ICON_WRAPPER_HEIGHT,
     width: ICON_WRAPPER_HEIGHT,
-    backgroundColor: theme.colors.background.layer2,
+    backgroundColor: theme.colors.background.layer1,
     borderRadius: theme.radius.default,
     justifyContent: 'center',
     alignItems: 'center',

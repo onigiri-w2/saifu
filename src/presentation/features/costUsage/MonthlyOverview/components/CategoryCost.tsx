@@ -74,7 +74,7 @@ const stylesheet = createStyleSheet((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: theme.radius.small,
-    backgroundColor: theme.colors.background.layer2,
+    backgroundColor: theme.colors.background.layer1,
   },
   text: {
     flex: 1,

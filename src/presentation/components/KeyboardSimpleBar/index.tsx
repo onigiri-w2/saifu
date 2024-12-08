@@ -40,7 +40,7 @@ const stylesheet = createStyleSheet((theme) => ({
     flexDirection: 'row',
     height: '100%',
     paddingHorizontal: theme.spacing.x3,
-    backgroundColor: theme.colors.background.layer2,
+    backgroundColor: theme.colors.background.layer1,
     borderTopWidth: 1,
     borderColor: theme.colors.border.primary,
   },
