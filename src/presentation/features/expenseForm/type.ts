@@ -1,8 +1,12 @@
+export type FormDataState = {
+  amount: number;
+  timestamp: number;
+  categoryId: string | undefined;
+  memo: string;
+};
 export type FormDataStore = {
-  form: {
-    amount: number;
-    timestamp: number;
-    categoryId: string | undefined;
-    memo: string;
-  };
+  form: FormDataState;
+  isDirty: () => boolean;
+  isValid: () => boolean;
+  subscribe: (callback: (isDirty: boolean, isValid: boolean) => void) => () => void;
 };

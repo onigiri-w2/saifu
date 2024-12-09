@@ -1,6 +1,7 @@
+import { useCallback } from 'react';
 import { View, Text } from 'react-native';
 
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useStyles } from 'react-native-unistyles';
 import { useSnapshot } from 'valtio';
 
@@ -15,12 +16,24 @@ export default function DateRow() {
   const store = useFormStoreContext();
   const timestamp = useSnapshot(store.form).timestamp;
 
+  const handleDateChange = useCallback((_: DateTimePickerEvent, selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      store.form.timestamp = selectedDate.getTime();
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <CalendarSvg width={theme.fontSize.subHeading} height={theme.fontSize.subHeading} stroke="#000" />
       <Text style={styles.label}>日付</Text>
       <View style={{ marginLeft: 'auto' }}>
-        <DateTimePicker value={new Date(timestamp)} mode="date" accentColor={theme.colors.brand.primary} locale="ja" />
+        <DateTimePicker
+          value={new Date(timestamp)}
+          mode="date"
+          accentColor={theme.colors.brand.primary}
+          locale="ja"
+          onChange={handleDateChange}
+        />
       </View>
     </View>
   );

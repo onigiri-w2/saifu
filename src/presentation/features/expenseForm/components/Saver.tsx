@@ -1,12 +1,24 @@
+import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { useFormStoreContext } from '../context/FormStoreContext';
+
 export default function Saver() {
-  const { styles } = useStyles(stylesheet);
+  const store = useFormStoreContext();
+  const [canSave, setCanSave] = useState(false);
+
+  useEffect(() => {
+    store.subscribe((isDirty: boolean, isValid: boolean) => {
+      setCanSave(isDirty && isValid);
+    });
+  }, [setCanSave]);
+
+  const { styles } = useStyles(stylesheet, { canSave });
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} disabled={!canSave}>
       <Text style={styles.text}>保存</Text>
     </TouchableOpacity>
   );
@@ -18,9 +30,18 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.spacing.x2,
-    backgroundColor: theme.colors.brand.primary,
     borderRadius: theme.radius.small,
     height: theme.component.button.middle.height,
+    variants: {
+      canSave: {
+        true: {
+          backgroundColor: theme.colors.brand.primary,
+        },
+        false: {
+          backgroundColor: theme.colors.status.disabled,
+        },
+      },
+    },
   },
   text: {
     color: theme.colors.text.oposite,

@@ -25,6 +25,7 @@ const pallet = {
     success: '#289150',
     warning: '#EBC816',
     error: '#E71B34',
+    disabled: 'rgba(0, 0, 0, 0.38)',
   },
   border: {
     primary: 'rgba(0, 0, 0, 0.12)',
