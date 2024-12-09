@@ -7,6 +7,7 @@ import { withSuspense } from '../../components/hoc/withSuspense';
 import { queryOptions } from '../../usecase/query';
 
 import FormView from './components/FormView';
+import { CategoryListContext } from './context/CategoryListContext';
 import { FormStoreContext } from './context/FormStoreContext';
 import { createFormDataStore } from './store/form.store';
 import { FormDataStore } from './type';
@@ -28,9 +29,11 @@ export const NewExpenseForm = withSuspense(() => {
   }, [query]);
 
   return (
-    <FormStoreContext.Provider value={store.current}>
-      <FormView />
-    </FormStoreContext.Provider>
+    <CategoryListContext.Provider value={query.data.map((c) => c.category)}>
+      <FormStoreContext.Provider value={store.current}>
+        <FormView />
+      </FormStoreContext.Provider>
+    </CategoryListContext.Provider>
   );
 });
 

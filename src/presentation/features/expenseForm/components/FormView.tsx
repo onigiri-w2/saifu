@@ -10,6 +10,7 @@ import Saver from './Saver';
 
 export default function FormView() {
   const { styles } = useStyles(stylesheet);
+
   return (
     <View style={styles.container}>
       <AmountRow />
@@ -24,10 +25,11 @@ export default function FormView() {
 }
 const stylesheet = createStyleSheet((theme) => ({
   container: {
+    paddingTop: theme.spacing.x5,
     gap: theme.spacing.x5,
   },
   saveWrapper: {
-    marginTop: theme.spacing.x5,
+    marginTop: theme.spacing.x2,
     marginHorizontal: theme.spacing.x4,
   },
 }));
