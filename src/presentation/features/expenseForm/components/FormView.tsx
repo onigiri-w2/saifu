@@ -44,8 +44,8 @@ export default function FormView() {
 }
 const stylesheet = createStyleSheet((theme) => ({
   container: {
-    paddingTop: theme.spacing.x5,
-    gap: theme.spacing.x5,
+    paddingTop: theme.spacing.x4,
+    gap: theme.spacing.x4,
   },
   saveWrapper: {
     marginTop: theme.spacing.x2,

@@ -8,27 +8,21 @@ import { FormDataStore } from '../type';
 export const createFormDataStore = (source?: Expense, defaultCategoryId?: string) => {
   const initialState = createInitialState(source, defaultCategoryId);
 
-  // const subscribers: Set<(isDirty: boolean, isValid: boolean) => void> = new Set();
-  // const tempAmountBuffer = 0;
-  //
-  const store = proxy<FormDataStore>({ form: deepClone(initialState) });
-  // subscribe(store.form, () => {});
-
-  return store;
+  return proxy<FormDataStore>({ form: deepClone(initialState) });
 };
 
 const createInitialState = (source?: Expense, defaultCategoryId?: string): FormDataStore['form'] => {
   if (!source) {
     return {
       amount: 0,
-      date: new Date(),
+      timestamp: new Date().getTime(),
       categoryId: defaultCategoryId,
       memo: '',
     };
   }
   return {
     amount: source.amount.value,
-    date: source.date,
+    timestamp: source.date.getTime(),
     categoryId: source.categoryId ?? defaultCategoryId,
     memo: source.memo,
   };

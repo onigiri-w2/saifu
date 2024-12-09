@@ -1,7 +1,7 @@
 export type FormDataStore = {
   form: {
     amount: number;
-    date: Date;
+    timestamp: number;
     categoryId: string | undefined;
     memo: string;
   };

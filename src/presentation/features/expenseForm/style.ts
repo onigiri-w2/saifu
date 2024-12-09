@@ -6,7 +6,7 @@ export const commonStylesheet = createStyleSheet((theme) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: theme.spacing.x4,
-    height: 32,
+    height: 36,
   },
   label: {
     fontSize: theme.fontSize.body,
@@ -16,7 +16,7 @@ export const commonStylesheet = createStyleSheet((theme) => ({
   valueWrapper: {
     height: '100%',
     paddingHorizontal: theme.spacing.x3,
-    borderRadius: theme.radius.small,
+    borderRadius: theme.radius.default,
     backgroundColor: theme.colors.background.layer2,
     marginLeft: 'auto',
     flexDirection: 'row',
