@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { withSuspense } from '../../components/hoc/withSuspense';
+import KeyboardAwareLayout from '../../components/KeyboardAwareLayout';
 import { queryOptions } from '../../usecase/query';
 
 import FormView from './components/FormView';
@@ -29,11 +30,13 @@ export const NewExpenseForm = withSuspense(() => {
   }, [query]);
 
   return (
-    <CategoryListContext.Provider value={query.data.map((c) => c.category)}>
-      <FormStoreContext.Provider value={store.current}>
-        <FormView />
-      </FormStoreContext.Provider>
-    </CategoryListContext.Provider>
+    <KeyboardAwareLayout>
+      <CategoryListContext.Provider value={query.data.map((c) => c.category)}>
+        <FormStoreContext.Provider value={store.current}>
+          <FormView />
+        </FormStoreContext.Provider>
+      </CategoryListContext.Provider>
+    </KeyboardAwareLayout>
   );
 });
 
