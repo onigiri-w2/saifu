@@ -29,10 +29,15 @@ export default function FormView() {
           keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false}
         >
-          <AmountRow />
-          <DateRow />
-          <CategoryRow />
-          <MemoRow />
+          <View style={styles.formBox}>
+            <AmountRow />
+            <View style={styles.separater} />
+            <DateRow />
+            <View style={styles.separater} />
+            <CategoryRow />
+            <View style={styles.separater} />
+            <MemoRow />
+          </View>
           <View style={styles.saveWrapper}>
             <Saver />
           </View>
@@ -46,9 +51,17 @@ const stylesheet = createStyleSheet((theme) => ({
   container: {
     paddingTop: theme.spacing.x4,
     gap: theme.spacing.x4,
+    paddingHorizontal: theme.spacing.x4,
   },
   saveWrapper: {
     marginTop: theme.spacing.x2,
-    marginHorizontal: theme.spacing.x4,
+  },
+  formBox: {
+    backgroundColor: theme.colors.background.layer1,
+    borderRadius: theme.radius.default,
+  },
+  separater: {
+    height: 1,
+    backgroundColor: theme.colors.border.listSeparator,
   },
 }));

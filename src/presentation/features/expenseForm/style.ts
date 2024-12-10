@@ -6,7 +6,7 @@ export const commonStylesheet = createStyleSheet((theme) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: theme.spacing.x4,
-    height: 36,
+    height: 48,
   },
   label: {
     fontSize: theme.fontSize.body,
@@ -15,13 +15,11 @@ export const commonStylesheet = createStyleSheet((theme) => ({
   },
   valueWrapper: {
     height: '100%',
-    paddingHorizontal: theme.spacing.x3,
-    borderRadius: theme.radius.default,
-    backgroundColor: theme.colors.background.layer2,
-    marginLeft: 'auto',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.x2,
+    justifyContent: 'flex-end',
+    gap: theme.spacing.x1,
   },
   value: {
     fontSize: theme.fontSize.body,

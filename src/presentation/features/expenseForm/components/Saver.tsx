@@ -30,7 +30,7 @@ const stylesheet = createStyleSheet((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.spacing.x2,
-    borderRadius: theme.radius.small,
+    borderRadius: theme.radius.default,
     height: theme.component.button.middle.height,
     variants: {
       canSave: {

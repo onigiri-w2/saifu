@@ -102,7 +102,7 @@ const baseTheme = {
     },
     button: {
       middle: {
-        height: 42,
+        height: 48,
         fontSize: fontSizeBase + fontSizeUnit,
       },
     },

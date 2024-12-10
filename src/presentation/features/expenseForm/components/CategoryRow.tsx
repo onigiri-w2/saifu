@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { View, Text } from 'react-native';
 
+import { NativeActionEvent, MenuView } from '@react-native-menu/menu';
 import { useStyles } from 'react-native-unistyles';
 import { useSnapshot } from 'valtio';
 
@@ -10,8 +11,6 @@ import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 import { useCategoryListContext } from '../context/CategoryListContext';
 import { useFormStoreContext } from '../context/FormStoreContext';
 import { commonStylesheet } from '../style';
-
-import CategoryMenuView from './CategoryMenuView';
 
 export default function CategoryRow() {
   const { styles, theme } = useStyles(commonStylesheet);
@@ -24,6 +23,24 @@ export default function CategoryRow() {
     return categories.find((category) => category.id === categoryId);
   }, [categoryId, categories]);
 
+  const menuRef = useRef(null);
+
+  const actions = useMemo(() => {
+    return categories.map((category) => {
+      return {
+        id: category.id,
+        title: category.name,
+        state: categoryId === category.id ? ('on' as const) : ('off' as const),
+      };
+    });
+  }, [categories, categoryId]);
+
+  const handlePressActions = useCallback(({ nativeEvent }: NativeActionEvent) => {
+    setTimeout(() => {
+      store.form.categoryId = nativeEvent.event;
+    }, 100);
+  }, []);
+
   return (
     <View style={styles.container}>
       <LayoutGridSvg
@@ -32,7 +49,14 @@ export default function CategoryRow() {
         stroke={theme.colors.text.primary}
       />
       <Text style={styles.label}>カテゴリ</Text>
-      <CategoryMenuView>
+      <MenuView
+        ref={menuRef}
+        title=""
+        onPressAction={handlePressActions}
+        style={styles.valueWrapper}
+        actions={actions}
+        shouldOpenOnLongPress={false}
+      >
         {category ? (
           <>
             <CategoryIcon
@@ -45,7 +69,7 @@ export default function CategoryRow() {
         ) : (
           <Text style={styles.value}>カテゴリがありません</Text>
         )}
-      </CategoryMenuView>
+      </MenuView>
     </View>
   );
 }

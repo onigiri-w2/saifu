@@ -1,40 +1,59 @@
 import { useCallback } from 'react';
-import { View, Text } from 'react-native';
+import { Text, Pressable, View } from 'react-native';
 
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { useStyles } from 'react-native-unistyles';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useSnapshot } from 'valtio';
 
 import CalendarSvg from '@/assets/icons/lucide/calendar.svg';
+import { useOpen } from '@/src/presentation/hooks/useOpen';
+import { dateFormat } from '@/src/presentation/i18n/format';
 
 import { useFormStoreContext } from '../context/FormStoreContext';
 import { commonStylesheet } from '../style';
 
 export default function DateRow() {
-  const { styles, theme } = useStyles(commonStylesheet);
+  const { styles, theme } = useStyles(stylesheet);
 
   const store = useFormStoreContext();
   const timestamp = useSnapshot(store.form).timestamp;
+  const date = new Date(timestamp);
 
-  const handleDateChange = useCallback((_: DateTimePickerEvent, selectedDate: Date | undefined) => {
-    if (selectedDate) {
-      store.form.timestamp = selectedDate.getTime();
-    }
+  const { isOpen, open, close } = useOpen();
+
+  const handleChangeDate = useCallback((date: Date) => {
+    store.form.timestamp = date.getTime();
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={open}>
       <CalendarSvg width={theme.fontSize.subHeading} height={theme.fontSize.subHeading} stroke="#000" />
       <Text style={styles.label}>日付</Text>
-      <View style={{ marginLeft: 'auto' }}>
-        <DateTimePicker
-          value={new Date(timestamp)}
-          mode="date"
-          accentColor={theme.colors.brand.primary}
-          locale="ja"
-          onChange={handleDateChange}
-        />
+      <View style={styles.valueWrapper}>
+        <Text style={styles.value}>{dateFormat(date)}</Text>
       </View>
-    </View>
+      <DateTimePickerModal
+        isVisible={isOpen}
+        mode="date"
+        display="inline"
+        date={new Date(timestamp)}
+        onConfirm={() => {
+          //
+        }}
+        onCancel={close}
+        onChange={handleChangeDate}
+        locale="ja"
+        customConfirmButtonIOS={() => null}
+        modalStyleIOS={styles.modal}
+        cancelTextIOS="閉じる"
+      />
+    </Pressable>
   );
 }
+
+const stylesheet = createStyleSheet((theme, rt) => ({
+  ...commonStylesheet(theme),
+  modal: {
+    marginBottom: rt.insets.bottom,
+  },
+}));

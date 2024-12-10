@@ -15,3 +15,8 @@ export const numberFormatOnWorklet = (value: number, isCurrency = true) => {
     currency,
   });
 };
+
+export const dateFormat = (value: Date) => {
+  // 今は日本だけ
+  return `${value.getFullYear()}年${value.getMonth() + 1}月${value.getDate()}日`;
+};
