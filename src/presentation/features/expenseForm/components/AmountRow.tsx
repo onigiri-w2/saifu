@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, TextInput, Text, View } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -10,7 +10,10 @@ import { numberFormat } from '@/src/presentation/i18n/format';
 import { useFormStoreContext } from '../context/FormStoreContext';
 import { commonStylesheet } from '../style';
 
-export default function AmountRow() {
+type Props = {
+  initialAutoFocus?: boolean;
+};
+export default function AmountRow({ initialAutoFocus = false }: Props) {
   const store = useFormStoreContext();
   const value = useSnapshot(store.form).amount;
 
@@ -23,6 +26,14 @@ export default function AmountRow() {
   const inputRef = useRef<TextInput>(null);
   const handlePress = useCallback(() => {
     inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (initialAutoFocus) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 200);
+    }
   }, []);
 
   return (

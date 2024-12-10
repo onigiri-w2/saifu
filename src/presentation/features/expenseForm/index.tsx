@@ -33,7 +33,7 @@ export const NewExpenseForm = withSuspense(() => {
     <KeyboardAwareLayout>
       <CategoryListContext.Provider value={query.data.map((c) => c.category)}>
         <FormStoreContext.Provider value={store.current}>
-          <FormView />
+          <FormView initialAutoFocusAmount />
         </FormStoreContext.Provider>
       </CategoryListContext.Provider>
     </KeyboardAwareLayout>

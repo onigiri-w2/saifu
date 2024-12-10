@@ -12,7 +12,10 @@ import DateRow from './DateRow';
 import MemoRow from './MemoRow';
 import Saver from './Saver';
 
-export default function FormView() {
+type Props = {
+  initialAutoFocusAmount?: boolean;
+};
+export default function FormView({ initialAutoFocusAmount }: Props) {
   const { styles, theme } = useStyles(stylesheet);
   const offset = useKeyboardOffsetContext();
 
@@ -30,7 +33,7 @@ export default function FormView() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.formBox}>
-            <AmountRow />
+            <AmountRow initialAutoFocus={initialAutoFocusAmount} />
             <View style={styles.separater} />
             <DateRow />
             <View style={styles.separater} />
