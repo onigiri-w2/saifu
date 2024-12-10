@@ -1,24 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useSnapshot } from 'valtio';
 
 import NoteSvg from '@/assets/icons/lucide/notepad.svg';
 
+import { useFormStoreContext } from '../context/FormStoreContext';
 import { commonStylesheet } from '../style';
 
 function MemoRow() {
   const { styles, theme } = useStyles(stylesheet);
-  const [value, setValue] = useState('');
+  const formStore = useFormStoreContext();
+  const memo = useSnapshot(formStore.form).memo;
+  const handleCahngeText = (text: string) => {
+    formStore.form.memo = text;
+  };
 
   return (
     <View style={styles.container}>
-      <NoteSvg width={theme.fontSize.subHeading} height={theme.fontSize.subHeading} stroke="#000" />
+      <NoteSvg
+        width={theme.fontSize.subHeading}
+        height={theme.fontSize.subHeading}
+        stroke={theme.colors.text.primary}
+      />
       <Text style={styles.label}>メモ</Text>
       <TextInput
-        value={value}
+        value={memo}
         style={styles.textinput}
-        onChangeText={setValue}
+        onChangeText={handleCahngeText}
         placeholder="メモを入力"
         multiline={false}
       />

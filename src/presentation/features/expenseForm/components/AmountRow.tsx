@@ -14,13 +14,12 @@ type Props = {
   initialAutoFocus?: boolean;
 };
 function AmountRow({ initialAutoFocus = false }: Props) {
-  const store = useFormStoreContext();
-  const value = useSnapshot(store.form).amount;
+  const formStore = useFormStoreContext();
+  const amount = useSnapshot(formStore.form).amount;
 
   const [isFocused, setIsFocused] = useState(false);
 
   const { styles, theme } = useStyles(stylesheet, { isFocused });
-  const [textValue, setTextValue] = useState('');
   const inputRef = useRef<TextInput>(null);
   const handlePress = useCallback(() => {
     inputRef.current?.focus();
@@ -43,19 +42,18 @@ function AmountRow({ initialAutoFocus = false }: Props) {
       />
       <Text style={styles.label}>金額</Text>
       <View style={styles.textView}>
-        <Text style={styles.text}>{numberFormat(value)}</Text>
+        <Text style={styles.text}>{numberFormat(amount)}</Text>
         <TextInput
           ref={inputRef}
           key="expenseform/amount"
           style={styles.textinput}
-          value={textValue}
+          value={amount.toString()}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           keyboardType="number-pad"
           onChangeText={(text) => {
             const number = Number(text) || 0;
-            setTextValue(number.toString());
-            store.form.amount = number;
+            formStore.form.amount = number;
           }}
         />
       </View>

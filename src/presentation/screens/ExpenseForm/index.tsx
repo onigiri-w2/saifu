@@ -9,9 +9,10 @@ export default function Page() {
   const navigation = useNavigation();
 
   const handleSaved = useCallback(
-    (success: boolean) => {
-      if (success) navigation.goBack();
-      else Alert.alert('Failed to save');
+    (success: boolean, keeping: boolean) => {
+      if (success && !keeping) navigation.goBack();
+      else if (!success) Alert.alert('Failed to save');
+      else if (keeping) Alert.alert('Saved');
     },
     [navigation],
   );

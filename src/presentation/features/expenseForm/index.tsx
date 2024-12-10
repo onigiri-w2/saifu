@@ -11,10 +11,10 @@ import FormView from './components/FormView';
 import { CategoryListContext } from './context/CategoryListContext';
 import { FormStoreContext } from './context/FormStoreContext';
 import { createFormDataStore } from './store/form.store';
-import { FormDataStore } from './type';
+import { FormDataStore, OnSavedFunction } from './type';
 
 type CreateExpenseFormProps = {
-  onSaved: (success: boolean) => void;
+  onSaved: OnSavedFunction;
 };
 export const CreateExpenseForm = withSuspense(({ onSaved }: CreateExpenseFormProps) => {
   const query = useSuspenseQuery(queryOptions.category.list());

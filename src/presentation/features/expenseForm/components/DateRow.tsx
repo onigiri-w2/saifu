@@ -27,7 +27,11 @@ function DateRow() {
 
   return (
     <Pressable style={styles.container} onPress={open}>
-      <CalendarSvg width={theme.fontSize.subHeading} height={theme.fontSize.subHeading} stroke="#000" />
+      <CalendarSvg
+        width={theme.fontSize.subHeading}
+        height={theme.fontSize.subHeading}
+        stroke={theme.colors.text.primary}
+      />
       <Text style={styles.label}>日付</Text>
       <View style={styles.valueWrapper}>
         <Text style={styles.value}>{dateFormat(date)}</Text>

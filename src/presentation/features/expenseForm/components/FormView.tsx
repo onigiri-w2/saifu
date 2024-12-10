@@ -6,6 +6,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useKeyboardOffsetContext } from '@/src/presentation/components/KeyboardAwareLayout';
 import KeyboardSimpleBar from '@/src/presentation/components/KeyboardSimpleBar';
 
+import { OnSavedFunction } from '../type';
+
 import AmountRow from './AmountRow';
 import CategoryRow from './CategoryRow';
 import DateRow from './DateRow';
@@ -14,7 +16,7 @@ import Saver from './Saver';
 
 type Props = {
   mode?: 'create' | 'update';
-  onSaved?: (success: boolean) => void;
+  onSaved?: OnSavedFunction;
 };
 function FormView({ mode = 'create', onSaved }: Props) {
   const { styles, theme } = useStyles(stylesheet);

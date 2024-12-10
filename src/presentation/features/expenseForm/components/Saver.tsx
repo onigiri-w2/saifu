@@ -1,21 +1,25 @@
 import { useEffect, useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import DashedSquareSvg from '@/assets/icons/lucide/square-check_1.75px.svg';
 import { useExpenseMutation } from '@/src/presentation/usecase/mutation/expense/mutation';
 import { assert } from '@/src/utils/errors';
 
 import { useFormStoreContext } from '../context/FormStoreContext';
+import { OnSavedFunction } from '../type';
 
 type Props = {
   mode?: 'create' | 'update';
-  onSaved?: (success: boolean) => void;
+  onSaved?: OnSavedFunction;
 };
 export default function Saver({ mode = 'create', onSaved }: Props) {
   const formStore = useFormStoreContext();
   const [canSave, setCanSave] = useState(false);
+
+  const [keeping, setKeeping] = useState(false);
 
   const queryClient = useQueryClient();
   const createMutation = useExpenseMutation.create(queryClient);
@@ -36,10 +40,14 @@ export default function Saver({ mode = 'create', onSaved }: Props) {
         },
         {
           onError: () => {
-            onSaved?.(false);
+            onSaved?.(false, keeping);
           },
           onSuccess: () => {
-            onSaved?.(true);
+            onSaved?.(true, keeping);
+            if (keeping) {
+              formStore.form.amount = 0;
+              formStore.form.memo = '';
+            }
           },
         },
       );
@@ -55,10 +63,10 @@ export default function Saver({ mode = 'create', onSaved }: Props) {
         },
         {
           onError: () => {
-            onSaved?.(false);
+            onSaved?.(false, false);
           },
           onSuccess: () => {
-            onSaved?.(true);
+            onSaved?.(true, false);
           },
         },
       );
@@ -71,12 +79,29 @@ export default function Saver({ mode = 'create', onSaved }: Props) {
     });
   }, [setCanSave]);
 
-  const { styles } = useStyles(stylesheet, { canSave });
+  const { styles, theme } = useStyles(stylesheet, { canSave, keeping });
 
   return (
-    <TouchableOpacity style={styles.container} disabled={!canSave} onPress={handlePress}>
-      <Text style={styles.text}>保存</Text>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity style={styles.container} disabled={!canSave} onPress={handlePress}>
+        <Text style={styles.text}>保存</Text>
+      </TouchableOpacity>
+      {mode === 'create' && (
+        <Pressable
+          style={styles.keepingView}
+          onPress={() => {
+            setKeeping((prev) => !prev);
+          }}
+        >
+          <DashedSquareSvg
+            width={theme.fontSize.body}
+            height={theme.fontSize.body}
+            stroke={keeping ? theme.colors.brand.primary : theme.colors.text.tertiary}
+          />
+          <Text style={styles.keeping}>保存後も続けて入力する</Text>
+        </Pressable>
+      )}
+    </View>
   );
 }
 
@@ -103,5 +128,28 @@ const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors.text.oposite,
     fontWeight: 600,
     fontSize: theme.fontSize.subHeading,
+  },
+  keepingView: {
+    marginTop: theme.spacing.x2,
+    paddingVertical: theme.spacing.x2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: theme.spacing.x1,
+  },
+  keeping: {
+    textAlign: 'center',
+    fontSize: theme.fontSize.subBody,
+    variants: {
+      keeping: {
+        true: {
+          color: theme.colors.brand.primary,
+          fontWeight: 600,
+        },
+        false: {
+          color: theme.colors.text.tertiary,
+        },
+      },
+    },
   },
 }));

@@ -12,3 +12,5 @@ export type FormDataStore = {
   updateTimestamp: (timestamp: number) => void;
   getId: () => string | undefined;
 };
+
+export type OnSavedFunction = (success: boolean, keeping: boolean) => void;
