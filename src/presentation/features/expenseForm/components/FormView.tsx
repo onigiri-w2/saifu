@@ -6,8 +6,6 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useKeyboardOffsetContext } from '@/src/presentation/components/KeyboardAwareLayout';
 import KeyboardSimpleBar from '@/src/presentation/components/KeyboardSimpleBar';
 
-import { OnRemovedFunction, OnSavedFunction } from '../type';
-
 import AmountRow from './AmountRow';
 import CategoryRow from './CategoryRow';
 import DateRow from './DateRow';
@@ -17,10 +15,8 @@ import Saver from './Saver';
 
 type Props = {
   mode?: 'create' | 'update';
-  onSaved?: OnSavedFunction;
-  onRemoved?: OnRemovedFunction;
 };
-function FormView({ mode = 'create', onSaved, onRemoved }: Props) {
+function FormView({ mode = 'create' }: Props) {
   const { styles, theme } = useStyles(stylesheet);
   // Note: こいつによって、マウント直後に3回くらいレンダリングされる。
   const offset = useKeyboardOffsetContext();
@@ -48,11 +44,11 @@ function FormView({ mode = 'create', onSaved, onRemoved }: Props) {
             <MemoRow />
           </View>
           <View style={styles.saveWrapper}>
-            <Saver mode={mode} onSaved={onSaved} />
+            <Saver mode={mode} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      <View style={styles.bottomView}>{mode === 'update' && <Remover onRemoved={onRemoved} />}</View>
+      <View style={styles.bottomView}>{mode === 'update' && <Remover />}</View>
       <KeyboardSimpleBar offset={offset} onPressDone={handlePressDone} />
     </>
   );

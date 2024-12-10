@@ -7,15 +7,17 @@ import KeyboardAwareLayout from '../../components/KeyboardAwareLayout';
 import { queryOptions } from '../../usecase/query';
 
 import FormView from './components/FormView';
+import { ActionsContext } from './context/ActionsContext';
 import { CategoryListContext } from './context/CategoryListContext';
 import { FormStoreContext } from './context/FormStoreContext';
 import { createFormDataStore } from './store/form.store';
-import { FormDataStore, OnRemovedFunction, OnSavedFunction } from './type';
+import { FormDataStore, OnDirtyChangeFunction, OnRemovedFunction, OnSavedFunction } from './type';
 
 type CreateExpenseFormProps = {
   onSaved: OnSavedFunction;
+  onDirtyChange: OnDirtyChangeFunction;
 };
-export const CreateExpenseForm = withSuspense(({ onSaved }: CreateExpenseFormProps) => {
+export const CreateExpenseForm = withSuspense(({ onSaved, onDirtyChange }: CreateExpenseFormProps) => {
   const categoryQuery = useSuspenseQuery(queryOptions.category.list());
 
   const store = useRef<FormDataStore>();
@@ -32,13 +34,19 @@ export const CreateExpenseForm = withSuspense(({ onSaved }: CreateExpenseFormPro
     store.current.form.categoryId = newCategoryId;
   }, [categoryQuery]);
 
+  useEffect(() => {
+    store.current?.subscribe(onDirtyChange);
+  }, []);
+
   return (
     <KeyboardAwareLayout>
-      <CategoryListContext.Provider value={categoryQuery.data.map((c) => c.category)}>
-        <FormStoreContext.Provider value={store.current}>
-          <FormView mode="create" onSaved={onSaved} />
-        </FormStoreContext.Provider>
-      </CategoryListContext.Provider>
+      <ActionsContext.Provider value={{ onSaved }}>
+        <CategoryListContext.Provider value={categoryQuery.data.map((c) => c.category)}>
+          <FormStoreContext.Provider value={store.current}>
+            <FormView mode="create" />
+          </FormStoreContext.Provider>
+        </CategoryListContext.Provider>
+      </ActionsContext.Provider>
     </KeyboardAwareLayout>
   );
 });
@@ -47,8 +55,9 @@ type UpdateExpenseFormProps = {
   expenseId: string;
   onSaved: OnSavedFunction;
   onRemoved: OnRemovedFunction;
+  onDirtyChange: OnDirtyChangeFunction;
 };
-export const UpdateExpenseForm = ({ expenseId, onSaved, onRemoved }: UpdateExpenseFormProps) => {
+export const UpdateExpenseForm = ({ expenseId, onSaved, onRemoved, onDirtyChange }: UpdateExpenseFormProps) => {
   const categoryQuery = useSuspenseQuery(queryOptions.category.list());
   const expenseQuery = useSuspenseQuery(queryOptions.expense.detail(expenseId));
 
@@ -59,13 +68,19 @@ export const UpdateExpenseForm = ({ expenseId, onSaved, onRemoved }: UpdateExpen
     store.current = createFormDataStore(expenseQuery.data);
   }
 
+  useEffect(() => {
+    store.current?.subscribe(onDirtyChange);
+  }, []);
+
   return (
     <KeyboardAwareLayout>
-      <CategoryListContext.Provider value={categoryQuery.data.map((c) => c.category)}>
-        <FormStoreContext.Provider value={store.current}>
-          <FormView mode="update" onSaved={onSaved} onRemoved={onRemoved} />
-        </FormStoreContext.Provider>
-      </CategoryListContext.Provider>
+      <ActionsContext.Provider value={{ onSaved, onRemoved }}>
+        <CategoryListContext.Provider value={categoryQuery.data.map((c) => c.category)}>
+          <FormStoreContext.Provider value={store.current}>
+            <FormView mode="update" />
+          </FormStoreContext.Provider>
+        </CategoryListContext.Provider>
+      </ActionsContext.Provider>
     </KeyboardAwareLayout>
   );
 };

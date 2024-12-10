@@ -8,17 +8,16 @@ import TrashSvg from '@/assets/icons/lucide/trash.svg';
 import { useMutations } from '@/src/presentation/usecase/mutation';
 import { assert } from '@/src/utils/errors';
 
+import { useActionsContext } from '../context/ActionsContext';
 import { useFormStoreContext } from '../context/FormStoreContext';
-import { OnRemovedFunction } from '../type';
 
-type Props = {
-  onRemoved?: OnRemovedFunction;
-};
-function Remover({ onRemoved }: Props) {
+function Remover() {
   const queryClient = useQueryClient();
   const formStore = useFormStoreContext();
   const mutation = useMutations.expense.delete(queryClient);
   const { styles, theme } = useStyles(stylesheet);
+
+  const actions = useActionsContext();
 
   const handlePress = () => {
     const id = formStore.getId();
@@ -31,10 +30,10 @@ function Remover({ onRemoved }: Props) {
         onPress: () => {
           mutation.mutate(id, {
             onSuccess: () => {
-              onRemoved?.(true);
+              actions.onRemoved?.(true);
             },
             onError: () => {
-              onRemoved?.(false);
+              actions.onRemoved?.(false);
             },
           });
         },

@@ -8,16 +8,17 @@ import DashedSquareSvg from '@/assets/icons/lucide/square-check_1.75px.svg';
 import { useExpenseMutation } from '@/src/presentation/usecase/mutation/expense/mutation';
 import { assert } from '@/src/utils/errors';
 
+import { useActionsContext } from '../context/ActionsContext';
 import { useFormStoreContext } from '../context/FormStoreContext';
-import { OnSavedFunction } from '../type';
 
 type Props = {
   mode?: 'create' | 'update';
-  onSaved?: OnSavedFunction;
 };
-export default function Saver({ mode = 'create', onSaved }: Props) {
+export default function Saver({ mode = 'create' }: Props) {
   const formStore = useFormStoreContext();
   const [canSave, setCanSave] = useState(false);
+
+  const actions = useActionsContext();
 
   const [keeping, setKeeping] = useState(false);
 
@@ -40,10 +41,10 @@ export default function Saver({ mode = 'create', onSaved }: Props) {
         },
         {
           onError: () => {
-            onSaved?.(false, keeping);
+            actions.onSaved?.(false, keeping);
           },
           onSuccess: () => {
-            onSaved?.(true, keeping);
+            actions.onSaved?.(true, keeping);
             if (keeping) {
               formStore.form.amount = 0;
               formStore.form.memo = '';
@@ -63,10 +64,10 @@ export default function Saver({ mode = 'create', onSaved }: Props) {
         },
         {
           onError: () => {
-            onSaved?.(false, false);
+            actions.onSaved?.(false, false);
           },
           onSuccess: () => {
-            onSaved?.(true, false);
+            actions.onSaved?.(true, false);
           },
         },
       );
