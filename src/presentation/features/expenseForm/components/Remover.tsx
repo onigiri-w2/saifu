@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -24,14 +24,26 @@ function Remover({ onRemoved }: Props) {
     const id = formStore.getId();
     assert(id, 'id is required');
 
-    mutation.mutate(id, {
-      onSuccess: () => {
-        onRemoved?.(true);
+    Alert.alert('削除しますか？', undefined, [
+      {
+        text: '削除',
+        style: 'destructive',
+        onPress: () => {
+          mutation.mutate(id, {
+            onSuccess: () => {
+              onRemoved?.(true);
+            },
+            onError: () => {
+              onRemoved?.(false);
+            },
+          });
+        },
       },
-      onError: () => {
-        onRemoved?.(false);
+      {
+        text: 'キャンセル',
+        style: 'cancel',
       },
-    });
+    ]);
   };
 
   return (

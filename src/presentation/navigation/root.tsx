@@ -4,8 +4,7 @@ import { useStyles } from 'react-native-unistyles';
 
 import CategoryForm from '@/src/presentation/screens/CategoryForm';
 import CategoryIconSelector from '@/src/presentation/screens/CategoryIconSelector';
-
-import ExpenseForm from '../screens/ExpenseForm';
+import ExpenseForm from '@/src/presentation/screens/ExpenseForm';
 
 import MainTabs from './mainTabs';
 
