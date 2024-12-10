@@ -9,4 +9,5 @@ export type FormDataStore = {
   isDirty: () => boolean;
   isValid: () => boolean;
   subscribe: (callback: (isDirty: boolean, isValid: boolean) => void) => () => void;
+  updateTimestamp: (timestamp: number) => void;
 };

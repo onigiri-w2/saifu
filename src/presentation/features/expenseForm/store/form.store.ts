@@ -23,6 +23,11 @@ export const createFormDataStore = (source?: Expense, defaultCategoryId?: string
         subscribers.delete(callback);
       };
     },
+    updateTimestamp(timestamp: number) {
+      const date = new Date(timestamp);
+      const onlyDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      this.form.timestamp = onlyDate.getTime();
+    },
   });
 
   subscribe(store.form, () => {
@@ -52,10 +57,11 @@ const isEqual = (a: FormDataState, b: FormDataState): boolean => {
   return true;
 };
 const createInitialState = (source?: Expense, defaultCategoryId?: string): FormDataStore['form'] => {
+  const now = new Date();
   if (!source) {
     return {
       amount: 0,
-      timestamp: new Date().getTime(),
+      timestamp: new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(),
       categoryId: defaultCategoryId,
       memo: '',
     };

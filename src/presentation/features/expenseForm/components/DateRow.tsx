@@ -22,7 +22,7 @@ export default function DateRow() {
   const { isOpen, open, close } = useOpen();
 
   const handleChangeDate = useCallback((date: Date) => {
-    store.form.timestamp = date.getTime();
+    store.updateTimestamp(date.getTime());
   }, []);
 
   return (
