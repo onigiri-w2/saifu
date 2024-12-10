@@ -14,3 +14,4 @@ export type FormDataStore = {
 };
 
 export type OnSavedFunction = (success: boolean, keeping: boolean) => void;
+export type OnRemovedFunction = (success: boolean) => void;

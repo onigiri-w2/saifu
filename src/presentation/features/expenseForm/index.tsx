@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { Text, View } from 'react-native';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -11,30 +10,31 @@ import FormView from './components/FormView';
 import { CategoryListContext } from './context/CategoryListContext';
 import { FormStoreContext } from './context/FormStoreContext';
 import { createFormDataStore } from './store/form.store';
-import { FormDataStore, OnSavedFunction } from './type';
+import { FormDataStore, OnRemovedFunction, OnSavedFunction } from './type';
 
 type CreateExpenseFormProps = {
   onSaved: OnSavedFunction;
 };
 export const CreateExpenseForm = withSuspense(({ onSaved }: CreateExpenseFormProps) => {
-  const query = useSuspenseQuery(queryOptions.category.list());
+  const categoryQuery = useSuspenseQuery(queryOptions.category.list());
 
   const store = useRef<FormDataStore>();
   if (!store.current) {
-    store.current = createFormDataStore(undefined, query.data[0]?.category.id);
+    store.current = createFormDataStore(undefined, categoryQuery.data[0]?.category.id);
   }
 
+  // TODO: 多分これ期待通りの挙動しないよ。
   useEffect(() => {
     if (!store.current) return;
-    const newCategoryId = query.data[0]?.category.id;
+    const newCategoryId = categoryQuery.data[0]?.category.id;
     if (store.current.form.categoryId === newCategoryId) return;
 
     store.current.form.categoryId = newCategoryId;
-  }, [query]);
+  }, [categoryQuery]);
 
   return (
     <KeyboardAwareLayout>
-      <CategoryListContext.Provider value={query.data.map((c) => c.category)}>
+      <CategoryListContext.Provider value={categoryQuery.data.map((c) => c.category)}>
         <FormStoreContext.Provider value={store.current}>
           <FormView mode="create" onSaved={onSaved} />
         </FormStoreContext.Provider>
@@ -45,11 +45,27 @@ export const CreateExpenseForm = withSuspense(({ onSaved }: CreateExpenseFormPro
 
 type UpdateExpenseFormProps = {
   expenseId: string;
+  onSaved: OnSavedFunction;
+  onRemoved: OnRemovedFunction;
 };
-export const UpdateExpenseForm = ({ expenseId }: UpdateExpenseFormProps) => {
+export const UpdateExpenseForm = ({ expenseId, onSaved, onRemoved }: UpdateExpenseFormProps) => {
+  const categoryQuery = useSuspenseQuery(queryOptions.category.list());
+  const expenseQuery = useSuspenseQuery(queryOptions.expense.detail(expenseId));
+
+  if (!expenseQuery.data) return null;
+
+  const store = useRef<FormDataStore>();
+  if (!store.current) {
+    store.current = createFormDataStore(expenseQuery.data);
+  }
+
   return (
-    <View>
-      <Text>fire</Text>
-    </View>
+    <KeyboardAwareLayout>
+      <CategoryListContext.Provider value={categoryQuery.data.map((c) => c.category)}>
+        <FormStoreContext.Provider value={store.current}>
+          <FormView mode="update" onSaved={onSaved} onRemoved={onRemoved} />
+        </FormStoreContext.Provider>
+      </CategoryListContext.Provider>
+    </KeyboardAwareLayout>
   );
 };

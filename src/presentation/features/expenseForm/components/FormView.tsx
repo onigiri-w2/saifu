@@ -6,19 +6,21 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useKeyboardOffsetContext } from '@/src/presentation/components/KeyboardAwareLayout';
 import KeyboardSimpleBar from '@/src/presentation/components/KeyboardSimpleBar';
 
-import { OnSavedFunction } from '../type';
+import { OnRemovedFunction, OnSavedFunction } from '../type';
 
 import AmountRow from './AmountRow';
 import CategoryRow from './CategoryRow';
 import DateRow from './DateRow';
 import MemoRow from './MemoRow';
+import Remover from './Remover';
 import Saver from './Saver';
 
 type Props = {
   mode?: 'create' | 'update';
   onSaved?: OnSavedFunction;
+  onRemoved?: OnRemovedFunction;
 };
-function FormView({ mode = 'create', onSaved }: Props) {
+function FormView({ mode = 'create', onSaved, onRemoved }: Props) {
   const { styles, theme } = useStyles(stylesheet);
   // Note: こいつによって、マウント直後に3回くらいレンダリングされる。
   const offset = useKeyboardOffsetContext();
@@ -50,13 +52,14 @@ function FormView({ mode = 'create', onSaved }: Props) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <View style={styles.bottomView}>{mode === 'update' && <Remover onRemoved={onRemoved} />}</View>
       <KeyboardSimpleBar offset={offset} onPressDone={handlePressDone} />
     </>
   );
 }
 
 export default React.memo(FormView);
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet((theme, rt) => ({
   container: {
     paddingTop: theme.spacing.x4,
     gap: theme.spacing.x4,
@@ -72,5 +75,9 @@ const stylesheet = createStyleSheet((theme) => ({
   separater: {
     height: 1,
     backgroundColor: theme.colors.border.listSeparator,
+  },
+  bottomView: {
+    paddingBottom: rt.insets.bottom,
+    paddingHorizontal: theme.spacing.x2,
   },
 }));
