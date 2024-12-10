@@ -2,6 +2,7 @@ import Yearmonth from '@/src/domain/valueobject/yearmonth';
 
 const root = 'expenses';
 export const expenseQueryKeys = {
+  root: [root],
   'monthly/timeline': (yearmonth: Yearmonth, asc: boolean) => [
     root,
     'monthly',

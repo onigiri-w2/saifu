@@ -13,9 +13,10 @@ import MemoRow from './MemoRow';
 import Saver from './Saver';
 
 type Props = {
-  initialAutoFocusAmount?: boolean;
+  mode?: 'create' | 'update';
+  onSaved?: (success: boolean) => void;
 };
-function FormView({ initialAutoFocusAmount }: Props) {
+function FormView({ mode = 'create', onSaved }: Props) {
   const { styles, theme } = useStyles(stylesheet);
   // Note: こいつによって、マウント直後に3回くらいレンダリングされる。
   const offset = useKeyboardOffsetContext();
@@ -34,7 +35,7 @@ function FormView({ initialAutoFocusAmount }: Props) {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.formBox}>
-            <AmountRow initialAutoFocus={initialAutoFocusAmount} />
+            <AmountRow initialAutoFocus={mode === 'create'} />
             <View style={styles.separater} />
             <DateRow />
             <View style={styles.separater} />
@@ -43,7 +44,7 @@ function FormView({ initialAutoFocusAmount }: Props) {
             <MemoRow />
           </View>
           <View style={styles.saveWrapper}>
-            <Saver />
+            <Saver mode={mode} onSaved={onSaved} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

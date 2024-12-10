@@ -13,7 +13,10 @@ import { FormStoreContext } from './context/FormStoreContext';
 import { createFormDataStore } from './store/form.store';
 import { FormDataStore } from './type';
 
-export const NewExpenseForm = withSuspense(() => {
+type CreateExpenseFormProps = {
+  onSaved: (success: boolean) => void;
+};
+export const CreateExpenseForm = withSuspense(({ onSaved }: CreateExpenseFormProps) => {
   const query = useSuspenseQuery(queryOptions.category.list());
 
   const store = useRef<FormDataStore>();
@@ -33,7 +36,7 @@ export const NewExpenseForm = withSuspense(() => {
     <KeyboardAwareLayout>
       <CategoryListContext.Provider value={query.data.map((c) => c.category)}>
         <FormStoreContext.Provider value={store.current}>
-          <FormView initialAutoFocusAmount />
+          <FormView mode="create" onSaved={onSaved} />
         </FormStoreContext.Provider>
       </CategoryListContext.Provider>
     </KeyboardAwareLayout>

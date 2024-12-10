@@ -9,6 +9,8 @@ export const createFormDataStore = (source?: Expense, defaultCategoryId?: string
   const initialState = createInitialState(source, defaultCategoryId);
   const subscribers: Set<(isDirty: boolean, isValid: boolean) => void> = new Set();
 
+  const id = source?.id;
+
   const store = proxy<FormDataStore>({
     form: deepClone(initialState),
     isDirty() {
@@ -27,6 +29,9 @@ export const createFormDataStore = (source?: Expense, defaultCategoryId?: string
       const date = new Date(timestamp);
       const onlyDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       this.form.timestamp = onlyDate.getTime();
+    },
+    getId() {
+      return id;
     },
   });
 
