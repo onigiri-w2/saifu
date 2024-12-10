@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { View, Text } from 'react-native';
 
 import { NativeActionEvent, MenuView } from '@react-native-menu/menu';
@@ -12,7 +12,7 @@ import { useCategoryListContext } from '../context/CategoryListContext';
 import { useFormStoreContext } from '../context/FormStoreContext';
 import { commonStylesheet } from '../style';
 
-export default function CategoryRow() {
+function CategoryRow() {
   const { styles, theme } = useStyles(commonStylesheet);
 
   const categories = useCategoryListContext();
@@ -73,3 +73,5 @@ export default function CategoryRow() {
     </View>
   );
 }
+
+export default React.memo(CategoryRow);

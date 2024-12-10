@@ -7,7 +7,7 @@ import NoteSvg from '@/assets/icons/lucide/notepad.svg';
 
 import { commonStylesheet } from '../style';
 
-export default function MemoRow() {
+function MemoRow() {
   const { styles, theme } = useStyles(stylesheet);
   const [value, setValue] = useState('');
 
@@ -25,6 +25,8 @@ export default function MemoRow() {
     </View>
   );
 }
+
+export default React.memo(MemoRow);
 
 const stylesheet = createStyleSheet((theme) => ({
   ...commonStylesheet(theme),

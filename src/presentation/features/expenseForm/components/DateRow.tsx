@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Text, Pressable, View } from 'react-native';
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -12,7 +12,7 @@ import { dateFormat } from '@/src/presentation/i18n/format';
 import { useFormStoreContext } from '../context/FormStoreContext';
 import { commonStylesheet } from '../style';
 
-export default function DateRow() {
+function DateRow() {
   const { styles, theme } = useStyles(stylesheet);
 
   const store = useFormStoreContext();
@@ -50,6 +50,8 @@ export default function DateRow() {
     </Pressable>
   );
 }
+
+export default React.memo(DateRow);
 
 const stylesheet = createStyleSheet((theme, rt) => ({
   ...commonStylesheet(theme),

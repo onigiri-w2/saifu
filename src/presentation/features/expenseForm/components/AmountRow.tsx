@@ -13,15 +13,13 @@ import { commonStylesheet } from '../style';
 type Props = {
   initialAutoFocus?: boolean;
 };
-export default function AmountRow({ initialAutoFocus = false }: Props) {
+function AmountRow({ initialAutoFocus = false }: Props) {
   const store = useFormStoreContext();
   const value = useSnapshot(store.form).amount;
 
   const [isFocused, setIsFocused] = useState(false);
 
-  const { styles, theme } = useStyles(stylesheet, {
-    state: isFocused ? 'focused' : value === 0 ? 'isZero' : 'nonZero',
-  });
+  const { styles, theme } = useStyles(stylesheet, { isFocused });
   const [textValue, setTextValue] = useState('');
   const inputRef = useRef<TextInput>(null);
   const handlePress = useCallback(() => {
@@ -65,6 +63,8 @@ export default function AmountRow({ initialAutoFocus = false }: Props) {
   );
 }
 
+export default React.memo(AmountRow);
+
 const stylesheet = createStyleSheet((theme) => ({
   ...commonStylesheet(theme),
   textinput: {
@@ -82,14 +82,11 @@ const stylesheet = createStyleSheet((theme) => ({
     fontSize: theme.fontSize.body,
     color: theme.colors.text.primary,
     variants: {
-      state: {
-        focused: {
+      isFocused: {
+        true: {
           color: theme.colors.brand.primary,
         },
-        isZero: {
-          color: theme.colors.text.tertiary,
-        },
-        nonZero: {
+        false: {
           color: theme.colors.text.primary,
         },
       },

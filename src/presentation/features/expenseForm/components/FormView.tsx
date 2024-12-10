@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Keyboard, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -15,8 +15,9 @@ import Saver from './Saver';
 type Props = {
   initialAutoFocusAmount?: boolean;
 };
-export default function FormView({ initialAutoFocusAmount }: Props) {
+function FormView({ initialAutoFocusAmount }: Props) {
   const { styles, theme } = useStyles(stylesheet);
+  // Note: こいつによって、マウント直後に3回くらいレンダリングされる。
   const offset = useKeyboardOffsetContext();
 
   const handlePressDone = useCallback(() => {
@@ -50,6 +51,8 @@ export default function FormView({ initialAutoFocusAmount }: Props) {
     </>
   );
 }
+
+export default React.memo(FormView);
 const stylesheet = createStyleSheet((theme) => ({
   container: {
     paddingTop: theme.spacing.x4,
