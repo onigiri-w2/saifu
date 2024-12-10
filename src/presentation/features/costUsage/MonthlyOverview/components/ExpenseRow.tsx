@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -11,8 +11,10 @@ import { numberFormat } from '@/src/presentation/i18n/format';
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
 import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
+import { useActionsContext } from '../../context/ActionsContext';
 import { useCategoryContext } from '../../context/CategoryContext';
 
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 type Props = {
   expense: Expense;
   focusDate: SharedValue<JsonLocalDate>;
@@ -33,17 +35,22 @@ function ExpenseRow({ expense, focusDate }: Props) {
     };
   });
 
+  const actions = useActionsContext();
+  const handlePress = () => {
+    actions.onSelectExpenseItem?.(expense.id);
+  };
+
   if (!category) return null;
 
   return (
-    <Animated.View style={[styles.container, containerStyle]}>
+    <AnimatedTouchableOpacity style={[styles.container, containerStyle]} onPress={handlePress}>
       <CategoryIcon iconName={category.iconName} iconColor={category.iconColor} size={28} />
       <View style={styles.middle}>
         <Text style={styles.categoryName}>{category.name}</Text>
         {expense.memo && <Text style={styles.memo}>{expense.memo}</Text>}
       </View>
       <Text style={styles.money}>{numberFormat(expense.amount.value)}</Text>
-    </Animated.View>
+    </AnimatedTouchableOpacity>
   );
 }
 export default React.memo(ExpenseRow);
@@ -63,7 +70,7 @@ const stylesheet = createStyleSheet((theme) => ({
     flex: 1,
   },
   categoryName: {
-    fontSize: theme.fontSize.subHeading,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.primary,
   },
   memo: {
@@ -71,7 +78,7 @@ const stylesheet = createStyleSheet((theme) => ({
     color: theme.colors.text.tertiary,
   },
   money: {
-    fontSize: theme.fontSize.subHeading,
+    fontSize: theme.fontSize.body,
     color: theme.colors.text.primary,
   },
 }));

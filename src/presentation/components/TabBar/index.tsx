@@ -21,7 +21,7 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const parentNavigation = navigation.getParent();
     if (parentNavigation) {
       // 親のStackNavigatorの'/expense'に遷移
-      parentNavigation.navigate('ExpenseForm');
+      parentNavigation.navigate('ExpenseForm', { expenseId: undefined });
     }
   };
 

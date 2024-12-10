@@ -13,7 +13,7 @@ export type RootStackParamList = {
   MainTabs: undefined;
   CategoryDetail: { categoryId: string | undefined; timestamp: string };
   CategoryIconSelector: undefined;
-  ExpenseForm: undefined;
+  ExpenseForm: { expenseId: string | undefined };
 };
 export type RootStackNavigationProp = NavigationProp<RootStackParamList>;
 
