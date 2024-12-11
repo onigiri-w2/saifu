@@ -18,6 +18,9 @@ export type Strategy = IBudgetNoneStrategy | IBudgetRegularlyStrategy;
 
 export const budgetCycles = ['weekly', 'monthly', 'yearly'] as const;
 export type BudgetCycle = (typeof budgetCycles)[number];
+export const isBudgetCycle = (value: unknown): value is BudgetCycle => {
+  return budgetCycles.includes(value as any);
+};
 
 export const budgetCycleLabels = {
   monthly: '月',
