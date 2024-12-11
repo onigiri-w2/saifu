@@ -36,9 +36,7 @@ function CategoryRow() {
   }, [categories, categoryId]);
 
   const handlePressActions = useCallback(({ nativeEvent }: NativeActionEvent) => {
-    setTimeout(() => {
-      store.form.categoryId = nativeEvent.event;
-    }, 100);
+    store.form.categoryId = nativeEvent.event;
   }, []);
 
   return (

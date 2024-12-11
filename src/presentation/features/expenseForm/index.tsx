@@ -26,13 +26,13 @@ export const CreateExpenseForm = withSuspense(({ onSaved, onDirtyChange }: Creat
   }
 
   // TODO: 多分これ期待通りの挙動しないよ。
-  useEffect(() => {
-    if (!store.current) return;
-    const newCategoryId = categoryQuery.data[0]?.category.id;
-    if (store.current.form.categoryId === newCategoryId) return;
-
-    store.current.form.categoryId = newCategoryId;
-  }, [categoryQuery]);
+  // useEffect(() => {
+  //   if (!store.current) return;
+  //   const newCategoryId = categoryQuery.data[0]?.category.id;
+  //   if (store.current.form.categoryId === newCategoryId) return;
+  //
+  //   store.current.form.categoryId = newCategoryId;
+  // }, [categoryQuery]);
 
   useEffect(() => {
     store.current?.subscribe(onDirtyChange);

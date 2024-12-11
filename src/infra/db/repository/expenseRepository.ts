@@ -1,6 +1,6 @@
-import { ExpenseRepositoryError } from '@/src/domain/error';
 import Expense from '@/src/domain/aggregation/expense';
 import IExpenseRepository from '@/src/domain/aggregation/expense/repository.type';
+import { ExpenseRepositoryError } from '@/src/domain/error';
 import Money from '@/src/domain/valueobject/money';
 
 import { db } from '../client';
@@ -65,10 +65,10 @@ class DbExpenseRepository implements IExpenseRepository {
       });
     }
   }
-  async findSome(id?: string, from?: Date, to?: Date, dateOrder: 'asc' | 'desc' = 'desc'): Promise<Expense[]> {
+  async findSome(categoryId?: string, from?: Date, to?: Date, dateOrder: 'asc' | 'desc' = 'desc'): Promise<Expense[]> {
     try {
       let query = db.selectFrom('expenses').selectAll();
-      if (id) query = query.where('id', '=', id);
+      if (categoryId) query = query.where('categoryId', '=', categoryId);
       if (from) query = query.where('date', '>=', from);
       if (to) query = query.where('date', '<=', to);
       const records = await query.orderBy('date', dateOrder).execute();
@@ -76,7 +76,7 @@ class DbExpenseRepository implements IExpenseRepository {
     } catch (e) {
       throw new ExpenseRepositoryError('Expenseデータの複数取得に失敗しました', {
         cause: e,
-        context: { id, from, to },
+        context: { categoryId, from, to },
       });
     }
   }
