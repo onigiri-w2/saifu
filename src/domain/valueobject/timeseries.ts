@@ -51,7 +51,7 @@ export class DailyStock implements ITimeSeries {
     const map = new HashMap<LocalDate, number>();
     for (const stock of stocks) {
       for (const point of stock.points) {
-        map.set(point.date, map.get(point.date) ?? 0 + point.value);
+        map.set(point.date, (map.get(point.date) ?? 0) + point.value);
       }
     }
     return DailyStock.fromMap(map, stocks[0].getPeriod());
