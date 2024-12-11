@@ -23,3 +23,10 @@ export function getDaysInMonth(year: Year, month: Month) {
 export function isLeapYear(year: Year) {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }
+
+export function isEqualDate(
+  date1: { year: Year; month: Month; day: Day },
+  date2: { year: Year; month: Month; day: Day },
+) {
+  return date1.year === date2.year && date1.month === date2.month && date1.day === date2.day;
+}

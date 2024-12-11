@@ -5,14 +5,19 @@ import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
-import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+import { isEqualDate } from '@/src/utils/dates';
+
+import { useTodayContext } from '../../context/TodayContext';
 
 type Props = {
   date: JsonLocalDate;
   focusDate: SharedValue<JsonLocalDate>;
 };
 function ExpenseDateRow({ date, focusDate }: Props) {
-  const label = `${date.month}月${date.day}日`;
+  const today = useTodayContext();
+  const jsonToday = convertToJsonLocalDate(today.date);
+  const label = isEqualDate(date, jsonToday) ? '今日' : `${date.month}月${date.day}日`;
 
   const animationStyle = useAnimatedStyle(() => {
     const isAfterThan = compareOnWorklet(date, focusDate.value) > 0;

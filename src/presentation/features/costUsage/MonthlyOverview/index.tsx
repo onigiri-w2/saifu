@@ -11,6 +11,7 @@ import { convertToJsonLocalDate, JsonLocalDate } from '@/src/presentation/utils/
 
 import { CategoryContext } from '../context/CategoryContext';
 import { useRenderingModeSwitchContext } from '../context/RenderingModeSwitchContext';
+import { useTodayContext } from '../context/TodayContext';
 import { costUsagePreferenceStore } from '../store/preference.store';
 
 import ListView from './components/ListView';
@@ -22,20 +23,19 @@ type Props = {
 };
 function MonthlyOverview({ yearmonth }: Props) {
   // query
-  const [categoryQuery, timelineQuery, stocksQuery, aggregatedStockQuery, todayQuery] = useSuspenseQueries({
+  const [categoryQuery, timelineQuery, stocksQuery, aggregatedStockQuery] = useSuspenseQueries({
     queries: [
       queryOptions.category.list(),
       queryOptions.expense['monthly/timeline'](yearmonth, false),
       queryOptions.costStock.monthly(yearmonth),
       queryOptions.costStock['monthly/aggregated'](yearmonth),
-      queryOptions.today.today(),
     ],
   });
 
   // data
   const stocksOrTimeline = useSnapshot(costUsagePreferenceStore).costOrTransaction;
   const timelineViewData = useTimelineViewData(timelineQuery.data);
-  const today = todayQuery.data;
+  const today = useTodayContext();
 
   // validation
   if (stocksQuery.data.length === 0) return <NotFound />;
