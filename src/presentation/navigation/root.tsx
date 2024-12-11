@@ -6,6 +6,8 @@ import CategoryForm from '@/src/presentation/screens/CategoryForm';
 import CategoryIconSelector from '@/src/presentation/screens/CategoryIconSelector';
 import ExpenseForm from '@/src/presentation/screens/ExpenseForm';
 
+import HeaderCloseButton from '../components/HeaderCloseButton';
+
 import MainTabs from './mainTabs';
 
 export type RootStackParamList = {
@@ -36,16 +38,34 @@ export default function RootStack() {
         component={CategoryForm}
         options={{
           presentation: 'modal',
-          headerLeft: () => null,
+          headerLeft: () => <HeaderCloseButton />,
+          headerTitleStyle: {
+            fontWeight: theme.component.navigation.header.title.fontWeight,
+            fontSize: theme.component.navigation.header.title.fontSize,
+            color: theme.component.navigation.header.title.color,
+          },
         }}
       />
-      <Stack.Screen name="CategoryIconSelector" component={CategoryIconSelector} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="CategoryIconSelector"
+        component={CategoryIconSelector}
+        options={{
+          presentation: 'modal',
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="ExpenseForm"
         component={ExpenseForm}
         options={{
           presentation: 'modal',
           title: '支出',
+          headerLeft: () => <HeaderCloseButton />,
+          headerTitleStyle: {
+            fontWeight: theme.component.navigation.header.title.fontWeight,
+            fontSize: theme.component.navigation.header.title.fontSize,
+            color: theme.component.navigation.header.title.color,
+          },
         }}
       />
     </Stack.Navigator>
