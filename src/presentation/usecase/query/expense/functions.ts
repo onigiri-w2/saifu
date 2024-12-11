@@ -43,8 +43,15 @@ export const loadMonthlyTimeline = async (yearmonth: Yearmonth, asc: boolean): P
     }
   });
 
-  if (asc) return result;
-  else return result.reverse();
+  if (asc) {
+    return result;
+  } else {
+    // 中身もreverseする
+    return result.reverse().map((item) => ({
+      date: item.date,
+      expenses: item.expenses.reverse(),
+    }));
+  }
 };
 
 export const loadExpense = async (id: string): Promise<Expense> => {
