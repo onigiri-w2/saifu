@@ -26,6 +26,7 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
           case 'none':
             break;
           case 'regularly':
+            console.log("save entity.strategy", entity.strategy.tempAmount);
             await transaction
               .insertInto('budgetRegularyStrategies')
               .values({
@@ -192,7 +193,7 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     return BudgetRegularlyStrategy.build(
       Money.build(record.amount),
       record.cycle,
-      record.tempAmount ? Money.build(record.tempAmount) : undefined,
+      record.tempAmount !== null ? Money.build(record.tempAmount) : undefined,
     );
   }
 }

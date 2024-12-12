@@ -35,7 +35,7 @@ export interface BudgetRegularyStrategyTable {
   budgetPlanId: string;
   amount: number;
   cycle: BudgetCycle;
-  tempAmount?: number;
+  tempAmount: number | null;
 }
 
 export interface Database {

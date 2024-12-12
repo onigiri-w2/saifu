@@ -4,6 +4,7 @@ module.exports = {
   plugins: ['import', 'unused-imports'],
   rules: {
     'import/no-cycle': 'error',
+    '@typescript-eslint/strict-boolean-expressions': 'error',
     'prettier/prettier': [
       'error',
       {

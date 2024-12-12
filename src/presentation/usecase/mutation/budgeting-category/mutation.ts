@@ -2,12 +2,12 @@ import { QueryClient, useMutation } from '@tanstack/react-query';
 
 import { keys } from '../../query';
 
-import { addBudgetingCategory, deleteBudgetingCategory, updateBudgetingCategory } from './functions';
+import { createBudgetingCategory, deleteBudgetingCategory, updateBudgetingCategory } from './functions';
 
 export const useBudgetingCategoryMutation = {
   create: (queryClient: QueryClient) => {
     return useMutation({
-      mutationFn: addBudgetingCategory,
+      mutationFn: createBudgetingCategory,
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
         queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });

@@ -67,6 +67,7 @@ export const createFormDataStore = (source?: BudgetingCategory) => {
 };
 
 const createInitialState = (source?: BudgetingCategory): FormDataState => {
+  console.log("source", source?.budgetPlan.strategy)
   if (!source) return deepClone(DEFAULT_STATE);
 
   const baseState: FormDataState = {
@@ -113,7 +114,7 @@ const isEqual = (a: FormDataState, b: FormDataState): boolean => {
     return (
       aPayload.amount === bPayload.amount &&
       aPayload.cycle === bPayload.cycle &&
-      ((!aPayload.tempAmount && !bPayload.tempAmount) || // 両方undefinedの場合
+      ((aPayload.tempAmount === undefined && bPayload.tempAmount === undefined) || // 両方undefinedの場合
         aPayload.tempAmount === bPayload.tempAmount) // 両方に値がある場合の比較
     );
   }
