@@ -26,10 +26,10 @@ function StartWeekUpdater({ initialStartWeek, onSelected }: Props) {
     (v: string) => {
       const cycleStartDef = query.data?.cycleStartDef;
       if (!cycleStartDef) return;
-      const newStartMonth = parseInt(v, 10) as DayOfWeek;
-      const newCycleStartDef = cycleStartDef.updateStartWeek(newStartMonth);
+      const newStartWeek = parseInt(v, 10) as DayOfWeek;
+      const newCycleStartDef = cycleStartDef.updateStartWeek(newStartWeek);
       mutation.mutate({ cycleStartDef: newCycleStartDef });
-      setStartWeek(newStartMonth);
+      setStartWeek(newStartWeek);
       onSelected?.();
     },
     [query.data],

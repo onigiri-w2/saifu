@@ -26,10 +26,10 @@ function StartYearUpdater({ initialStartYear, onSelected }: Props) {
     (v: string) => {
       const cycleStartDef = query.data?.cycleStartDef;
       if (!cycleStartDef) return;
-      const newStartMonth = parseInt(v, 10) as Month;
-      const newCycleStartDef = cycleStartDef.updateStartMonth(newStartMonth);
+      const newStartYear = parseInt(v, 10) as Month;
+      const newCycleStartDef = cycleStartDef.updateStartYear(newStartYear);
       mutation.mutate({ cycleStartDef: newCycleStartDef });
-      setStartYear(newStartMonth);
+      setStartYear(newStartYear);
       onSelected?.();
     },
     [query.data],
