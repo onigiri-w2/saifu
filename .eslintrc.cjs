@@ -1,30 +1,23 @@
 module.exports = {
   root: true,
-  extends: ['universe', 'plugin:prettier/recommended'],
-  plugins: ['import', 'unused-imports'],
-  rules: {
-    'import/no-cycle': 'error',
-    '@typescript-eslint/strict-boolean-expressions': 'error',
-    'prettier/prettier': [
-      'error',
-      {
-        printWidth: 120,
-        // 他のPrettier設定をここに追加
+  plugins: ['import', 'unused-imports', '@typescript-eslint'],
+  parser: '@typescript-eslint/parser',
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx', '*.d.ts'],
+      parserOptions: {
+        project: './tsconfig.json',
       },
-    ],
+    },
+  ],
+  extends: ['universe', 'prettier'],
+  rules: {
+    "@typescript-eslint/strict-boolean-expressions": "error",
+    '@typescript-eslint/no-unused-vars': 'off',
     'comma-dangle': 'off',
     curly: ['error', 'multi-line'],
-    '@typescript-eslint/no-unused-vars': 'off',
     'unused-imports/no-unused-imports': 'warn',
-    'unused-imports/no-unused-vars': [
-      'warn',
-      {
-        vars: 'all',
-        varsIgnorePattern: '^_',
-        args: 'after-used',
-        argsIgnorePattern: '^_',
-      },
-    ],
+    'import/no-cycle': 'error',
     'import/order': [
       'error',
       {
