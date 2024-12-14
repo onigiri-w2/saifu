@@ -43,7 +43,7 @@ export default function Saver({ mode = 'create' }: Props) {
           onError: () => {
             actions.onSaved?.(false, keeping);
           },
-          onSuccess: () => {
+          onSuccess: async () => {
             actions.onSaved?.(true, keeping);
             if (keeping) {
               formStore.form.amount = 0;

@@ -37,5 +37,14 @@ class Category {
       });
     }
   }
+
+  public isSameValue(other: Category) {
+    return (
+      this.id === other.id &&
+      this.name === other.name &&
+      this.iconName === other.iconName &&
+      this.iconColor === other.iconColor
+    );
+  }
 }
 export default Category;

@@ -2,13 +2,14 @@ import Money from '../../valueobject/money';
 
 const STRATEGY_TYPES = { NONE: 'none', REGULARLY: 'regularly' } as const;
 export type StrategyType = (typeof STRATEGY_TYPES)[keyof typeof STRATEGY_TYPES];
-export interface BaseStrategy {
+export interface BaseStrategy<T> {
   type: StrategyType;
+  isSameValue(other: T): boolean;
 }
-export interface IBudgetNoneStrategy extends BaseStrategy {
+export interface IBudgetNoneStrategy extends BaseStrategy<IBudgetNoneStrategy> {
   type: typeof STRATEGY_TYPES.NONE;
 }
-export interface IBudgetRegularlyStrategy extends BaseStrategy {
+export interface IBudgetRegularlyStrategy extends BaseStrategy<IBudgetRegularlyStrategy> {
   type: typeof STRATEGY_TYPES.REGULARLY;
   amount: Money;
   cycle: BudgetCycle;

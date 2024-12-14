@@ -26,7 +26,7 @@ function Row({ budgetingCategory, onPress }: Props) {
   const { category, budgetPlan } = budgetingCategory;
 
   const { label, value } = useMemo(() => {
-    if (!budgetPlan) return { label: '予算なし', value: undefined };
+    if (budgetPlan === undefined) return { label: '予算なし', value: undefined };
 
     switch (budgetPlan.strategy.type) {
       case 'regularly': {
@@ -48,8 +48,7 @@ function Row({ budgetingCategory, onPress }: Props) {
   const isOpen = useSnapshot(store).rowCollapseStates.get(category.id);
 
   useEffect(() => {
-    if (isOpen) {
-    } else {
+    if (Boolean(isOpen) === false) {
       swipeableRef.current?.close();
     }
   }, [isOpen]);
@@ -83,15 +82,20 @@ function Row({ budgetingCategory, onPress }: Props) {
           <Text style={styles.categoryName}>{category.name}</Text>
         </View>
         <View style={styles.budgetPlanWrap}>
-          {label && <Text style={styles.budgetPlanLabel}>{label}</Text>}
-          {value && <Text style={styles.budgetPlanValue}>{value}</Text>}
+          {label !== undefined && <Text style={styles.budgetPlanLabel}>{label}</Text>}
+          {value !== undefined && <Text style={styles.budgetPlanValue}>{value}</Text>}
         </View>
       </View>
     </Swipeable>
   );
 }
 
-export default React.memo(Row);
+export default React.memo(Row, (prev, next) => {
+  return (
+    prev.budgetingCategory.category.isSameValue(next.budgetingCategory.category) &&
+    prev.budgetingCategory.budgetPlan.isSameValue(next.budgetingCategory.budgetPlan)
+  );
+});
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {
