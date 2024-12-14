@@ -12,7 +12,7 @@ import { commonStylesheet } from '../style';
 function MemoRow() {
   const { styles, theme } = useStyles(stylesheet);
   const formStore = useFormStoreContext();
-  const memo = useSnapshot(formStore.form).memo;
+  const memo = useSnapshot(formStore.form, { sync: true }).memo;
   const handleCahngeText = (text: string) => {
     formStore.form.memo = text;
   };

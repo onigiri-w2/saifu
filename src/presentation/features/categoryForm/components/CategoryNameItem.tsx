@@ -10,7 +10,7 @@ import { useStoreContext } from '../context/StoreContext';
 function CategoryNameItem() {
   const { styles, theme } = useStyles(stylesheet);
   const { formDataStore, formFocusStore } = useStoreContext();
-  const categoryName = useSnapshot(formDataStore.form).categoryName;
+  const categoryName = useSnapshot(formDataStore.form, { sync: true }).categoryName;
 
   const handleChangeText = useCallback((text: string) => {
     formDataStore.form.categoryName = text;
