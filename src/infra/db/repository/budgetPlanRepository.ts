@@ -26,7 +26,6 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
           case 'none':
             break;
           case 'regularly':
-            console.log('save entity.strategy', entity.strategy.tempAmount);
             await transaction
               .insertInto('budgetRegularyStrategies')
               .values({

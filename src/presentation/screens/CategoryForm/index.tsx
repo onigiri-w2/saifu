@@ -27,7 +27,7 @@ export default function Page() {
   const saveButton = useCallback(() => {
     const handleSave = async () => {
       const result = ref.current?.save();
-      if (result) {
+      if (result !== undefined) {
         setForceBack(true);
         setTimeout(navigation.goBack, 0);
       }
@@ -39,7 +39,7 @@ export default function Page() {
   useEffect(() => {
     setTimeout(() => {
       navigation.setOptions({
-        title: params.categoryId ? 'カテゴリ更新' : '新規カテゴリ',
+        title: params.categoryId !== undefined ? 'カテゴリ更新' : '新規カテゴリ',
         headerRight: saveButton,
       });
     }, 0);
@@ -74,16 +74,13 @@ export default function Page() {
     ]);
   });
 
+  const key = (params.categoryId ?? 'new') + params.timestamp;
+
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <View style={styles.container}>
         {!isLoading && (
-          <CategoryForm
-            key={params.categoryId ?? 'new' + params.timestamp}
-            ref={ref}
-            categoryId={params.categoryId}
-            onStateChange={handleStateChange}
-          />
+          <CategoryForm key={key} ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />
         )}
       </View>
     </ErrorBoundary>

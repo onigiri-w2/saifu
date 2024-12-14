@@ -18,7 +18,6 @@ type Props = {
   onStateChange?: (isDirty: boolean, isValid: boolean) => void;
 };
 const CategoryForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
-  // categoryIdがマウント中に変わることないという前提で条件分岐内でhook使用
   const { data } =
     props.categoryId !== undefined
       ? useSuspenseQuery(queryOptions.category.detail(props.categoryId))

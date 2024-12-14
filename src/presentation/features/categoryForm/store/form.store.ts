@@ -67,7 +67,6 @@ export const createFormDataStore = (source?: BudgetingCategory) => {
 };
 
 const createInitialState = (source?: BudgetingCategory): FormDataState => {
-  console.log("source", source?.budgetPlan.strategy)
   if (!source) return deepClone(DEFAULT_STATE);
 
   const baseState: FormDataState = {
