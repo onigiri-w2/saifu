@@ -23,13 +23,12 @@ function StartMonthUpdater({ initialStartMonth, onSelected }: Props) {
   const mutation = useCalendarMutation.update(queryClient);
 
   const handleSelect = useCallback(
-    (v: string) => {
+    (value: Day) => {
       const cycleStartDef = query.data?.cycleStartDef;
       if (!cycleStartDef) return;
-      const newStartMonth = parseInt(v, 10) as Day;
-      const newCycleStartDef = cycleStartDef.updateStartMonth(newStartMonth);
+      const newCycleStartDef = cycleStartDef.updateStartMonth(value);
       mutation.mutate({ cycleStartDef: newCycleStartDef });
-      setStartMonth(newStartMonth);
+      setStartMonth(value);
       onSelected?.();
     },
     [query.data],
@@ -40,14 +39,8 @@ function StartMonthUpdater({ initialStartMonth, onSelected }: Props) {
   }, []);
   const renderItem = useCallback(
     (item: ListRenderItemInfo<Day>) => {
-      return (
-        <Item
-          value={item.item.toString()}
-          label={`${item.item}日`}
-          onPress={handleSelect}
-          isActive={startMonth === item.item}
-        />
-      );
+      const day = item.item;
+      return <Item value={day} label={`${item.item}日`} onPress={handleSelect} isActive={startMonth === item.item} />;
     },
     [startMonth],
   );

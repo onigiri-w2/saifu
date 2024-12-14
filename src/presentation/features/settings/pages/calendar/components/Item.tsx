@@ -3,15 +3,14 @@ import { Pressable, Text } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-type Props = {
-  value: string;
+type Props<T> = {
+  value: T;
   label?: string;
   isActive?: boolean;
-  onPress?: (value: string) => void;
+  onPress?: (value: T) => void;
 };
-function Item({ value, label, isActive = false, onPress }: Props) {
+function BaseItem<T>({ value, label, isActive = false, onPress }: Props<T>) {
   const { styles } = useStyles(stylesheet, { isActive });
-
   return (
     <Pressable
       style={styles.container}
@@ -19,11 +18,11 @@ function Item({ value, label, isActive = false, onPress }: Props) {
         onPress?.(value);
       }}
     >
-      <Text style={styles.text}>{label ?? value}</Text>
+      <Text style={styles.text}>{label ?? String(value)}</Text>
     </Pressable>
   );
 }
-export default React.memo(Item);
+export default React.memo(BaseItem) as typeof BaseItem;
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {

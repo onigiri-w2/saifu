@@ -23,13 +23,12 @@ function StartYearUpdater({ initialStartYear, onSelected }: Props) {
   const mutation = useCalendarMutation.update(queryClient);
 
   const handleSelect = useCallback(
-    (v: string) => {
+    (v: Month) => {
       const cycleStartDef = query.data?.cycleStartDef;
       if (!cycleStartDef) return;
-      const newStartYear = parseInt(v, 10) as Month;
-      const newCycleStartDef = cycleStartDef.updateStartYear(newStartYear);
+      const newCycleStartDef = cycleStartDef.updateStartYear(v);
       mutation.mutate({ cycleStartDef: newCycleStartDef });
-      setStartYear(newStartYear);
+      setStartYear(v);
       onSelected?.();
     },
     [query.data],
@@ -41,12 +40,7 @@ function StartYearUpdater({ initialStartYear, onSelected }: Props) {
   const renderItem = useCallback(
     (item: ListRenderItemInfo<Month>) => {
       return (
-        <Item
-          value={item.item.toString()}
-          label={`${item.item}月`}
-          onPress={handleSelect}
-          isActive={startYear === item.item}
-        />
+        <Item value={item.item} label={`${item.item}月`} onPress={handleSelect} isActive={startYear === item.item} />
       );
     },
     [startYear],

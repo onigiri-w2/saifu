@@ -23,13 +23,12 @@ function StartWeekUpdater({ initialStartWeek, onSelected }: Props) {
   const mutation = useCalendarMutation.update(queryClient);
 
   const handleSelect = useCallback(
-    (v: string) => {
+    (v: DayOfWeek) => {
       const cycleStartDef = query.data?.cycleStartDef;
       if (!cycleStartDef) return;
-      const newStartWeek = parseInt(v, 10) as DayOfWeek;
-      const newCycleStartDef = cycleStartDef.updateStartWeek(newStartWeek);
+      const newCycleStartDef = cycleStartDef.updateStartWeek(v);
       mutation.mutate({ cycleStartDef: newCycleStartDef });
-      setStartWeek(newStartWeek);
+      setStartWeek(v);
       onSelected?.();
     },
     [query.data],
@@ -42,7 +41,7 @@ function StartWeekUpdater({ initialStartWeek, onSelected }: Props) {
     (item: ListRenderItemInfo<DayOfWeek>) => {
       return (
         <Item
-          value={item.item.toString()}
+          value={item.item}
           label={`${dayOfWeekLabels[item.item]}曜日`}
           onPress={handleSelect}
           isActive={startWeek === item.item}

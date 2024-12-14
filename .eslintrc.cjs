@@ -1,3 +1,5 @@
+// NOTE: universeにprettier-pluginが定義されてるので、ここでprettierは指定してない
+//
 module.exports = {
   root: true,
   plugins: ['import', 'unused-imports', '@typescript-eslint'],
