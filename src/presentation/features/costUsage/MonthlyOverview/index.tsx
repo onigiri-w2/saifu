@@ -8,7 +8,6 @@ import Yearmonth from '@/src/domain/valueobject/yearmonth';
 import { withSuspense } from '@/src/presentation/components/hoc/withSuspense';
 import { queryOptions } from '@/src/presentation/usecase/query';
 import { convertToJsonLocalDate, JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
-import { BaseError } from '@/src/utils/errors';
 
 import { CategoryContext } from '../context/CategoryContext';
 import { useRenderingModeSwitchContext } from '../context/RenderingModeSwitchContext';
@@ -33,10 +32,6 @@ function MonthlyOverview({ yearmonth }: Props) {
   });
   const stocksOrTimeline = useSnapshot(costUsagePreferenceStore).costOrTransaction;
   const today = useTodayContext();
-
-  // validation
-  if (stocksQuery.data.length === 0) throw new BaseError('Stocks not found');
-  if (categoryQuery.data.length === 0) throw new BaseError('Categories not found');
 
   // convert
   const timelineViewData = useTimelineViewData(timelineQuery.data);

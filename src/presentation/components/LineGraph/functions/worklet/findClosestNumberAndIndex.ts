@@ -1,8 +1,6 @@
-import { BaseError } from '@/src/utils/errors';
-
 export function findClosestNumberAndIndex(sortedNumbers: number[], target: number): { value: number; index: number } {
   'worklet';
-  if (sortedNumbers.length === 0) throw new BaseError('配列が空です。少なくとも1つ以上必要です');
+  if (sortedNumbers.length === 0) throw new Error('配列が空です。少なくとも1つ以上必要です');
   if (sortedNumbers.length === 1) return { value: sortedNumbers[0], index: 0 };
 
   // 二分探索のための左右のインデックス

@@ -17,6 +17,8 @@ import CategoryCost from './CategoryCost';
 import DateRow from './ExpenseDateRow';
 import ExpenseRow from './ExpenseRow';
 import Header from './Header';
+import NotFoundCategories from './NotFoundCategories';
+import NotFoundExpenses from './NotFoundExpenses';
 
 type Props = {
   stocks: CostStock[];
@@ -55,6 +57,13 @@ function ListView({ stocks, aggregatedStock, timeline, today, focusDate, stocksO
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
       contentInset={{ bottom: theme.spacing.x6 }}
+      ListFooterComponent={
+        stocksOrTimeline === 'transaction' ? (
+          <NotFoundExpenses period={aggregatedStock.getPeriod()} timeline={timeline} focusDate={focusDate} />
+        ) : (
+          <NotFoundCategories existAtLeastOne={stocks.length > 0} />
+        )
+      }
     />
   );
 }

@@ -1,3 +1,5 @@
+import { JsonLocalDate } from '../utils/reanimated/types';
+
 import { locale, currency } from './config';
 
 export const numberFormat = (value: number, isCurrency = true) => {
@@ -19,4 +21,9 @@ export const numberFormatOnWorklet = (value: number, isCurrency = true) => {
 export const dateFormat = (value: Date) => {
   // 今は日本だけ
   return `${value.getFullYear()}年${value.getMonth() + 1}月${value.getDate()}日`;
+};
+
+export const dateFormatOnWorklet = (date: JsonLocalDate) => {
+  'worklet';
+  return `${date.month}/${date.day}`;
 };
