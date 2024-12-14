@@ -17,9 +17,24 @@ function DeleteAction({ categoryId }: Props) {
   const deleteMutation = useBudgetingCategoryMutation.delete(queryClient);
 
   const handlePress = () => {
-    Alert.alert('カテゴリを削除しますか？', '関連する支出は全て削除されます', [
+    Alert.alert('カテゴリを削除しますか？', '', [
+      {
+        text: '削除する',
+        onPress: () => {
+          Alert.alert('注意', '紐づく支出も一緒に削除されますが、削除しますか？', [
+            { text: 'キャンセル', style: 'cancel' },
+            {
+              text: '削除する',
+              onPress: () => {
+                deleteMutation.mutate({ categoryId });
+              },
+              style: 'destructive',
+            },
+          ]);
+        },
+        style: 'destructive',
+      },
       { text: 'キャンセル', style: 'cancel' },
-      { text: '削除', onPress: () => deleteMutation.mutate({ categoryId }), style: 'destructive' },
     ]);
   };
 
