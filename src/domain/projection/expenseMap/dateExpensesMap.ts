@@ -39,5 +39,9 @@ class DateExpensesMap {
       return [LocalDate.decode(hash), value];
     });
   }
+
+  toJSON() {
+    return this.map.toJSON();
+  }
 }
 export default DateExpensesMap;

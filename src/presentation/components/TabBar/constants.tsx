@@ -7,5 +7,5 @@ export const icons = {
   BudgetMonitorList: WalletSvg,
   CashFlow: LineChartSvg,
   CategoryList: GridLayoutSvg,
-  SettingsHome: SettingsHomeSvg,
+  Settings: SettingsHomeSvg,
 };

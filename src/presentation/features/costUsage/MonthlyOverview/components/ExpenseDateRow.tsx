@@ -34,7 +34,10 @@ function ExpenseDateRow({ date, focusDate }: Props) {
   );
 }
 
-export default React.memo(ExpenseDateRow);
+export default React.memo(
+  ExpenseDateRow,
+  (prev, next) => JSON.stringify(prev.date) === JSON.stringify(next.date) && prev.focusDate === next.focusDate,
+);
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {

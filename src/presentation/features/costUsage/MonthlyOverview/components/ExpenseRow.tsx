@@ -53,7 +53,10 @@ function ExpenseRow({ expense, focusDate }: Props) {
     </AnimatedTouchableOpacity>
   );
 }
-export default React.memo(ExpenseRow);
+export default React.memo(
+  ExpenseRow,
+  (prev, next) => JSON.stringify(prev.expense) === JSON.stringify(next.expense) && prev.focusDate === next.focusDate,
+);
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {

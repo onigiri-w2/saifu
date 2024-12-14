@@ -18,9 +18,5 @@ class Money {
       });
     }
   }
-
-  isSameValue(other: Money) {
-    return this.value === other.value;
-  }
 }
 export default Money;

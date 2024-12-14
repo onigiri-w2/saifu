@@ -18,7 +18,7 @@ export type MainTabParamList = {
   BudgetMonitorList: undefined;
   CategoryList: undefined;
   CashFlow: undefined;
-  SettingsHome: undefined;
+  Settings: undefined;
 };
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -63,7 +63,7 @@ export default function MainTabs() {
         component={CategoryList}
         options={{ tabBarLabel: 'カテゴリ', title: 'カテゴリ' }}
       />
-      <Tab.Screen name="SettingsHome" component={SettingsStack} options={{ tabBarLabel: '設定', headerShown: false }} />
+      <Tab.Screen name="Settings" component={SettingsStack} options={{ tabBarLabel: '設定', headerShown: false }} />
     </Tab.Navigator>
   );
 }

@@ -92,8 +92,7 @@ function Row({ budgetingCategory, onPress }: Props) {
 
 export default React.memo(Row, (prev, next) => {
   return (
-    prev.budgetingCategory.category.isSameValue(next.budgetingCategory.category) &&
-    prev.budgetingCategory.budgetPlan.isSameValue(next.budgetingCategory.budgetPlan)
+    JSON.stringify(prev.budgetingCategory) === JSON.stringify(next.budgetingCategory) && prev.onPress === next.onPress
   );
 });
 

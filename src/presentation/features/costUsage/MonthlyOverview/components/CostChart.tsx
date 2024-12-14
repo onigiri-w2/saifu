@@ -33,4 +33,10 @@ function CostChart({ stock, today, focusDate }: Props) {
     />
   );
 }
-export default React.memo(CostChart);
+export default React.memo(
+  CostChart,
+  (prev, next) =>
+    JSON.stringify(prev.stock) === JSON.stringify(next.stock) &&
+    JSON.stringify(prev.today) === JSON.stringify(next.today) &&
+    prev.focusDate === next.focusDate,
+);

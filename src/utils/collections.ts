@@ -4,7 +4,6 @@ export interface Hashable {
 
 export class HashMap<K extends Hashable, V> {
   protected map = new Map<string, V>();
-
   constructor(entries?: Iterable<[K, V]>);
   constructor(map: HashMap<K, V>);
 
@@ -68,5 +67,13 @@ export class HashMap<K extends Hashable, V> {
       // you might want to store the original keys alongside their hashes.
       callbackfn(value, { hash: () => hash } as K, this);
     });
+  }
+
+  toJSON(): Record<string, V> {
+    const obj: Record<string, V> = {};
+    this.map.forEach((value, key) => {
+      obj[key] = value;
+    });
+    return obj;
   }
 }

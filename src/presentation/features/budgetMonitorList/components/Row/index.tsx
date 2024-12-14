@@ -51,7 +51,13 @@ function Row({ monitor, category, visual = 'entirly' }: Props) {
     </View>
   );
 }
-export default React.memo(Row);
+export default React.memo(Row, (prev, next) => {
+  return (
+    JSON.stringify(prev.monitor) === JSON.stringify(next.monitor) &&
+    JSON.stringify(prev.category) === JSON.stringify(next.category) &&
+    prev.visual === next.visual
+  );
+});
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {

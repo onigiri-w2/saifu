@@ -11,7 +11,7 @@ class BudgetPlan {
     public readonly id: string,
     public readonly categoryId: string,
     public readonly strategy: Strategy,
-  ) { }
+  ) {}
 
   static create(categoryId: string, strategy: Strategy) {
     const id = uuid.v4().toString();
@@ -33,17 +33,6 @@ class BudgetPlan {
         tempAmount !== undefined ? Money.build(tempAmount) : undefined,
       ),
     );
-  }
-
-  isSameValue(other: BudgetPlan) {
-    if (this.categoryId !== other.categoryId) return false;
-    if (this.strategy.type !== other.strategy.type) return false;
-    if (this.strategy.type === 'regularly' && other.strategy.type === 'regularly') {
-      if (this.strategy.cycle !== other.strategy.cycle) return false;
-      if (this.strategy.amount.value !== other.strategy.amount.value) return false;
-      if (this.strategy.tempAmount?.value !== other.strategy.tempAmount?.value) return false;
-    }
-    return true;
   }
 }
 

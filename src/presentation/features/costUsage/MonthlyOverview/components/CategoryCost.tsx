@@ -59,7 +59,10 @@ function CategoryCost({ stock, focusDate }: CategoryCostProps) {
   );
 }
 
-export default React.memo(CategoryCost);
+export default React.memo(
+  CategoryCost,
+  (prev, next) => JSON.stringify(prev.stock) === JSON.stringify(next.stock) && prev.focusDate === next.focusDate,
+);
 
 const stylesheet = createStyleSheet((theme) => ({
   container: {

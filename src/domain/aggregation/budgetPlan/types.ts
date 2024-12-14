@@ -4,7 +4,6 @@ const STRATEGY_TYPES = { NONE: 'none', REGULARLY: 'regularly' } as const;
 export type StrategyType = (typeof STRATEGY_TYPES)[keyof typeof STRATEGY_TYPES];
 export interface BaseStrategy<T> {
   type: StrategyType;
-  isSameValue(other: T): boolean;
 }
 export interface IBudgetNoneStrategy extends BaseStrategy<IBudgetNoneStrategy> {
   type: typeof STRATEGY_TYPES.NONE;

@@ -1,5 +1,6 @@
 import { Suspense, forwardRef } from 'react';
-import { Text } from 'react-native';
+
+import LoadingView from '../LoadingView';
 
 export function withSuspense<P extends object>(
   Component: React.ComponentType<P>,
@@ -28,5 +29,5 @@ export function withSuspenseRef<T, P extends object>(
 }
 
 function DefaultFallback() {
-  return <Text>Loading...</Text>;
+  return <LoadingView />;
 }
