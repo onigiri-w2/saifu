@@ -2,7 +2,7 @@ import { queryOptions as queryOptionsRQ } from '@tanstack/react-query';
 
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
 
-import { loadExpense, loadMonthlyExpenses, loadMonthlyTimeline } from './functions';
+import { loadExpenseDetail, loadMonthlyExpenses, loadMonthlyTimeline } from './functions';
 import { expenseQueryKeys } from './keys';
 
 export const expenseQueryOptions = {
@@ -19,6 +19,6 @@ export const expenseQueryOptions = {
   detail: (id: string) =>
     queryOptionsRQ({
       queryKey: expenseQueryKeys.detail(id),
-      queryFn: async () => loadExpense(id),
+      queryFn: async () => loadExpenseDetail(id),
     }),
 };

@@ -20,11 +20,9 @@ export class NotImplementedError extends BaseError {
     super(`${label}の処理が実装されていません`, { context: { checkValue } });
   }
 }
-export class DataIntegrityError extends BaseError {}
-export class DbMigrationError extends BaseError {}
 
 export function assert(condition: unknown, message: string, context: Record<string, unknown> = {}): asserts condition {
-  if (!condition) {
+  if (condition === false) {
     throw new AssertionError(message, context);
   }
 }

@@ -1,6 +1,7 @@
 import BudgetPlan from '@/src/domain/aggregation/budgetPlan';
 import Category from '@/src/domain/aggregation/category';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
+import { BaseError } from '@/src/utils/errors';
 
 // 中身はdomain modelのまま渡してるので注意。
 export type BudgetingCategory = {
@@ -25,7 +26,9 @@ export const loadBudgetingCategory = async (id: string): Promise<BudgetingCatego
   const repoBudgetPlan = RepositoryRegistry.getInstance().budgetPlanRepository;
 
   const category = await repoCategory.find(id);
-  if (!category) throw new Error('Category not found');
+  if (!category) {
+    throw new BaseError('カテゴリが見つかりません', { context: { category } });
+  }
   const budgetPlan = await repoBudgetPlan.findByCategoryId(id);
 
   return { category, budgetPlan: budgetPlan || BudgetPlan.withNone(id) };

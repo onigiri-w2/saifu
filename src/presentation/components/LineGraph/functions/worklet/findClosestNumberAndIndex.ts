@@ -1,9 +1,8 @@
+import { BaseError } from '@/src/utils/errors';
+
 export function findClosestNumberAndIndex(sortedNumbers: number[], target: number): { value: number; index: number } {
   'worklet';
-  // 配列が空の場合はnullを返す
-  if (sortedNumbers.length === 0) throw new Error('Array is empty');
-
-  // 配列の長さが1の場合は最初の要素とインデックス0を返す
+  if (sortedNumbers.length === 0) throw new BaseError('配列が空です。少なくとも1つ以上必要です');
   if (sortedNumbers.length === 1) return { value: sortedNumbers[0], index: 0 };
 
   // 二分探索のための左右のインデックス

@@ -2,6 +2,8 @@ import { Year, Month, Day, DayOfWeek } from '@/src/domain/valueobject/types';
 import { Hashable } from '@/src/utils/collections';
 import { clampDateToMonthEnd, getDaysInMonth } from '@/src/utils/dates';
 
+import { DomainValidationError } from '../error';
+
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
 class LocalDate implements Hashable {
   public readonly year!: Year;
@@ -169,11 +171,11 @@ export class LocalDateFormat {
     return Number(this.value.slice(6, 8)) as Day;
   }
   private _validate(value: string) {
-    if (!/^\d{8}$/.test(value)) throw new Error('数字8桁で入力してください');
+    if (!/^\d{8}$/.test(value)) throw new DomainValidationError('数字8桁で入力してください');
     const month = value.slice(4, 6);
     const day = value.slice(6, 8);
-    if (month < '01' || month > '12') throw new Error('月は1から12の間で入力してください');
-    if (day < '01' || day > '31') throw new Error('日は1から31の間で入力してください');
+    if (month < '01' || month > '12') throw new DomainValidationError('月は1から12の間で入力してください');
+    if (day < '01' || day > '31') throw new DomainValidationError('日は1から31の間で入力してください');
   }
 }
 

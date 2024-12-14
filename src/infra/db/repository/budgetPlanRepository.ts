@@ -4,7 +4,7 @@ import BudgetNoneStrategy from '@/src/domain/aggregation/budgetPlan/strategy/non
 import BudgetRegularlyStrategy from '@/src/domain/aggregation/budgetPlan/strategy/regularly';
 import { BudgetPlanRepositoryError } from '@/src/domain/error';
 import Money from '@/src/domain/valueobject/money';
-import { DataIntegrityError, NotImplementedError } from '@/src/utils/errors';
+import { NotImplementedError } from '@/src/utils/errors';
 
 import { db } from '../client';
 import { BudgetPlanTable, BudgetRegularyStrategyTable } from '../schema';
@@ -26,7 +26,7 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
           case 'none':
             break;
           case 'regularly':
-            console.log("save entity.strategy", entity.strategy.tempAmount);
+            console.log('save entity.strategy', entity.strategy.tempAmount);
             await transaction
               .insertInto('budgetRegularyStrategies')
               .values({
@@ -148,7 +148,7 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
           if (strategyRec && planRec.strategyType === 'regularly') {
             strategy = this.budgetRegularyStrategyRecordToEntity(strategyRec);
           } else if (planRec.strategyType === 'regularly' && !strategyRec) {
-            throw new DataIntegrityError('BudgetPlanのStrategyが見つかりません', {
+            throw new BudgetPlanRepositoryError('BudgetPlanのStrategyが見つかりません', {
               context: {
                 budgetPlanId: planRec.id,
                 type: planRec.strategyType,
@@ -176,7 +176,7 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
         .where('budgetPlanId', '=', budgetPlan.id)
         .executeTakeFirst();
       if (!strategyRecord) {
-        throw new DataIntegrityError('BudgetPlanのStrategyが見つかりません', {
+        throw new BudgetPlanRepositoryError('BudgetPlanのStrategyが見つかりません', {
           context: {
             budgetPlanId: budgetPlan.id,
             type: budgetPlan.strategyType,

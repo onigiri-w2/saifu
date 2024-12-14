@@ -45,5 +45,16 @@ export const loadMonthlyCostStocks = async (yearmonth: Yearmonth): Promise<CostS
 
 export const loadMonthlyAggregatedCostStocks = async (yearmonth: Yearmonth): Promise<DailyStock> => {
   const costStocks = await loadMonthlyCostStocks(yearmonth);
-  return DailyStock.aggregate(costStocks.map((cs) => cs.stock));
+
+  if (costStocks.length !== 0) {
+    return DailyStock.aggregate(
+      costStocks.map((cs) => cs.stock),
+      costStocks[0].stock.getPeriod(),
+    );
+  } else {
+    const registry = RepositoryRegistry.getInstance();
+    const calendar = await registry.calendarRepository.findOne();
+    const period = calendar.cycleStartDef.genMonthPeriodYm(yearmonth);
+    return DailyStock.empty(period);
+  }
 };

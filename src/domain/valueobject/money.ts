@@ -1,4 +1,4 @@
-import { ValidationError } from '@/src/domain/error';
+import { DomainValidationError } from '@/src/domain/error';
 
 class Money {
   private constructor(public readonly value: number) {
@@ -11,7 +11,7 @@ class Money {
 
   private _validate() {
     if (this.value < 0) {
-      throw new ValidationError('金額は0以上である必要があります', {
+      throw new DomainValidationError('金額は0以上である必要があります', {
         context: {
           value: this.value,
         },

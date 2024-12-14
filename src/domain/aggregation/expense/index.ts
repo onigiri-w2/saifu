@@ -1,6 +1,6 @@
 import uuid from 'react-native-uuid';
 
-import { ValidationError } from '../../error';
+import { DomainValidationError } from '../../error';
 import Money from '../../valueobject/money';
 
 class Expense {
@@ -25,7 +25,7 @@ class Expense {
 
   private _validate() {
     if (this.memo.length > 500) {
-      throw new ValidationError('メモは500文字以下である必要があります', {
+      throw new DomainValidationError('メモは500文字以下である必要があります', {
         context: { memo: this.memo },
       });
     }

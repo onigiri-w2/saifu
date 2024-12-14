@@ -3,6 +3,8 @@ import { Platform } from 'react-native';
 
 import { matchFont, Text } from '@shopify/react-native-skia';
 
+import { BaseError } from '@/src/utils/errors';
+
 import { Scale } from '../models/scale';
 import { TimePoint } from '../models/timepoint';
 
@@ -37,8 +39,8 @@ const Xlabels = React.memo(({ points, scale, height }: Props) => {
 });
 
 function generateIndexTicks(size: number, interval: number, offset: number = 0): number[] {
-  if (interval < 1) throw new Error('intervalは1以上である必要があります');
-  if (offset < 0) throw new Error('offsetは0以上である必要があります');
+  if (interval < 1) throw new BaseError('intervalは1以上である必要があります');
+  if (offset < 0) throw new BaseError('offsetは0以上である必要があります');
 
   const ticks: number[] = [];
   let current = offset;

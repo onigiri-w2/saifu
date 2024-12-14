@@ -1,5 +1,5 @@
 import Today from '@/src/domain/aggregation/today';
-import { ValidationError } from '@/src/domain/error';
+import { DomainValidationError } from '@/src/domain/error';
 
 import Budget from '../../budget';
 import DateExpensesMap from '../../expenseMap/dateExpensesMap';
@@ -63,7 +63,7 @@ class ThisCycleMonitor {
 
   private _validate() {
     if (!this.budget.period.includes(this.today.date)) {
-      throw new ValidationError('予算期間に今日が含まれていません', {
+      throw new DomainValidationError('予算期間に今日が含まれていません', {
         context: { today: this.today, period: this.budget.period },
       });
     }

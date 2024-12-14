@@ -1,6 +1,6 @@
 import uuid from 'react-native-uuid';
 
-import { ValidationError } from '../../error';
+import { DomainValidationError } from '../../error';
 
 import { IconColor } from './types/iconColor';
 import { IconName } from './types/iconName';
@@ -30,7 +30,7 @@ class Category {
 
   private _validate() {
     if (this.name.length > LIMIT.maxNameLength && this.name.trim() === '') {
-      throw new ValidationError(`カテゴリの名前の長さは1以上${LIMIT.maxNameLength}以下にしてください`, {
+      throw new DomainValidationError(`カテゴリの名前の長さは1以上${LIMIT.maxNameLength}以下にしてください`, {
         context: {
           name: this.name,
         },

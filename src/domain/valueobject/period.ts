@@ -1,4 +1,4 @@
-import { ValidationError } from '../error';
+import { DomainValidationError } from '../error';
 
 import LocalDate from './localdate';
 
@@ -61,7 +61,7 @@ class Period {
   }
   private _validate() {
     if (this.start.isAfterThan(this.end)) {
-      throw new ValidationError('startはendと同じ日もしくは前の日である必要があります', {
+      throw new DomainValidationError('startはendと同じ日もしくは前の日である必要があります', {
         context: {
           start: this.start,
           end: this.end,

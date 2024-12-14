@@ -1,3 +1,5 @@
+import { BaseError } from '@/src/utils/errors';
+
 export type ChartDate = {
   year: number;
   month: number;
@@ -20,7 +22,7 @@ export function toStr(chartdate: ChartDate) {
 export function fromStr(str: string): ChartDate {
   const [year, month, day] = str.split('-').map(Number);
   if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
-    throw new Error('Invalid date string');
+    throw new BaseError('year, month, day のどれかが数値ではありません', { context: { year, month, day } });
   }
   return { year, month, day };
 }

@@ -8,6 +8,7 @@ import Yearmonth from '@/src/domain/valueobject/yearmonth';
 import { withSuspense } from '@/src/presentation/components/hoc/withSuspense';
 import { queryOptions } from '@/src/presentation/usecase/query';
 import { convertToJsonLocalDate, JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
+import { BaseError } from '@/src/utils/errors';
 
 import { CategoryContext } from '../context/CategoryContext';
 import { useRenderingModeSwitchContext } from '../context/RenderingModeSwitchContext';
@@ -15,7 +16,6 @@ import { useTodayContext } from '../context/TodayContext';
 import { costUsagePreferenceStore } from '../store/preference.store';
 
 import ListView from './components/ListView';
-import NotFound from './components/NotFound';
 import { useTimelineViewData } from './hooks';
 
 type Props = {
@@ -31,14 +31,15 @@ function MonthlyOverview({ yearmonth }: Props) {
       queryOptions.costStock['monthly/aggregated'](yearmonth),
     ],
   });
-
-  // data
   const stocksOrTimeline = useSnapshot(costUsagePreferenceStore).costOrTransaction;
-  const timelineViewData = useTimelineViewData(timelineQuery.data);
   const today = useTodayContext();
 
   // validation
-  if (stocksQuery.data.length === 0) return <NotFound />;
+  if (stocksQuery.data.length === 0) throw new BaseError('Stocks not found');
+  if (categoryQuery.data.length === 0) throw new BaseError('Categories not found');
+
+  // convert
+  const timelineViewData = useTimelineViewData(timelineQuery.data);
 
   const viewData = useMemo(() => {
     return {

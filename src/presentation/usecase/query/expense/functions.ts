@@ -1,8 +1,8 @@
 import Expense from '@/src/domain/aggregation/expense';
-import { NotFoundExpenseError } from '@/src/domain/error';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 import LocalDate from '@/src/domain/valueobject/localdate';
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
+import { BaseError } from '@/src/utils/errors';
 
 export const loadMonthlyExpenses = async (yearmonth: Yearmonth): Promise<Expense[]> => {
   const calendarRepo = RepositoryRegistry.getInstance().calendarRepository;
@@ -54,9 +54,11 @@ export const loadMonthlyTimeline = async (yearmonth: Yearmonth, asc: boolean): P
   }
 };
 
-export const loadExpense = async (id: string): Promise<Expense> => {
+export const loadExpenseDetail = async (id: string): Promise<Expense> => {
   const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
   const expense = await expenseRepo.find(id);
-  if (!expense) throw new NotFoundExpenseError('指定の支出が見つかりません');
+  if (!expense) {
+    throw new BaseError('指定の支出が見つかりません', { context: { expense } });
+  }
   return expense;
 };

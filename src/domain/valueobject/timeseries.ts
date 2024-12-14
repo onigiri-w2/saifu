@@ -1,7 +1,5 @@
 import { HashMap } from '@/src/utils/collections';
 
-import { ValidationError } from '../error';
-
 import LocalDate from './localdate';
 import Period from './period';
 
@@ -48,9 +46,7 @@ export class DailyStock implements ITimeSeries {
   }
 
   static aggregate(stocks: DailyStock[], period: Period): DailyStock {
-    if (stocks.length === 0) {
-      throw new ValidationError('DailyStockが1つもありません', { context: { length: stocks.length } });
-    }
+    if (stocks.length === 0) return DailyStock.empty(period);
     // 結果を格納するためのマップを初期化
     const resultMap = new HashMap<LocalDate, number>();
 
@@ -119,18 +115,6 @@ export class DailyFlow implements ITimeSeries {
     return DailyFlow.fromMap(map, period);
   }
 
-  static merge(flows: DailyFlow[]): DailyFlow {
-    if (flows.length === 0) throw new Error('flows must not be empty');
-
-    const map = new HashMap<LocalDate, number>();
-    for (const flow of flows) {
-      for (const point of flow.points) {
-        map.set(point.date, map.get(point.date) ?? 0 + point.value);
-      }
-    }
-    return DailyFlow.fromMap(map, flows[0].getPeriod());
-  }
-
   toStock(): DailyStock {
     const newPoints: TimeSeriesDataPoint[] = [];
     let sum = 0;
@@ -138,7 +122,6 @@ export class DailyFlow implements ITimeSeries {
       sum += point.value;
       newPoints.push({ date: point.date, value: sum });
     }
-
     return DailyStock.fromPoints(newPoints);
   }
   getPeriod(): Period {
