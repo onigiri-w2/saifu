@@ -7,7 +7,7 @@ import { useStyles, createStyleSheet } from 'react-native-unistyles';
 
 import ErrorFallback from '../../components/ErrorFallback';
 import { SaveButton } from '../../components/PageHeader';
-import CategoryForm from '../../features/categoryForm';
+import { CreateCategoryForm, UpdateCategoryForm } from '../../features/categoryForm';
 import { CategoryBudgetFormRef } from '../../features/categoryForm/types';
 import { RootStackParamList } from '../../navigation/root';
 
@@ -76,11 +76,15 @@ export default function Page() {
 
   const key = (params.categoryId ?? 'new') + params.timestamp;
 
+  if (isLoading) return null;
+
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <View style={styles.container}>
-        {!isLoading && (
-          <CategoryForm key={key} ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />
+        {params.categoryId !== undefined ? (
+          <UpdateCategoryForm key={key} ref={ref} categoryId={params.categoryId} onStateChange={handleStateChange} />
+        ) : (
+          <CreateCategoryForm key={key} ref={ref} onStateChange={handleStateChange} />
         )}
       </View>
     </ErrorBoundary>

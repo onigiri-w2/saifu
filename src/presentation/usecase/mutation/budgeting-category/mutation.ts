@@ -8,8 +8,9 @@ export const useBudgetingCategoryMutation = {
   create: (queryClient: QueryClient) => {
     return useMutation({
       mutationFn: createBudgetingCategory,
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: keys.category.list });
+        queryClient.resetQueries({ queryKey: keys.category.detail(data.category.id) });
         queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
         queryClient.invalidateQueries({ queryKey: keys.costStock.root });
       },
@@ -18,8 +19,9 @@ export const useBudgetingCategoryMutation = {
   update: (queryClient: QueryClient) => {
     return useMutation({
       mutationFn: updateBudgetingCategory,
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: keys.category.list });
+        queryClient.resetQueries({ queryKey: keys.category.detail(data.category.id) });
         queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
         queryClient.invalidateQueries({ queryKey: keys.costStock.root });
       },
@@ -28,9 +30,9 @@ export const useBudgetingCategoryMutation = {
   delete: (queryClient: QueryClient) => {
     return useMutation({
       mutationFn: deleteBudgetingCategory,
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
-        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: keys.category.list });
+        queryClient.removeQueries({ queryKey: keys.category.detail(data?.id ?? '') });
         queryClient.invalidateQueries({ queryKey: keys.costStock.root });
         queryClient.invalidateQueries({ queryKey: keys.expense.root });
       },

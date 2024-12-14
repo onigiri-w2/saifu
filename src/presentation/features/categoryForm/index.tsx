@@ -13,36 +13,59 @@ import { FormDataStore, createFormDataStore } from './store/form.store';
 import { createFormFocusStore, FormFocusStore } from './store/selectedItem.store';
 import { CategoryBudgetFormRef } from './types';
 
-type Props = {
-  categoryId?: string;
+type CreateCategoryProps = {
   onStateChange?: (isDirty: boolean, isValid: boolean) => void;
 };
-const CategoryForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
-  const { data } =
-    props.categoryId !== undefined
-      ? useSuspenseQuery(queryOptions.category.detail(props.categoryId))
-      : { data: undefined };
+export const CreateCategoryForm = React.memo(
+  forwardRef<CategoryBudgetFormRef, CreateCategoryProps>((props, ref) => {
+    const formDataStore = useRef<FormDataStore>();
+    if (!formDataStore.current) formDataStore.current = createFormDataStore();
+    const formFocusStore = useRef<FormFocusStore>();
+    if (!formFocusStore.current) formFocusStore.current = createFormFocusStore();
 
-  const formDataStore = useRef<FormDataStore>();
-  if (!formDataStore.current) {
-    formDataStore.current = createFormDataStore(props.categoryId !== undefined ? data : undefined);
-  }
+    useEffect(() => {
+      props.onStateChange && formDataStore.current?.subscribe(props.onStateChange);
+    }, []);
 
-  const formFocusStore = useRef<FormFocusStore>();
-  if (!formFocusStore.current) formFocusStore.current = createFormFocusStore();
+    return (
+      <KeyboardAwareLayout>
+        <StoreContext.Provider value={{ formDataStore: formDataStore.current, formFocusStore: formFocusStore.current }}>
+          <FormView />
+          <Saver ref={ref} />
+        </StoreContext.Provider>
+      </KeyboardAwareLayout>
+    );
+  }),
+);
 
-  useEffect(() => {
-    props.onStateChange && formDataStore.current?.subscribe(props.onStateChange);
-  }, []);
+type UpdateCategoryProps = {
+  categoryId: string;
+  onStateChange?: (isDirty: boolean, isValid: boolean) => void;
+};
+export const UpdateCategoryForm = React.memo(
+  withSuspenseRef(
+    forwardRef<CategoryBudgetFormRef, UpdateCategoryProps>((props, ref) => {
+      const { data } = useSuspenseQuery(queryOptions.category.detail(props.categoryId));
 
-  return (
-    <KeyboardAwareLayout>
-      <StoreContext.Provider value={{ formDataStore: formDataStore.current, formFocusStore: formFocusStore.current }}>
-        <FormView />
-        <Saver ref={ref} />
-      </StoreContext.Provider>
-    </KeyboardAwareLayout>
-  );
-});
+      const formDataStore = useRef<FormDataStore>();
+      if (!formDataStore.current) formDataStore.current = createFormDataStore(data);
+      const formFocusStore = useRef<FormFocusStore>();
+      if (!formFocusStore.current) formFocusStore.current = createFormFocusStore();
 
-export default React.memo(withSuspenseRef(CategoryForm));
+      useEffect(() => {
+        props.onStateChange && formDataStore.current?.subscribe(props.onStateChange);
+      }, []);
+
+      return (
+        <KeyboardAwareLayout>
+          <StoreContext.Provider
+            value={{ formDataStore: formDataStore.current, formFocusStore: formFocusStore.current }}
+          >
+            <FormView />
+            <Saver ref={ref} />
+          </StoreContext.Provider>
+        </KeyboardAwareLayout>
+      );
+    }),
+  ),
+);
