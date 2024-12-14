@@ -9,11 +9,11 @@ export const costStockQueryOptions = {
   monthly: (yearmonth: Yearmonth) =>
     queryOptionsRQ({
       queryKey: costStockKeys.monthly(yearmonth),
-      queryFn: async () => loadMonthlyCostStocks(yearmonth),
+      queryFn: () => loadMonthlyCostStocks(yearmonth),
     }),
   'monthly/aggregated': (yearmonth: Yearmonth) =>
     queryOptionsRQ({
       queryKey: costStockKeys['monthly/aggregated'](yearmonth),
-      queryFn: async () => loadMonthlyAggregatedCostStocks(yearmonth),
+      queryFn: () => loadMonthlyAggregatedCostStocks(yearmonth),
     }),
 };

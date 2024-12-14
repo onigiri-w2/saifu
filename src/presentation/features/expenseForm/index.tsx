@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { assert } from '@/src/utils/errors';
+
 import { withSuspense } from '../../components/hoc/withSuspense';
 import KeyboardAwareLayout from '../../components/KeyboardAwareLayout';
 import { queryOptions } from '../../usecase/query';
@@ -20,19 +22,11 @@ type CreateExpenseFormProps = {
 export const CreateExpenseForm = withSuspense(({ onSaved, onDirtyChange }: CreateExpenseFormProps) => {
   const categoryQuery = useSuspenseQuery(queryOptions.category.list());
 
+  const defaultCategoryId = categoryQuery.data[0]?.category.id;
   const store = useRef<FormDataStore>();
   if (!store.current) {
-    store.current = createFormDataStore(undefined, categoryQuery.data[0]?.category.id);
+    store.current = createFormDataStore(undefined, defaultCategoryId);
   }
-
-  // TODO: 多分これ期待通りの挙動しないよ。
-  // useEffect(() => {
-  //   if (!store.current) return;
-  //   const newCategoryId = categoryQuery.data[0]?.category.id;
-  //   if (store.current.form.categoryId === newCategoryId) return;
-  //
-  //   store.current.form.categoryId = newCategoryId;
-  // }, [categoryQuery]);
 
   useEffect(() => {
     store.current?.subscribe(onDirtyChange);
@@ -61,7 +55,9 @@ export const UpdateExpenseForm = ({ expenseId, onSaved, onRemoved, onDirtyChange
   const categoryQuery = useSuspenseQuery(queryOptions.category.list());
   const expenseQuery = useSuspenseQuery(queryOptions.expense.detail(expenseId));
 
-  if (!expenseQuery.data) return null;
+  // validation
+  assert(expenseQuery.data !== undefined, 'Expense not found');
+  assert(categoryQuery.data.length > 0, 'Category not found');
 
   const store = useRef<FormDataStore>();
   if (!store.current) {

@@ -32,6 +32,7 @@ export const useBudgetingCategoryMutation = {
         queryClient.invalidateQueries({ queryKey: keys.category.root, refetchType: 'all' });
         queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
         queryClient.invalidateQueries({ queryKey: keys.costStock.root });
+        queryClient.invalidateQueries({ queryKey: keys.expense.root });
       },
     });
   },

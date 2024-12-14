@@ -7,7 +7,6 @@ import ThisCycleMonitor from '@/src/domain/projection/budgetMonitor/monitors/thi
 import { withSuspense } from '../../components/hoc/withSuspense';
 import { queryOptions } from '../../usecase/query';
 import { BudgetingCategory } from '../../usecase/query/budgeting-category/functions';
-import { budgetingCategoryQueryOptions as categoryQueryOptions } from '../../usecase/query/budgeting-category/query-options';
 import { MonitorViewData } from '../categoryList/types';
 
 import ListView from './components/ListView';
@@ -16,10 +15,10 @@ type Props = {
   useDeferredRendering: boolean;
 };
 function BudgetMonitorList({ useDeferredRendering }: Props) {
-  const [monitorRslt, categoryQRslt] = useSuspenseQueries({
-    queries: [queryOptions.budgetMonitor.thisCycleMonitorList(), categoryQueryOptions.list()],
+  const [monitorQuery, categoryQuery] = useSuspenseQueries({
+    queries: [queryOptions.budgetMonitor.thisCycleMonitorList(), queryOptions.category.list()],
   });
-  const viewData = useViewData(monitorRslt.data, categoryQRslt.data);
+  const viewData = useViewData(monitorQuery.data, categoryQuery.data);
   const defferedViewData = useDeferredValue(viewData);
 
   return <ListView viewData={useDeferredRendering ? defferedViewData : viewData} />;

@@ -19,13 +19,14 @@ type Props = {
 };
 const CategoryForm = forwardRef<CategoryBudgetFormRef, Props>((props, ref) => {
   // categoryIdがマウント中に変わることないという前提で条件分岐内でhook使用
-  const { data } = props.categoryId
-    ? useSuspenseQuery(queryOptions.category.detail(props.categoryId))
-    : { data: undefined };
+  const { data } =
+    props.categoryId !== undefined
+      ? useSuspenseQuery(queryOptions.category.detail(props.categoryId))
+      : { data: undefined };
 
   const formDataStore = useRef<FormDataStore>();
   if (!formDataStore.current) {
-    formDataStore.current = createFormDataStore(props.categoryId ? data : undefined);
+    formDataStore.current = createFormDataStore(props.categoryId !== undefined ? data : undefined);
   }
 
   const formFocusStore = useRef<FormFocusStore>();

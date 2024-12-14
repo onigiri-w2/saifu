@@ -1,5 +1,7 @@
 import { HashMap } from '@/src/utils/collections';
 
+import { ValidationError } from '../error';
+
 import LocalDate from './localdate';
 import Period from './period';
 
@@ -13,7 +15,7 @@ export interface ITimeSeries {
 }
 
 export class DailyStock implements ITimeSeries {
-  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) { }
+  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) {}
 
   static fromMap(map: HashMap<LocalDate, number>, period: Period): DailyStock {
     const dates = period.genArray();
@@ -45,16 +47,45 @@ export class DailyStock implements ITimeSeries {
     return DailyFlow.fromPoints(newPoints);
   }
 
-  static aggregate(stocks: DailyStock[]): DailyStock {
-    if (stocks.length === 0) throw new Error('stocks must not be empty');
-
-    const map = new HashMap<LocalDate, number>();
-    for (const stock of stocks) {
-      for (const point of stock.points) {
-        map.set(point.date, (map.get(point.date) ?? 0) + point.value);
-      }
+  static aggregate(stocks: DailyStock[], period: Period): DailyStock {
+    if (stocks.length === 0) {
+      throw new ValidationError('DailyStockが1つもありません', { context: { length: stocks.length } });
     }
-    return DailyStock.fromMap(map, stocks[0].getPeriod());
+    // 結果を格納するためのマップを初期化
+    const resultMap = new HashMap<LocalDate, number>();
+
+    // 各stockのpointsをdateでインデックス化して高速アクセスできるようにする
+    const stockMaps = stocks.map((stock) => {
+      const pointMap = new HashMap<LocalDate, number>();
+      stock.points.forEach((point) => {
+        pointMap.set(point.date, point.value);
+      });
+      return pointMap;
+    });
+
+    // 期間内の各日付について集計を行う
+    for (const date of period.genArray()) {
+      let sum = 0;
+      // 各stockの対応する日付のデータを取得して合算
+      for (const stockMap of stockMaps) {
+        const value = stockMap.get(date);
+        if (value !== undefined) {
+          sum += value;
+        }
+      }
+      resultMap.set(date, sum);
+    }
+
+    return DailyStock.fromMap(resultMap, period);
+  }
+
+  static empty(period: Period): DailyStock {
+    const dates = period.genArray();
+    const values: TimeSeriesDataPoint[] = [];
+    for (const date of dates) {
+      values.push({ date, value: 0 });
+    }
+    return new DailyStock(values);
   }
 
   getPeriod(): Period {
@@ -70,7 +101,7 @@ export class DailyStock implements ITimeSeries {
 }
 
 export class DailyFlow implements ITimeSeries {
-  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) { }
+  private constructor(public readonly points: readonly TimeSeriesDataPoint[]) {}
 
   static fromMap(map: HashMap<LocalDate, number>, period: Period): DailyFlow {
     const dates = period.genArray();

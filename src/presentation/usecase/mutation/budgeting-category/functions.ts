@@ -29,7 +29,6 @@ export const createBudgetingCategory = async (request: AddRequest) => {
 };
 
 export const updateBudgetingCategory = async (request: UpdateRequest) => {
-  console.log('updateBudgetingCategory', request.budgetPlan.strategy);
   const repoCategory = RepositoryRegistry.getInstance().categoryRepository;
   const repoBudgetPlan = RepositoryRegistry.getInstance().budgetPlanRepository;
 
@@ -46,8 +45,6 @@ export const updateBudgetingCategory = async (request: UpdateRequest) => {
     );
   }
   const budgetPlan = BudgetPlan.build(request.budgetPlan.id, request.category.id, strategy);
-
-  console.log('updateBudgetingCategory after', budgetPlan.strategy);
 
   await Promise.all([repoCategory.save(category), repoBudgetPlan.save(budgetPlan)]);
   return { category, budgetPlan };

@@ -1,4 +1,4 @@
-import { useDeferredValue } from 'react';
+import { useDeferredValue, useRef } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -6,7 +6,8 @@ import { withSuspense } from '../../components/hoc/withSuspense';
 import { queryOptions } from '../../usecase/query';
 
 import ListView from './components/ListView';
-import { StoreProvider } from './context';
+import { CategoryToggleMapStoreContext } from './context';
+import { CategoryToggleMapStore, createCategoryToggleMapStore } from './store';
 
 type Props = {
   onPressAdd: () => void;
@@ -14,18 +15,23 @@ type Props = {
   useDeferredRender?: boolean;
 };
 function CategoryList({ onPressAdd, onPressItem, useDeferredRender = true }: Props) {
-  const query = useSuspenseQuery(queryOptions.category.list());
-  const viewData = query.data;
+  const categoryListQuery = useSuspenseQuery(queryOptions.category.list());
+  const viewData = categoryListQuery.data;
   const deferredViewData = useDeferredValue(viewData);
 
+  const store = useRef<CategoryToggleMapStore>();
+  if (!store.current) {
+    store.current = createCategoryToggleMapStore(categoryListQuery.data.map((c) => c.category.id));
+  }
+
   return (
-    <StoreProvider categoryIds={query.data.map((c) => c.category.id)}>
+    <CategoryToggleMapStoreContext.Provider value={store.current}>
       <ListView
         viewData={useDeferredRender ? deferredViewData : viewData}
         onPressAdd={onPressAdd}
         onPressItem={onPressItem}
       />
-    </StoreProvider>
+    </CategoryToggleMapStoreContext.Provider>
   );
 }
 export default withSuspense(CategoryList);
