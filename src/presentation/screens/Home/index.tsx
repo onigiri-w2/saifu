@@ -2,6 +2,7 @@ import { ScrollView, Text, View } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import BudgetMetricsList from '../../features/budgetMetricsList';
 import { utilStyleSheet } from '../../style/utilStyleSheet';
 
 export default function Page() {
@@ -13,7 +14,7 @@ export default function Page() {
         <Text style={styles.pageTitle}>お金の状況</Text>
         <Text style={styles.today}>12月15日(日)</Text>
       </View>
-      {/* <TodayExpensesSummary /> */}
+      <BudgetMetricsList useDeferredRendering={false} />
     </ScrollView>
   );
 }

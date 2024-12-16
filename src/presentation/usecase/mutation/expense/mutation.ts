@@ -11,7 +11,7 @@ export const useExpenseMutation = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.expense.root });
         queryClient.invalidateQueries({ queryKey: keys.projectedCostStock.root });
-        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+        queryClient.invalidateQueries({ queryKey: keys.budgetMetrics.root });
       },
     });
   },
@@ -21,7 +21,7 @@ export const useExpenseMutation = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.expense.root });
         queryClient.invalidateQueries({ queryKey: keys.projectedCostStock.root });
-        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+        queryClient.invalidateQueries({ queryKey: keys.budgetMetrics.root });
       },
     });
   },
@@ -31,7 +31,7 @@ export const useExpenseMutation = {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.expense.root });
         queryClient.invalidateQueries({ queryKey: keys.projectedCostStock.root });
-        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+        queryClient.invalidateQueries({ queryKey: keys.budgetMetrics.root });
       },
     });
   },

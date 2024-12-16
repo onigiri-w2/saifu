@@ -1,5 +1,5 @@
-import { budgetMonitorKeys } from './budget-monitor/keys';
-import { budgetMonitorQueryOptions } from './budget-monitor/query-options';
+import { budgetMetricsKeys } from './budget-metrics/keys';
+import { budgetMetricsQueryOptions } from './budget-metrics/query-options';
 import { budgetingCategoryKeys } from './budgeting-category/keys';
 import { budgetingCategoryQueryOptions } from './budgeting-category/query-options';
 import { calendarKeys } from './calendar/keys';
@@ -14,17 +14,17 @@ import { todayQueryOptions } from './today/query-options';
 export const queryOptions = {
   category: budgetingCategoryQueryOptions,
   projectedCostStock: projectedCoststockQueryOptions,
+  budgetMetrics: budgetMetricsQueryOptions,
   expense: expenseQueryOptions,
   calendar: calendarQueryOptions,
-  budgetMonitor: budgetMonitorQueryOptions,
   today: todayQueryOptions,
 };
 
 export const keys = {
   category: budgetingCategoryKeys,
   projectedCostStock: projectedCoststockKeys,
+  budgetMetrics: budgetMetricsKeys,
   expense: expenseQueryKeys,
   calendar: calendarKeys,
-  budgetMonitor: budgetMonitorKeys,
   today: todayKeys,
 };
