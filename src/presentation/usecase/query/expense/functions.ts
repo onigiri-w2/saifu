@@ -6,14 +6,19 @@ import { BaseError } from '@/src/utils/errors';
 
 export const loadMonthlyExpenses = async (yearmonth: Yearmonth): Promise<Expense[]> => {
   const calendarRepo = RepositoryRegistry.getInstance().calendarRepository;
+  const categoryRepository = RepositoryRegistry.getInstance().categoryRepository;
   const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
 
-  const calendar = await calendarRepo.findOne();
+  const [calendar, categories] = await Promise.all([calendarRepo.findOne(), categoryRepository.findAll()]);
   const period = calendar.cycleStartDef.genMonthPeriodYm(yearmonth);
 
   const start = new Date(period.start.year, period.start.month - 1, 1);
   const end = new Date(period.end.year, period.end.month, 0);
-  const expenses = await expenseRepo.findSome(undefined, start, end);
+  const expenses = await expenseRepo.findSome(
+    categories.map((c) => c.id),
+    start,
+    end,
+  );
 
   return expenses;
 };
@@ -21,14 +26,19 @@ export const loadMonthlyExpenses = async (yearmonth: Yearmonth): Promise<Expense
 export type MonthlyTimeline = { date: LocalDate; expenses: Expense[] }[];
 export const loadMonthlyTimeline = async (yearmonth: Yearmonth, asc: boolean): Promise<MonthlyTimeline> => {
   const calendarRepo = RepositoryRegistry.getInstance().calendarRepository;
+  const categoryRepository = RepositoryRegistry.getInstance().categoryRepository;
   const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
 
-  const calendar = await calendarRepo.findOne();
+  const [calendar, categories] = await Promise.all([calendarRepo.findOne(), categoryRepository.findAll()]);
   const period = calendar.cycleStartDef.genMonthPeriodYm(yearmonth);
 
   const start = new Date(period.start.year, period.start.month - 1, 1);
   const end = new Date(period.end.year, period.end.month, 0);
-  const expenses = await expenseRepo.findSome(undefined, start, end);
+  const expenses = await expenseRepo.findSome(
+    categories.map((c) => c.id),
+    start,
+    end,
+  );
 
   const map = new Map<string, Expense[]>();
   expenses.forEach((e) => {

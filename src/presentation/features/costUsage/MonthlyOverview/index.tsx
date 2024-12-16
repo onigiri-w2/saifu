@@ -26,8 +26,8 @@ function MonthlyOverview({ yearmonth }: Props) {
     queries: [
       queryOptions.category.list(),
       queryOptions.expense['monthly/timeline'](yearmonth, false),
-      queryOptions.costStock.monthly(yearmonth),
-      queryOptions.costStock['monthly/aggregated'](yearmonth),
+      queryOptions.projectedCostStock.monthly(yearmonth),
+      queryOptions.projectedCostStock['monthly/aggregated'](yearmonth),
     ],
   });
   const stocksOrTimeline = useSnapshot(costUsagePreferenceStore).costOrTransaction;

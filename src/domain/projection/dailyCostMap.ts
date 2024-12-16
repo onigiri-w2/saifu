@@ -1,30 +1,31 @@
 import { HashMap } from '@/src/utils/collections';
 
-import LocalDate from './localdate';
+import Expense from '../aggregation/expense';
+import LocalDate from '../valueobject/localdate';
 
-class DateNumberMap {
+class DailyCostMap {
   private constructor(private readonly map: HashMap<LocalDate, number>) {}
 
-  getValue(date: LocalDate): number | undefined {
+  get(date: LocalDate): number | undefined {
     return this.map.get(date);
   }
 
-  updateAt(date: LocalDate, val: number): DateNumberMap {
+  updateAt(date: LocalDate, val: number): DailyCostMap {
     const copied = new HashMap(this.map);
     copied.set(date, val);
-    return new DateNumberMap(copied);
+    return new DailyCostMap(copied);
   }
-  updateSome(map: HashMap<LocalDate, number>): DateNumberMap {
+  updateSome(map: HashMap<LocalDate, number>): DailyCostMap {
     const copied = new HashMap(this.map);
     map.forEach((value, key) => {
       copied.set(key, value);
     });
-    return new DateNumberMap(copied);
+    return new DailyCostMap(copied);
   }
-  deleteAt(date: LocalDate): DateNumberMap {
+  deleteAt(date: LocalDate): DailyCostMap {
     const copied = new HashMap(this.map);
     copied.delete(date);
-    return DateNumberMap.build(copied);
+    return DailyCostMap.build(copied);
   }
 
   getMap(): HashMap<LocalDate, number> {
@@ -32,7 +33,7 @@ class DateNumberMap {
     return this.map;
   }
 
-  merge(other: DateNumberMap): DateNumberMap {
+  merge(other: DailyCostMap): DailyCostMap {
     return this.updateSome(other.map);
   }
 
@@ -44,8 +45,8 @@ class DateNumberMap {
    * @param to 終了日
    * @returns DateNumberMap
    */
-  extract(from: LocalDate, to: LocalDate): DateNumberMap {
-    if (from.isAfterThan(to)) return DateNumberMap.empty();
+  extract(from: LocalDate, to: LocalDate): DailyCostMap {
+    if (from.isAfterThan(to)) return DailyCostMap.empty();
 
     const result = new HashMap<LocalDate, number>();
     for (const [date, val] of this._entries()) {
@@ -53,7 +54,7 @@ class DateNumberMap {
         result.set(date, val);
       }
     }
-    return new DateNumberMap(result);
+    return new DailyCostMap(result);
   }
 
   values() {
@@ -78,19 +79,30 @@ class DateNumberMap {
   }
 
   copy() {
-    return new DateNumberMap(new HashMap(this.map));
+    return new DailyCostMap(new HashMap(this.map));
   }
 
-  static build(map: HashMap<LocalDate, number>): DateNumberMap {
-    return new DateNumberMap(map);
+  static build(map: HashMap<LocalDate, number>): DailyCostMap {
+    return new DailyCostMap(map);
   }
-  static empty(): DateNumberMap {
-    return new DateNumberMap(new HashMap());
+  static empty(): DailyCostMap {
+    return new DailyCostMap(new HashMap());
   }
+
+  static fromList(list: Expense[]): DailyCostMap {
+    const map = new HashMap<LocalDate, number>();
+    for (const expense of list) {
+      const date = LocalDate.fromDate(expense.date);
+      const prevValue = map.get(date) ?? 0;
+      map.set(date, prevValue + expense.amount.value);
+    }
+    return new DailyCostMap(map);
+  }
+
   private _entries(): [LocalDate, number][] {
     return Array.from(this.map.entries()).map(([hash, value]) => {
       return [LocalDate.decode(hash), value];
     });
   }
 }
-export default DateNumberMap;
+export default DailyCostMap;

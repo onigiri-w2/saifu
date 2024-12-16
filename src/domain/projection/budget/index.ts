@@ -2,10 +2,10 @@ import BudgetPlan from '../../aggregation/budgetPlan';
 import { isRegularlyStrategy } from '../../aggregation/budgetPlan/strategy/regularly';
 import Today from '../../aggregation/today';
 import CycleStartDef from '../../valueobject/cycleStartDef';
-import DateNumberMap from '../../valueobject/dateNumberMap';
 import LocalDate from '../../valueobject/localdate';
 import Money from '../../valueobject/money';
 import Period from '../../valueobject/period';
+import DailyCostMap from '../dailyCostMap';
 
 class Budget {
   private constructor(
@@ -31,7 +31,7 @@ class Budget {
    *  @param actual 出費のマップ
    *  @param today 今日の日付
    */
-  allocate(actual: DateNumberMap, today: Today): DateNumberMap {
+  allocate(actual: DailyCostMap, today: Today): DailyCostMap {
     if (today.date.isAfterThan(this.period.end)) {
       return actual;
     }
@@ -48,7 +48,7 @@ class Budget {
     return this._distributeRemaining(actual, distributedPeriod, remainingFromToday);
   }
 
-  private _distributeRemaining(actual: DateNumberMap, period: Period, remaining: number): DateNumberMap {
+  private _distributeRemaining(actual: DailyCostMap, period: Period, remaining: number): DailyCostMap {
     // 0. 事前準備
     let result = actual;
     const slicedDist = actual.extract(period.start, period.end);

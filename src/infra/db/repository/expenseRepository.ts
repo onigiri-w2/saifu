@@ -65,10 +65,15 @@ class DbExpenseRepository implements IExpenseRepository {
       });
     }
   }
-  async findSome(categoryId?: string, from?: Date, to?: Date, dateOrder: 'asc' | 'desc' = 'desc'): Promise<Expense[]> {
+  async findSome(
+    categoryIds: string[],
+    from?: Date,
+    to?: Date,
+    dateOrder: 'asc' | 'desc' = 'desc',
+  ): Promise<Expense[]> {
     try {
       let query = db.selectFrom('expenses').selectAll();
-      if (categoryId) query = query.where('categoryId', '=', categoryId);
+      if (categoryIds.length !== 0) query = query.where('categoryId', 'in', categoryIds);
       if (from) query = query.where('date', '>=', from);
       if (to) query = query.where('date', '<=', to);
       const records = await query.orderBy('date', dateOrder).execute();
@@ -76,7 +81,7 @@ class DbExpenseRepository implements IExpenseRepository {
     } catch (e) {
       throw new ExpenseRepositoryError('Expenseデータの複数取得に失敗しました', {
         cause: e,
-        context: { categoryId, from, to },
+        context: { categoryIds, from, to },
       });
     }
   }

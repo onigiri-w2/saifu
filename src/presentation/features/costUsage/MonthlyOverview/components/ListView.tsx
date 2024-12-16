@@ -6,9 +6,9 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import Expense from '@/src/domain/aggregation/expense';
 import Today from '@/src/domain/aggregation/today';
+import { DailyProjectedCostStock } from '@/src/domain/projection/timeseries/daily/timeseries';
 import LocalDate from '@/src/domain/valueobject/localdate';
-import { DailyStock } from '@/src/domain/valueobject/timeseries';
-import { CostStock } from '@/src/presentation/usecase/query/cost-stocks/functions';
+import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 import { TimelineViewData } from '../../types';
@@ -22,7 +22,7 @@ import NotFoundExpenses from './NotFoundExpenses';
 
 type Props = {
   stocks: CostStock[];
-  aggregatedStock: DailyStock;
+  aggregatedStock: DailyProjectedCostStock;
   timeline: TimelineViewData;
   today: Today;
   focusDate: SharedValue<JsonLocalDate>;

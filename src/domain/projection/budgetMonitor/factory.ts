@@ -20,7 +20,7 @@ class BudgetMonitorFactory {
     const period = budget.period;
 
     const expenses = await this.expenseRepository.findSome(
-      budgetPlan.categoryId,
+      [budgetPlan.categoryId],
       period.start.datetime,
       period.end.datetime,
     );

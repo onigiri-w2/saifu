@@ -4,7 +4,7 @@ import { TextInput, View } from 'react-native';
 import Animated, { SharedValue, useAnimatedProps, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import { DailyStock } from '@/src/domain/valueobject/timeseries';
+import ActualCostStock from '@/src/domain/projection/timeseries/actual/stock';
 import { numberFormatOnWorklet } from '@/src/presentation/i18n/format';
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
@@ -12,7 +12,7 @@ import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type Props = {
-  stock: DailyStock;
+  stock: ActualCostStock;
   focusDate: SharedValue<JsonLocalDate>;
 };
 function Title({ stock, focusDate }: Props) {

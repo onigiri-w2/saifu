@@ -1,13 +1,13 @@
 import { HashMap } from '@/src/utils/collections';
 
 import Expense from '../../aggregation/expense';
-import DateNumberMap from '../../valueobject/dateNumberMap';
 import LocalDate from '../../valueobject/localdate';
+import DailyCostMap from '../dailyCostMap';
 
 class DateExpensesMap {
   private constructor(public readonly map: HashMap<LocalDate, Expense[]>) {}
 
-  genTotalEachDate(): DateNumberMap {
+  genTotalEachDate(): DailyCostMap {
     const map = new HashMap<LocalDate, number>();
     for (const [date, expenses] of this._entries()) {
       let total = 0;
@@ -16,7 +16,7 @@ class DateExpensesMap {
       }
       map.set(date, total);
     }
-    return DateNumberMap.build(map);
+    return DailyCostMap.build(map);
   }
 
   static build(map: HashMap<LocalDate, Expense[]>): DateExpensesMap {

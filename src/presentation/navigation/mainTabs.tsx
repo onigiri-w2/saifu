@@ -5,9 +5,9 @@ import GraphSvg from '@/assets/icons/lucide/chart-line_1.75px.svg';
 import GridSvg from '@/assets/icons/lucide/layout-grid_1.75px.svg';
 import SettingsSvg from '@/assets/icons/lucide/settings_1.75px.svg';
 import WalletSvg from '@/assets/icons/lucide/wallet_1.75px.svg';
-import BudgetMonitorList from '@/src/presentation/screens/BudgetMonitorList';
 import CashFlow from '@/src/presentation/screens/CashFlow';
 import CategoryList from '@/src/presentation/screens/CategoryList';
+import Home from '@/src/presentation/screens/Home';
 
 import TabBar from '../components/TabBar';
 import HeaderRightActions from '../screens/CashFlow/components/HeaderRightActions';
@@ -43,9 +43,10 @@ export default function MainTabs() {
     >
       <Tab.Screen
         name="BudgetMonitorList"
-        component={BudgetMonitorList}
+        component={Home}
         options={{
           tabBarLabel: '予算',
+          headerShown: false,
           title: '予算',
         }}
       />

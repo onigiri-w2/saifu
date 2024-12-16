@@ -25,8 +25,8 @@ class ThisCycleMonitor {
 
     // actualからtodayを無くしたデータに予算をかけさせることで、今日の本来の予算を取得できる。
     const actualWithoutToday = actualExpenses.deleteAt(this.today.date);
-    const todayBudget = this.budget.allocate(actualWithoutToday, this.today).getValue(this.today.date);
-    const todaySpending = actualExpenses.getValue(this.today.date) ?? 0;
+    const todayBudget = this.budget.allocate(actualWithoutToday, this.today).get(this.today.date);
+    const todaySpending = actualExpenses.get(this.today.date) ?? 0;
 
     return {
       budget: this.budget.money.value,

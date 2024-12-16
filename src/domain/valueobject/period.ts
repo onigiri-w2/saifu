@@ -34,7 +34,7 @@ class Period {
    * @param periods 統合するPeriodの配列
    * @returns 統合されたPeriod、または入力が空の場合はundefined
    */
-  static combine(periods: Period[]): Period | undefined {
+  static merge(periods: Period[]): Period | undefined {
     if (periods.length === 0) return undefined;
 
     // 開始日でソート
@@ -53,6 +53,25 @@ class Period {
         end = current.end;
       }
     }
+    return new Period(start, end);
+  }
+
+  /**
+   * 2つのPeriodの重複する期間を返す
+   * @param a 1つ目のPeriod
+   * @param b 2つ目のPeriod
+   * @returns 重複期間のPeriod、重複がない場合はundefined
+   */
+  static intersect(a: Period, b: Period): Period | undefined {
+    // 重複がない場合
+    if (a.end.isBeforeThan(b.start) || b.end.isBeforeThan(a.start)) {
+      return undefined;
+    }
+
+    // 重複期間の開始日と終了日を決定
+    const start = LocalDate.max([a.start, b.start]);
+    const end = LocalDate.min([a.end, b.end]);
+
     return new Period(start, end);
   }
 
