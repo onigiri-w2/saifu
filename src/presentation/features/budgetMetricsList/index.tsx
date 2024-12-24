@@ -7,11 +7,14 @@ import { queryOptions } from '../../usecase/query';
 
 import ListView from './components/ListView';
 import { CategoryContext } from './context/CategoryContext';
+import { InfoVariantContext } from './context/InfoVariantContext';
+import { InfoVarinat } from './types';
 
 type Props = {
   useDeferredRendering: boolean;
+  variant?: InfoVarinat;
 };
-function BudgetMonitorList({ useDeferredRendering }: Props) {
+function BudgetMonitorList({ useDeferredRendering, variant = 'entirly' }: Props) {
   const [metricsQuery, categoryQuery] = useSuspenseQueries({
     queries: [queryOptions.budgetMetrics['active/list'](), queryOptions.category.list()],
   });
@@ -20,7 +23,9 @@ function BudgetMonitorList({ useDeferredRendering }: Props) {
 
   return (
     <CategoryContext.Provider value={useDeferredRendering ? deferredCategory : categoryQuery.data}>
-      <ListView allMetrics={useDeferredRendering ? deferredMetrics : metricsQuery.data} />
+      <InfoVariantContext.Provider value={variant}>
+        <ListView allMetrics={useDeferredRendering ? deferredMetrics : metricsQuery.data} />
+      </InfoVariantContext.Provider>
     </CategoryContext.Provider>
   );
 }

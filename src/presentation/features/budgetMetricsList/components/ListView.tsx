@@ -5,18 +5,17 @@ import { useStyles, createStyleSheet } from 'react-native-unistyles';
 
 import { CategorizedActiveBudgetMetrics } from '@/src/presentation/usecase/query/budget-metrics/functions';
 
-import PeriodRow from '../row/periodRow';
+import Row from './Row';
 
 type Props = {
   allMetrics: CategorizedActiveBudgetMetrics[];
-  scrollEnabled?: boolean;
 };
-function ListView({ allMetrics, scrollEnabled = false }: Props) {
+function ListView({ allMetrics }: Props) {
   const renderItem = useCallback((item: ListRenderItemInfo<CategorizedActiveBudgetMetrics>) => {
-    return <PeriodRow metrics={item.item} />;
+    return <Row metrics={item.item} />;
   }, []);
   const keyExtractor = useCallback((item: CategorizedActiveBudgetMetrics) => item.categoryId, []);
-  const { styles, theme } = useStyles(stylesheet);
+  const { styles } = useStyles(stylesheet);
 
   return (
     <FlatList
@@ -25,8 +24,7 @@ function ListView({ allMetrics, scrollEnabled = false }: Props) {
       data={allMetrics}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
-      contentInset={{ top: theme.spacing.x8, bottom: theme.spacing.x8 }}
-      scrollEnabled={scrollEnabled}
+      scrollEnabled={false}
     />
   );
 }
@@ -40,6 +38,5 @@ const stylesheet = createStyleSheet((theme) => ({
   contentContainer: {
     gap: theme.spacing.x6,
     backgroundColor: 'transparent',
-    overflow: 'hidden',
   },
 }));

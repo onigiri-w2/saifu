@@ -1,36 +1,46 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
 
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useStyles, createStyleSheet } from 'react-native-unistyles';
 
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 import { CategorizedActiveBudgetMetrics } from '@/src/presentation/usecase/query/budget-metrics/functions';
 
-import EntirlyDiffBar from './bar/EntirlyDiffBar';
-import EntirlyRemainingBar from './bar/EntirlyRemainingBar';
-import TodayRemainingBar from './bar/TodayRemainingBar';
-import EntirlyDiffBody from './body/EntirlyDiffBody';
-import EntirlyRemainingBody from './body/EntirlyRemainingBody';
-import TodayRemainingBody from './body/TodayRemainingBody';
+import { useCategoryContext } from '../../context/CategoryContext';
+import { useInfoVariantContext } from '../../context/InfoVariantContext';
+
+import { DiffRowBar, DiffRowBody } from './kind/diff';
+import { EntirlyRowBar, EntirlyRowBody } from './kind/entirly';
+import { TodayRowBar, TodayRowBody } from './kind/today';
 
 type Props = {
   metrics: CategorizedActiveBudgetMetrics;
-  visual?: 'entirly' | 'today' | 'diff';
 };
-function Row({ metrics: monitor, category, visual = 'entirly' }: Props) {
+function Row({ metrics }: Props) {
   const { styles, theme } = useStyles(stylesheet);
+  const variant = useInfoVariantContext();
+  const categories = useCategoryContext();
+  const category = categories.find((c) => c.category.id === metrics.categoryId)?.category;
 
-  const bar = useMemo(() => {
-    if (visual === 'entirly') return <EntirlyRemainingBar monitor={monitor} />;
-    else if (visual === 'diff') return <EntirlyDiffBar monitor={monitor} />;
-    else return <TodayRemainingBar monitor={monitor} />;
-  }, [visual, monitor]);
+  if (category === undefined) return null;
 
-  const body = useMemo(() => {
-    if (visual === 'entirly') return <EntirlyRemainingBody monitor={monitor} />;
-    else if (visual === 'diff') return <EntirlyDiffBody monitor={monitor} />;
-    else return <TodayRemainingBody monitor={monitor} />;
-  }, [visual, monitor]);
+  const body =
+    variant === 'entirly' ? (
+      <EntirlyRowBody metrics={metrics.metrics} />
+    ) : variant === 'today' ? (
+      <TodayRowBody metrics={metrics.metrics} />
+    ) : (
+      <DiffRowBody metrics={metrics.metrics} />
+    );
+
+  const bar =
+    variant === 'entirly' ? (
+      <EntirlyRowBar metrics={metrics.metrics} />
+    ) : variant === 'today' ? (
+      <TodayRowBar metrics={metrics.metrics} />
+    ) : (
+      <DiffRowBar metrics={metrics.metrics} />
+    );
 
   return (
     <View style={styles.container}>
@@ -50,11 +60,7 @@ function Row({ metrics: monitor, category, visual = 'entirly' }: Props) {
   );
 }
 export default React.memo(Row, (prev, next) => {
-  return (
-    JSON.stringify(prev.metrics) === JSON.stringify(next.metrics) &&
-    JSON.stringify(prev.category) === JSON.stringify(next.category) &&
-    prev.visual === next.visual
-  );
+  return JSON.stringify(prev.metrics) === JSON.stringify(next.metrics);
 });
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -62,7 +68,6 @@ const stylesheet = createStyleSheet((theme) => ({
     flexDirection: 'row',
     height: theme.component.list.row.height.default,
     gap: theme.spacing.x4,
-    paddingHorizontal: theme.spacing.x4,
   },
   iconWrap: {
     height: '100%',

@@ -89,7 +89,7 @@ const baseTheme = {
     },
     list: {
       row: {
-        height: { default: 52 },
+        height: { small: 44, default: 52 },
         padding: {
           horizontal: spaceUnit * 4,
         },
