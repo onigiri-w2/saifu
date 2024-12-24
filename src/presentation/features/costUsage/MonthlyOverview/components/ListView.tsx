@@ -6,9 +6,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import Expense from '@/src/domain/aggregation/expense';
 import Today from '@/src/domain/aggregation/today';
-import { DailyProjectedCostStock } from '@/src/domain/projection/timeseries/daily/timeseries';
 import LocalDate from '@/src/domain/valueobject/localdate';
-import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
+import { CategorizedCostStock, CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 import { TimelineViewData } from '../../types';
@@ -21,25 +20,25 @@ import NotFoundCategories from './NotFoundCategories';
 import NotFoundExpenses from './NotFoundExpenses';
 
 type Props = {
-  stocks: CostStock[];
-  aggregatedStock: DailyProjectedCostStock;
+  stocks: CategorizedCostStock[];
+  aggregatedStock: CostStock;
   timeline: TimelineViewData;
   today: Today;
   focusDate: SharedValue<JsonLocalDate>;
   stocksOrTimeline: 'cost' | 'transaction';
 };
 function ListView({ stocks, aggregatedStock, timeline, today, focusDate, stocksOrTimeline }: Props) {
-  const renderItem = useCallback((item: ListRenderItemInfo<CostStock | Expense | LocalDate>) => {
+  const renderItem = useCallback((item: ListRenderItemInfo<CategorizedCostStock | Expense | LocalDate>) => {
     if (item.item instanceof LocalDate) {
       return <DateRow date={convertToJsonLocalDate(item.item)} focusDate={focusDate} />;
     } else if (item.item instanceof Expense) {
       return <ExpenseRow expense={item.item} focusDate={focusDate} />;
     } else {
-      return <CategoryCost stock={item.item} focusDate={focusDate} />;
+      return <CategoryCost categoryId={item.item.categoryId} stock={item.item.stock} focusDate={focusDate} />;
     }
   }, []);
 
-  const keyExtractor = useCallback((item: CostStock | Expense | LocalDate) => {
+  const keyExtractor = useCallback((item: CategorizedCostStock | Expense | LocalDate) => {
     if (item instanceof LocalDate) return item.toString();
     if (item instanceof Expense) return item.id;
     return item.categoryId;
@@ -59,7 +58,7 @@ function ListView({ stocks, aggregatedStock, timeline, today, focusDate, stocksO
       contentInset={{ bottom: theme.spacing.x6 }}
       ListFooterComponent={
         stocksOrTimeline === 'transaction' ? (
-          <NotFoundExpenses period={aggregatedStock.getPeriod()} timeline={timeline} focusDate={focusDate} />
+          <NotFoundExpenses period={aggregatedStock.period} timeline={timeline} focusDate={focusDate} />
         ) : (
           <NotFoundCategories existAtLeastOne={stocks.length > 0} />
         )

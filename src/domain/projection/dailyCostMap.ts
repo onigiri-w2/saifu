@@ -1,6 +1,5 @@
 import { HashMap } from '@/src/utils/collections';
 
-import Expense from '../aggregation/expense';
 import LocalDate from '../valueobject/localdate';
 
 class DailyCostMap {
@@ -9,19 +8,18 @@ class DailyCostMap {
   get(date: LocalDate): number | undefined {
     return this.map.get(date);
   }
-
-  updateAt(date: LocalDate, val: number): DailyCostMap {
-    const copied = new HashMap(this.map);
-    copied.set(date, val);
-    return new DailyCostMap(copied);
+  set(date: LocalDate, val: number): void {
+    this.map.set(date, val);
   }
-  updateSome(map: HashMap<LocalDate, number>): DailyCostMap {
+
+  cloneWith(map: HashMap<LocalDate, number>): DailyCostMap {
     const copied = new HashMap(this.map);
     map.forEach((value, key) => {
       copied.set(key, value);
     });
     return new DailyCostMap(copied);
   }
+
   deleteAt(date: LocalDate): DailyCostMap {
     const copied = new HashMap(this.map);
     copied.delete(date);
@@ -34,7 +32,7 @@ class DailyCostMap {
   }
 
   merge(other: DailyCostMap): DailyCostMap {
-    return this.updateSome(other.map);
+    return this.cloneWith(other.map);
   }
 
   /**
@@ -89,12 +87,11 @@ class DailyCostMap {
     return new DailyCostMap(new HashMap());
   }
 
-  static fromList(list: Expense[]): DailyCostMap {
+  static fromEntries(entries: [LocalDate, number][]): DailyCostMap {
     const map = new HashMap<LocalDate, number>();
-    for (const expense of list) {
-      const date = LocalDate.fromDate(expense.date);
+    for (const [date, value] of entries) {
       const prevValue = map.get(date) ?? 0;
-      map.set(date, prevValue + expense.amount.value);
+      map.set(date, prevValue + value);
     }
     return new DailyCostMap(map);
   }

@@ -6,6 +6,7 @@ export type DataPoint = {
   value: number;
 };
 export interface ITimeSeries {
-  readonly points: readonly DataPoint[];
+  asFlow(): DataPoint[];
+  asStock(): DataPoint[];
   getPeriod(): Period;
 }

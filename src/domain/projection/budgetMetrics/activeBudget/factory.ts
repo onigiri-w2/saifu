@@ -4,7 +4,7 @@ import IExpenseRepository from '@/src/domain/aggregation/expense/repository.type
 import Today from '@/src/domain/aggregation/today';
 
 import Budget from '../../budget';
-import DailyCostMap from '../../dailyCostMap';
+import { createFromExpenses } from '../../timeseries/daily/factory/common';
 
 import { ActiveBudgetMetrics } from './metrics';
 
@@ -25,18 +25,19 @@ export default async function makeActiveBudget(
     period.start.datetime,
     period.end.datetime,
   );
-  const actualDailyCost = DailyCostMap.fromList(expenses);
+  const actualTimeseries = createFromExpenses(expenses, period);
 
   // 3. 期間全体のメトリクス計算
-  const periodSpending = actualDailyCost.calcTotal();
+  const periodSpending = actualTimeseries.calcSum();
   const periodRemaining = activeBudget.money.value - periodSpending;
   const remainingDays = period.end.diffDays(today.date) + 1;
 
   // 4. 今日のメトリクス計算
-  const actualWithoutToday = actualDailyCost.deleteAt(today.date);
-  const allocated = activeBudget.allocate(actualWithoutToday, today);
+  const actualWithoutToday = actualTimeseries.cloneWith();
+  actualWithoutToday.set(today.date, 0);
+  const allocated = activeBudget.allocateTo(actualWithoutToday, today.date);
   const todayBudget = allocated.get(today.date) ?? 0;
-  const todaySpending = actualDailyCost.get(today.date) ?? 0;
+  const todaySpending = actualTimeseries.get(today.date) ?? 0;
 
   // 5. 理想の使用ペースとの差分計算
   const idealDailyBudget = activeBudget.money.value / period.length;

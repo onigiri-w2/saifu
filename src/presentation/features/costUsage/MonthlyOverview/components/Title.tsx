@@ -4,15 +4,15 @@ import { TextInput, View } from 'react-native';
 import Animated, { SharedValue, useAnimatedProps, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import ActualCostStock from '@/src/domain/projection/timeseries/actual/stock';
 import { numberFormatOnWorklet } from '@/src/presentation/i18n/format';
+import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type Props = {
-  stock: ActualCostStock;
+  stock: CostStock;
   focusDate: SharedValue<JsonLocalDate>;
 };
 function Title({ stock, focusDate }: Props) {

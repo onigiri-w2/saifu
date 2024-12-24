@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 import { numberFormat, numberFormatOnWorklet } from '@/src/presentation/i18n/format';
-import { CostStock } from '@/src/presentation/usecase/query/cost-stocks/functions';
+import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
@@ -15,14 +15,15 @@ import { useCategoryContext } from '../../context/CategoryContext';
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type CategoryCostProps = {
+  categoryId: string;
   stock: CostStock;
   focusDate: SharedValue<JsonLocalDate>;
 };
-function CategoryCost({ stock, focusDate }: CategoryCostProps) {
+function CategoryCost({ categoryId, stock, focusDate }: CategoryCostProps) {
   const categoryList = useCategoryContext();
-  const category = categoryList.find((c) => c.category.id === stock.categoryId)?.category;
+  const category = categoryList.find((c) => c.category.id === categoryId)?.category;
   const dailyCosts = useMemo(() => {
-    return stock.stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
+    return stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
   }, [stock]);
 
   //TODO: マウント時に一瞬文字が消えるのを修正

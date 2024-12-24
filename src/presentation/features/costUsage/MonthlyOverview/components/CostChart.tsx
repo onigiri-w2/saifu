@@ -4,13 +4,13 @@ import { SharedValue } from 'react-native-reanimated';
 import { useStyles } from 'react-native-unistyles';
 
 import Today from '@/src/domain/aggregation/today';
-import ActualCostStock from '@/src/domain/projection/timeseries/actual/stock';
 import DailyLineGraph from '@/src/presentation/components/LineGraph/DailyLineGraph';
+import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
 import { DEVICE_LAYOUT } from '@/src/presentation/utils/const';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 type Props = {
-  stock: ActualCostStock;
+  stock: CostStock;
   today: Today;
   focusDate: SharedValue<JsonLocalDate>;
 };
