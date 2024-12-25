@@ -4,21 +4,21 @@ import { TextInput, View } from 'react-native';
 import Animated, { SharedValue, useAnimatedProps, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { DailyTimeSeries } from '@/src/domain/projection/timeseries/daily/timeseries';
 import { numberFormatOnWorklet } from '@/src/presentation/i18n/format';
-import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type Props = {
-  stock: CostStock;
+  cost: DailyTimeSeries;
   focusDate: SharedValue<JsonLocalDate>;
 };
-function Title({ stock, focusDate }: Props) {
+function Title({ cost, focusDate }: Props) {
   const dailyCosts = useMemo(() => {
-    return stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
-  }, [stock]);
+    return cost.asStock().map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
+  }, [cost]);
   const { styles, theme } = useStyles(stylesheet);
 
   const index = useDerivedValue(() => {

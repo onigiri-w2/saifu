@@ -10,8 +10,8 @@ export const useCalendarMutation = {
       mutationFn: updateCalendar,
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: keys.calendar.one });
-        queryClient.invalidateQueries({ queryKey: keys.projectedCostStock.root });
-        queryClient.invalidateQueries({ queryKey: keys.budgetMonitor.root });
+        queryClient.invalidateQueries({ queryKey: keys.projectedCost.root });
+        queryClient.invalidateQueries({ queryKey: keys.budgetMetrics.root });
       },
     });
   },

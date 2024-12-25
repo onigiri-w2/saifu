@@ -1,23 +1,16 @@
 import BudgetPlan from '@/src/domain/aggregation/budgetPlan';
-import { buildBudgetsInPeriod } from '@/src/domain/projection/budget';
-import { createProjectedCost } from '@/src/domain/projection/timeseries/daily/factory/projectedCost';
+import { buildActualCost } from '@/src/domain/projection/timeseries/daily/builder/actualCost';
+import { ProjectedCostBuilder } from '@/src/domain/projection/timeseries/daily/builder/projectedCost';
 import { DailyTimeSeries } from '@/src/domain/projection/timeseries/daily/timeseries';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
-import Period from '@/src/domain/valueobject/period';
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
-import { assert } from '@/src/utils/errors';
 
-export type CostStock = {
-  period: Period;
-  points: ReturnType<DailyTimeSeries['asStock']>;
-};
-
-export type CategorizedCostStock = {
+export type CategorizedProjectedCost = {
   categoryId: string;
-  stock: CostStock;
+  cost: DailyTimeSeries;
 };
 
-export const loadMonthlyTimeSeries = async (yearmonth: Yearmonth): Promise<CategorizedCostStock[]> => {
+export const loadMonthlyTimeSeries = async (yearmonth: Yearmonth): Promise<CategorizedProjectedCost[]> => {
   const categoryRepo = RepositoryRegistry.getInstance().categoryRepository;
   const calendarRepo = RepositoryRegistry.getInstance().calendarRepository;
   const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
@@ -38,25 +31,22 @@ export const loadMonthlyTimeSeries = async (yearmonth: Yearmonth): Promise<Categ
     return bp ? bp : BudgetPlan.withNone(c.id);
   });
 
-  return await Promise.all(
+  const projectedCosts = await Promise.all(
     validBudgetPlans.map(async (bp) => {
-      const budgets = buildBudgetsInPeriod(bp, calendar.cycleStartDef, today, period);
-      const timeseries = await createProjectedCost(bp.categoryId, period, budgets, today, expenseRepo);
       const category = categories.find((c) => c.id === bp.categoryId);
-      assert(category, 'categoryがないはずがありません');
+      if (!category) return undefined;
 
-      return {
-        stock: {
-          period: timeseries.getPeriod(),
-          points: timeseries.asStock(),
-        },
-        categoryId: category.id,
-      };
+      const projectedBuilder = new ProjectedCostBuilder(bp.categoryId, period, today, calendar, bp);
+      const actual = await buildActualCost([bp.categoryId], projectedBuilder.requiredPeriodOfActual, expenseRepo);
+      const projected = projectedBuilder.build(actual);
+      return { cost: projected, categoryId: category.id };
     }),
   );
+
+  return projectedCosts.filter((pc): pc is CategorizedProjectedCost => pc !== undefined);
 };
 
-export const loadMonthlyAggregatedStock = async (yearmonth: Yearmonth): Promise<CostStock> => {
+export const loadMonthlyAggregatedTimeSeries = async (yearmonth: Yearmonth): Promise<DailyTimeSeries> => {
   const categoryRepo = RepositoryRegistry.getInstance().categoryRepository;
   const calendarRepo = RepositoryRegistry.getInstance().calendarRepository;
   const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
@@ -77,23 +67,24 @@ export const loadMonthlyAggregatedStock = async (yearmonth: Yearmonth): Promise<
     return bp ? bp : BudgetPlan.withNone(c.id);
   });
 
-  const stocks = await Promise.all(
+  const costs = await Promise.all(
     validBudgetPlans.map(async (bp) => {
-      const budgets = buildBudgetsInPeriod(bp, calendar.cycleStartDef, today, period);
-      const s = await createProjectedCost(bp.categoryId, period, budgets, today, expenseRepo);
       const category = categories.find((c) => c.id === bp.categoryId);
-      assert(category, 'categoryがないはずがありません');
-      return s;
+      if (!category) return undefined;
+
+      const projectedBuilder = new ProjectedCostBuilder(bp.categoryId, period, today, calendar, bp);
+      const actual = await buildActualCost([bp.categoryId], projectedBuilder.requiredPeriodOfActual, expenseRepo);
+      return projectedBuilder.build(actual);
     }),
   );
+  const validCosts = costs.filter((c): c is DailyTimeSeries => c !== undefined);
 
-  if (stocks.length === 0) {
-    const ts = DailyTimeSeries.buildAllZero(period);
-    return { period, points: ts.asStock() };
+  if (validCosts.length === 0) {
+    return DailyTimeSeries.buildAllZero(period);
   } else {
-    const base = stocks[0];
-    const rest = stocks.slice(1);
+    const base = validCosts[0];
+    const rest = validCosts.slice(1);
     base.aggregate(rest);
-    return { period, points: base.asStock() };
+    return base;
   }
 };

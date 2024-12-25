@@ -4,11 +4,11 @@ import IExpenseRepository from '@/src/domain/aggregation/expense/repository.type
 import Today from '@/src/domain/aggregation/today';
 
 import Budget from '../../budget';
-import { createFromExpenses } from '../../timeseries/daily/factory/common';
+import { buildActualCost } from '../../timeseries/daily/builder/actualCost';
 
 import { ActiveBudgetMetrics } from './metrics';
 
-export default async function makeActiveBudget(
+export default async function buildActiveBudget(
   budgetPlan: BudgetPlan,
   calendar: Calendar,
   today: Today,
@@ -20,12 +20,7 @@ export default async function makeActiveBudget(
   const period = activeBudget.period;
 
   // 2. 期間内の支出データの取得
-  const expenses = await expenseRepository.findSome(
-    [budgetPlan.categoryId],
-    period.start.datetime,
-    period.end.datetime,
-  );
-  const actualTimeseries = createFromExpenses(expenses, period);
+  const actualTimeseries = await buildActualCost([budgetPlan.categoryId], period, expenseRepository);
 
   // 3. 期間全体のメトリクス計算
   const periodSpending = actualTimeseries.calcSum();

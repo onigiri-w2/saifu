@@ -5,23 +5,23 @@ import { SharedValue } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import Today from '@/src/domain/aggregation/today';
-import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
+import { DailyTimeSeries } from '@/src/domain/projection/timeseries/daily/timeseries';
 import { JsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
 import CostChart from './CostChart';
 import Title from './Title';
 
 type Props = {
-  stock: CostStock;
+  cost: DailyTimeSeries;
   focusDate: SharedValue<JsonLocalDate>;
   today: Today;
 };
-function Header({ stock, focusDate, today }: Props) {
+function Header({ cost, focusDate, today }: Props) {
   const { styles } = useStyles(stylesheet);
   return (
     <View style={styles.container}>
-      <Title stock={stock} focusDate={focusDate} />
-      <CostChart stock={stock} today={today} focusDate={focusDate} />
+      <Title cost={cost} focusDate={focusDate} />
+      <CostChart cost={cost} today={today} focusDate={focusDate} />
     </View>
   );
 }

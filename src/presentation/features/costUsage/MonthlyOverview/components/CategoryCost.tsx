@@ -4,9 +4,9 @@ import { View, Text, TextInput } from 'react-native';
 import Animated, { SharedValue, useAnimatedProps } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { DailyTimeSeries } from '@/src/domain/projection/timeseries/daily/timeseries';
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 import { numberFormat, numberFormatOnWorklet } from '@/src/presentation/i18n/format';
-import { CostStock } from '@/src/presentation/usecase/query/projected-coststock/functions';
 import { compareOnWorklet } from '@/src/presentation/utils/reanimated/date.worklet';
 import { JsonLocalDate, convertToJsonLocalDate } from '@/src/presentation/utils/reanimated/types';
 
@@ -16,15 +16,15 @@ const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type CategoryCostProps = {
   categoryId: string;
-  stock: CostStock;
+  cost: DailyTimeSeries;
   focusDate: SharedValue<JsonLocalDate>;
 };
-function CategoryCost({ categoryId, stock, focusDate }: CategoryCostProps) {
+function CategoryCost({ categoryId, cost, focusDate }: CategoryCostProps) {
   const categoryList = useCategoryContext();
   const category = categoryList.find((c) => c.category.id === categoryId)?.category;
   const dailyCosts = useMemo(() => {
-    return stock.points.map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
-  }, [stock]);
+    return cost.asStock().map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
+  }, [cost]);
 
   //TODO: マウント時に一瞬文字が消えるのを修正
   const spendingTextProps = useAnimatedProps(() => {
@@ -62,7 +62,7 @@ function CategoryCost({ categoryId, stock, focusDate }: CategoryCostProps) {
 
 export default React.memo(
   CategoryCost,
-  (prev, next) => JSON.stringify(prev.stock) === JSON.stringify(next.stock) && prev.focusDate === next.focusDate,
+  (prev, next) => JSON.stringify(prev.cost) === JSON.stringify(next.cost) && prev.focusDate === next.focusDate,
 );
 
 const stylesheet = createStyleSheet((theme) => ({

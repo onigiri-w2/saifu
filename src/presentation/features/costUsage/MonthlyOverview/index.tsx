@@ -22,12 +22,12 @@ type Props = {
 };
 function MonthlyOverview({ yearmonth }: Props) {
   // query
-  const [categoryQuery, timelineQuery, stocksQuery, aggregatedStockQuery] = useSuspenseQueries({
+  const [categoryQuery, timelineQuery, costQuery, aggregatedCostQuery] = useSuspenseQueries({
     queries: [
       queryOptions.category.list(),
       queryOptions.expense['monthly/timeline'](yearmonth, false),
-      queryOptions.projectedCostStock.monthly(yearmonth),
-      queryOptions.projectedCostStock['monthly/aggregated'](yearmonth),
+      queryOptions.projectedCost.monthly(yearmonth),
+      queryOptions.projectedCost['monthly/aggregated'](yearmonth),
     ],
   });
   const stocksOrTimeline = useSnapshot(costUsagePreferenceStore).costOrTransaction;
@@ -38,13 +38,13 @@ function MonthlyOverview({ yearmonth }: Props) {
 
   const viewData = useMemo(() => {
     return {
-      stocks: stocksQuery.data,
-      aggregatedStock: aggregatedStockQuery.data,
+      costs: costQuery.data,
+      aggregatedCost: aggregatedCostQuery.data,
       timeline: timelineViewData,
       today,
       stocksOrTimeline,
     };
-  }, [stocksQuery.data, aggregatedStockQuery.data, timelineViewData, today, stocksOrTimeline]);
+  }, [costQuery.data, aggregatedCostQuery.data, timelineViewData, today, stocksOrTimeline]);
   const deferredViewData = useDeferredValue(viewData);
 
   const renderModeMap = useRenderingModeSwitchContext();
