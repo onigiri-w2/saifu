@@ -2,7 +2,7 @@ import { View } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import { IconColor, iconColors } from '@/src/domain/aggregation/category/types/iconColor';
+import { IconColor, iconColors } from '@/src/domain/types/categoryIconColor';
 
 import { COLMUN_COUNT } from '../cosntants';
 

@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import { IconName } from '@/src/domain/aggregation/category/types/iconName';
+import { IconName } from '@/src/domain/types/categoryIconName';
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 
 type Props = {

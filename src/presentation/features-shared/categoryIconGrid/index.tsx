@@ -3,8 +3,8 @@ import { FlatList } from 'react-native';
 
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import { IconColor } from '@/src/domain/aggregation/category/types/iconColor';
-import { IconName, iconNames } from '@/src/domain/aggregation/category/types/iconName';
+import { IconColor } from '@/src/domain/types/categoryIconColor';
+import { IconName, iconNames } from '@/src/domain/types/categoryIconName';
 
 import ColorGrid from './components/ColorGrid';
 import IconItem from './components/IconItem';

@@ -1,11 +1,13 @@
-import BudgetPlan from '.';
+import { ExpenseCategoryId } from '../expenseCategory';
+
+import BudgetPlan, { BudgetPlanId } from '.';
 
 interface IBudgetPlanRepository {
   save: (entity: BudgetPlan) => Promise<void>;
-  remove: (id: string) => Promise<void>;
-  removeByCategoryId: (categoryId: string) => Promise<void>;
-  find: (id: string) => Promise<BudgetPlan | undefined>;
-  findByCategoryId: (categoryId: string) => Promise<BudgetPlan | undefined>;
+  remove: (id: BudgetPlanId) => Promise<void>;
+  removeByCategoryId: (categoryId: ExpenseCategoryId) => Promise<void>;
+  find: (id: BudgetPlanId) => Promise<BudgetPlan | undefined>;
+  findByCategoryId: (categoryId: ExpenseCategoryId) => Promise<BudgetPlan | undefined>;
   findAll: () => Promise<BudgetPlan[]>;
 }
 

@@ -4,8 +4,8 @@ import { View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useSnapshot } from 'valtio';
 
-import { IconColor } from '@/src/domain/aggregation/category/types/iconColor';
-import { IconName } from '@/src/domain/aggregation/category/types/iconName';
+import { IconColor } from '@/src/domain/types/categoryIconColor';
+import { IconName } from '@/src/domain/types/categoryIconName';
 
 import CategoryIcon from '../../features-shared/categoryIcon';
 import CategoryIconGird from '../../features-shared/categoryIconGrid';

@@ -1,7 +1,7 @@
-import BudgetPlan from '@/src/domain/aggregation/budgetPlan';
+import BudgetPlan, { BudgetPlanId } from '@/src/domain/aggregation/budgetPlan';
 import BudgetNoneStrategy from '@/src/domain/aggregation/budgetPlan/strategy/none';
 import BudgetRegularlyStrategy from '@/src/domain/aggregation/budgetPlan/strategy/regularly';
-import Category from '@/src/domain/aggregation/category';
+import ExpenseCategory, { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 import Money from '@/src/domain/valueobject/money';
 
@@ -12,7 +12,7 @@ export const createBudgetingCategory = async (request: AddRequest) => {
   const repoBudgetPlan = RepositoryRegistry.getInstance().budgetPlanRepository;
 
   const { name, iconName, iconColor } = request.category;
-  const category = Category.create(name, iconName, iconColor);
+  const category = ExpenseCategory.create(name, iconName, iconColor);
 
   let budgetPlan = BudgetPlan.withNone(category.id);
   if (request.budgetPlan.strategy.type === 'regularly') {
@@ -33,7 +33,7 @@ export const updateBudgetingCategory = async (request: UpdateRequest) => {
   const repoBudgetPlan = RepositoryRegistry.getInstance().budgetPlanRepository;
 
   const { id, name, iconName, iconColor } = request.category;
-  const category = Category.build(id, name, iconName, iconColor);
+  const category = ExpenseCategory.build(ExpenseCategoryId.build(id), name, iconName, iconColor);
 
   let strategy: BudgetNoneStrategy | BudgetRegularlyStrategy = BudgetNoneStrategy.build();
   if (request.budgetPlan.strategy.type === 'regularly') {
@@ -44,7 +44,7 @@ export const updateBudgetingCategory = async (request: UpdateRequest) => {
       tempAmount !== undefined ? Money.build(tempAmount) : undefined,
     );
   }
-  const budgetPlan = BudgetPlan.build(request.budgetPlan.id, request.category.id, strategy);
+  const budgetPlan = BudgetPlan.build(BudgetPlanId.build(request.budgetPlan.id), ExpenseCategoryId.build(id), strategy);
 
   await Promise.all([repoCategory.save(category), repoBudgetPlan.save(budgetPlan)]);
   return { category, budgetPlan };
@@ -54,7 +54,7 @@ export const deleteBudgetingCategory = async (request: { categoryId: string }) =
   const repoCategory = RepositoryRegistry.getInstance().categoryRepository;
   const repoExpense = RepositoryRegistry.getInstance().expenseRepository;
   const repoBudgetPlan = RepositoryRegistry.getInstance().budgetPlanRepository;
-  const target = await repoCategory.find(request.categoryId);
+  const target = await repoCategory.find(ExpenseCategoryId.build(request.categoryId));
 
   if (!target) return;
   await repoCategory.remove(target.id);

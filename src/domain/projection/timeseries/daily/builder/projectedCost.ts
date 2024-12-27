@@ -1,5 +1,6 @@
 import BudgetPlan from '@/src/domain/aggregation/budgetPlan';
 import Calendar from '@/src/domain/aggregation/calendar';
+import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import Today from '@/src/domain/aggregation/today';
 import { DomainValidationError } from '@/src/domain/error';
 import Period from '@/src/domain/valueobject/period';
@@ -11,14 +12,14 @@ import { DailyTimeSeries } from '../timeseries';
 export class ProjectedCostBuilder {
   public readonly budgets!: Budget[];
   constructor(
-    public readonly categoryId: string,
+    public readonly categoryId: ExpenseCategoryId,
     private readonly period: Period,
     private readonly today: Today,
     calendar: Calendar,
     budgetPlan: BudgetPlan,
   ) {
     this.budgets = buildBudgetsInPeriod(budgetPlan, calendar.cycleStartDef, today, period);
-    if (budgetPlan.categoryId !== categoryId) {
+    if (!budgetPlan.categoryId.equals(categoryId)) {
       throw new DomainValidationError('budgetPlan.categoryIdとcategoryIdが一致しません');
     }
   }

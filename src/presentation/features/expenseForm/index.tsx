@@ -22,7 +22,7 @@ type CreateExpenseFormProps = {
 export const CreateExpenseForm = withSuspense(({ onSaved, onDirtyChange }: CreateExpenseFormProps) => {
   const categoryQuery = useSuspenseQuery(queryOptions.category.list());
 
-  const defaultCategoryId = categoryQuery.data[0]?.category.id;
+  const defaultCategoryId = categoryQuery.data[0]?.category.id.value;
   const store = useRef<FormDataStore>();
   if (!store.current) {
     store.current = createFormDataStore(undefined, defaultCategoryId);

@@ -1,4 +1,4 @@
-import { IconName } from '@/src/domain/aggregation/category/types/iconName';
+import { IconName } from '@/src/domain/types/categoryIconName';
 
 import icons from './data';
 
@@ -11,7 +11,7 @@ type Props = {
 function CategoryIcon({ iconName, iconColor, size = 20 }: Props) {
   const Icon = icons[iconName];
 
-  if (!Icon) {
+  if (Icon === undefined) {
     return <icons.fork width={size} height={size} fill={iconColor} />;
   }
 

@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import CheckSvg from '@/assets/icons/lucide/check_3px.svg';
-import { IconColor } from '@/src/domain/aggregation/category/types/iconColor';
+import { IconColor } from '@/src/domain/types/categoryIconColor';
 
 import { COLMUN_COUNT } from '../cosntants';
 

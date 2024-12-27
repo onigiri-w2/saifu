@@ -21,7 +21,7 @@ function Remover() {
 
   const handlePress = () => {
     const id = formStore.getId();
-    assert(id, 'id is required');
+    assert(id !== undefined, 'id is required');
 
     Alert.alert('削除しますか？', undefined, [
       {

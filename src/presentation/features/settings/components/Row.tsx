@@ -38,7 +38,7 @@ function Row({ title, value, SvgComponent, rightIconVariant = 'chevron', onPress
     <TouchableOpacity style={styles.row} onPress={onPress}>
       {leftIcon}
       <Text style={styles.title}>{title}</Text>
-      {value && <Text style={styles.value}>{value}</Text>}
+      {value !== undefined && <Text style={styles.value}>{value}</Text>}
       {rightIcon}
     </TouchableOpacity>
   );

@@ -1,11 +1,16 @@
 import IExpenseRepository from '@/src/domain/aggregation/expense/repository.type';
+import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import LocalDate from '@/src/domain/valueobject/localdate';
 import Period from '@/src/domain/valueobject/period';
 import { HashMap } from '@/src/utils/collections';
 
 import { DailyTimeSeries } from '../timeseries';
 
-export async function buildActualCost(categoryIds: string[], period: Period, expenseRespository: IExpenseRepository) {
+export async function buildActualCost(
+  categoryIds: ExpenseCategoryId[],
+  period: Period,
+  expenseRespository: IExpenseRepository,
+) {
   const start = period.start.datetime;
   const end = period.end.datetime;
   const expenses = await expenseRespository.findSome(categoryIds, start, end);

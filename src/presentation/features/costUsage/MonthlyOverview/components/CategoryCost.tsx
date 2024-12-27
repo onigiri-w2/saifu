@@ -4,6 +4,7 @@ import { View, Text, TextInput } from 'react-native';
 import Animated, { SharedValue, useAnimatedProps } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import { DailyTimeSeries } from '@/src/domain/projection/timeseries/daily/timeseries';
 import CategoryIcon from '@/src/presentation/features-shared/categoryIcon';
 import { numberFormat, numberFormatOnWorklet } from '@/src/presentation/i18n/format';
@@ -15,13 +16,13 @@ import { useCategoryContext } from '../../context/CategoryContext';
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
 type CategoryCostProps = {
-  categoryId: string;
+  categoryId: ExpenseCategoryId;
   cost: DailyTimeSeries;
   focusDate: SharedValue<JsonLocalDate>;
 };
 function CategoryCost({ categoryId, cost, focusDate }: CategoryCostProps) {
   const categoryList = useCategoryContext();
-  const category = categoryList.find((c) => c.category.id === categoryId)?.category;
+  const category = categoryList.find((c) => c.category.id.equals(categoryId))?.category;
   const dailyCosts = useMemo(() => {
     return cost.asStock().map((s) => ({ date: convertToJsonLocalDate(s.date), cost: s.value }));
   }, [cost]);

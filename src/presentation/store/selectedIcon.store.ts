@@ -1,7 +1,7 @@
 import { proxy } from 'valtio';
 
-import { IconColor } from '@/src/domain/aggregation/category/types/iconColor';
-import { IconName } from '@/src/domain/aggregation/category/types/iconName';
+import { IconColor } from '@/src/domain/types/categoryIconColor';
+import { IconName } from '@/src/domain/types/categoryIconName';
 
 type SelectedIconStore = {
   selected: {

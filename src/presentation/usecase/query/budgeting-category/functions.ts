@@ -1,11 +1,11 @@
 import BudgetPlan from '@/src/domain/aggregation/budgetPlan';
-import Category from '@/src/domain/aggregation/category';
+import ExpenseCategory, { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 import { BaseError } from '@/src/utils/errors';
 
 // 中身はdomain modelのまま渡してるので注意。
 export type BudgetingCategory = {
-  category: Category;
+  category: ExpenseCategory;
   budgetPlan: BudgetPlan;
 };
 
@@ -16,7 +16,7 @@ export const loadBudgetingCategories = async (): Promise<BudgetingCategory[]> =>
   const [categories, budgetPlans] = await Promise.all([repoCategory.findAll(), repoBudgetPlan.findAll()]);
 
   return categories.map((category) => {
-    const budgetPlan = budgetPlans.find((plan) => plan.categoryId === category.id);
+    const budgetPlan = budgetPlans.find((plan) => plan.categoryId.equals(category.id));
     return { category, budgetPlan: budgetPlan || BudgetPlan.withNone(category.id) };
   });
 };
@@ -25,11 +25,14 @@ export const loadBudgetingCategory = async (id: string): Promise<BudgetingCatego
   const repoCategory = RepositoryRegistry.getInstance().categoryRepository;
   const repoBudgetPlan = RepositoryRegistry.getInstance().budgetPlanRepository;
 
-  const category = await repoCategory.find(id);
+  const category = await repoCategory.find(ExpenseCategoryId.build(id));
   if (!category) {
     throw new BaseError('カテゴリが見つかりません', { context: { category } });
   }
-  const budgetPlan = await repoBudgetPlan.findByCategoryId(id);
+  const budgetPlan = await repoBudgetPlan.findByCategoryId(ExpenseCategoryId.build(id));
 
-  return { category, budgetPlan: budgetPlan || BudgetPlan.withNone(id) };
+  return {
+    category,
+    budgetPlan: budgetPlan || BudgetPlan.withNone(ExpenseCategoryId.build(id)),
+  };
 };

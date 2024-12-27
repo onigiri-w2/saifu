@@ -6,7 +6,15 @@ export const Migration20241025 = {
   up: async (db: Kysely<any>) => {
     await db.transaction().execute(async (transaction) => {
       await transaction.schema
-        .createTable('categories')
+        .createTable('expenseCategories')
+        .addColumn('id', SQLiteType.String, (col) => col.primaryKey())
+        .addColumn('name', SQLiteType.String, (col) => col.notNull())
+        .addColumn('iconName', SQLiteType.String)
+        .addColumn('iconColor', SQLiteType.String)
+        .execute();
+
+      await transaction.schema
+        .createTable('incomeCategories')
         .addColumn('id', SQLiteType.String, (col) => col.primaryKey())
         .addColumn('name', SQLiteType.String, (col) => col.notNull())
         .addColumn('iconName', SQLiteType.String)
@@ -44,12 +52,26 @@ export const Migration20241025 = {
         .addColumn('date', SQLiteType.DateTime, (col) => col.notNull())
         .addColumn('memo', SQLiteType.String)
         .execute();
+
+      await transaction.schema
+        .createTable('incomes')
+        .addColumn('id', SQLiteType.String, (col) => col.primaryKey())
+        .addColumn('categoryId', SQLiteType.String, (col) => col.notNull())
+        .addColumn('amount', SQLiteType.Number, (col) => col.notNull())
+        .addColumn('date', SQLiteType.DateTime, (col) => col.notNull())
+        .addColumn('memo', SQLiteType.String)
+        .execute();
     });
   },
   down: async (db: Kysely<any>) => {
     await db.transaction().execute(async (transactionClient) => {
-      await transactionClient.schema.dropTable('categories').execute();
+      await transactionClient.schema.dropTable('expenseCategories').execute();
+      await transactionClient.schema.dropTable('incomeCategories').execute();
       await transactionClient.schema.dropTable('budgetRegularyStrategies').execute();
+      await transactionClient.schema.dropTable('expenses').execute();
+      await transactionClient.schema.dropTable('incomes').execute();
+      await transactionClient.schema.dropTable('calendars').execute();
+      await transactionClient.schema.dropTable('budgetPlans').execute();
     });
   },
 };

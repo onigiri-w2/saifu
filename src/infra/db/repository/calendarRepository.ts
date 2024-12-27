@@ -6,13 +6,14 @@ import { assert } from '@/src/utils/errors';
 
 import { db } from '../client';
 
+const TABLE_NAME = 'calendars';
 class DbCalendarRepository implements ICalendarRepository {
   async save(entity: Calendar): Promise<void> {
     try {
       await db.transaction().execute(async (transaction) => {
-        await transaction.deleteFrom('calendars').where('id', '=', entity.id).execute();
+        await transaction.deleteFrom(TABLE_NAME).where('id', '=', entity.id).execute();
         await transaction
-          .insertInto('calendars')
+          .insertInto(TABLE_NAME)
           .values({
             id: entity.id,
             startYear: entity.cycleStartDef.startYear,

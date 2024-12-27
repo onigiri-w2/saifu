@@ -1,4 +1,5 @@
-import Expense from '@/src/domain/aggregation/expense';
+import Expense, { ExpenseId } from '@/src/domain/aggregation/expense';
+import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 import Money from '@/src/domain/valueobject/money';
 
@@ -7,7 +8,12 @@ import { CreateRequest, UpdateRequest } from './types';
 export async function createExpense(request: CreateRequest): Promise<Expense> {
   const repo = RepositoryRegistry.getInstance().expenseRepository;
 
-  const expense = Expense.create(request.categoryId, Money.build(request.amount), request.date, request.memo);
+  const expense = Expense.create(
+    ExpenseCategoryId.build(request.categoryId),
+    Money.build(request.amount),
+    request.date,
+    request.memo,
+  );
   await repo.save(expense);
   return expense;
 }
@@ -15,8 +21,8 @@ export async function createExpense(request: CreateRequest): Promise<Expense> {
 export async function updateExpense(request: UpdateRequest): Promise<Expense> {
   const repo = RepositoryRegistry.getInstance().expenseRepository;
   const expense = Expense.build(
-    request.id,
-    request.categoryId,
+    ExpenseId.build(request.id),
+    ExpenseCategoryId.build(request.categoryId),
     Money.build(request.amount),
     request.date,
     request.memo,
@@ -27,5 +33,5 @@ export async function updateExpense(request: UpdateRequest): Promise<Expense> {
 
 export async function deleteExpense(id: string): Promise<void> {
   const repo = RepositoryRegistry.getInstance().expenseRepository;
-  await repo.remove(id);
+  await repo.remove(ExpenseId.build(id));
 }

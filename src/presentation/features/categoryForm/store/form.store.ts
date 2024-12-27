@@ -3,8 +3,8 @@ import { deepClone } from 'valtio/utils';
 
 import { isRegularlyStrategy } from '@/src/domain/aggregation/budgetPlan/strategy/regularly';
 import { BudgetCycle, StrategyType } from '@/src/domain/aggregation/budgetPlan/types';
-import { IconColor } from '@/src/domain/aggregation/category/types/iconColor';
-import { IconName } from '@/src/domain/aggregation/category/types/iconName';
+import { IconColor } from '@/src/domain/types/categoryIconColor';
+import { IconName } from '@/src/domain/types/categoryIconName';
 import { BudgetingCategory } from '@/src/presentation/usecase/query/budgeting-category/functions';
 
 export const createFormDataStore = (source?: BudgetingCategory) => {
@@ -16,8 +16,8 @@ export const createFormDataStore = (source?: BudgetingCategory) => {
   const formContext: FormContext = source
     ? ({
       mode: 'update',
-      categoryId: source.category.id,
-      budgetPlanId: source.budgetPlan.id,
+      categoryId: source.category.id.value,
+      budgetPlanId: source.budgetPlan.id.value,
     } as const)
     : ({
       mode: 'create',

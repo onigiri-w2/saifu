@@ -2,11 +2,29 @@ import uuid from 'react-native-uuid';
 
 import { DomainValidationError } from '../../error';
 import Money from '../../valueobject/money';
+import { ExpenseCategoryId } from '../expenseCategory';
+
+export class ExpenseId {
+  _expenseIdBrand!: never;
+  private constructor(public value: string) {}
+
+  static build(id: string) {
+    return new ExpenseId(id);
+  }
+  static create() {
+    const id = uuid.v4().toString();
+    return new ExpenseId(id);
+  }
+
+  equals(other: ExpenseId) {
+    return this.value === other.value;
+  }
+}
 
 class Expense {
   private constructor(
-    public id: string,
-    public categoryId: string,
+    public id: ExpenseId,
+    public categoryId: ExpenseCategoryId,
     public amount: Money,
     public date: Date,
     public memo: string,
@@ -14,12 +32,11 @@ class Expense {
     this._validate();
   }
 
-  static create(categoryId: string, amount: Money, date: Date, memo: string) {
-    const id = uuid.v4().toString();
-    return new Expense(id, categoryId, amount, date, memo);
+  static create(categoryId: ExpenseCategoryId, amount: Money, date: Date, memo: string) {
+    return new Expense(ExpenseId.create(), categoryId, amount, date, memo);
   }
 
-  static build(id: string, categoryId: string, amount: Money, date: Date, memo: string) {
+  static build(id: ExpenseId, categoryId: ExpenseCategoryId, amount: Money, date: Date, memo: string) {
     return new Expense(id, categoryId, amount, date, memo);
   }
 

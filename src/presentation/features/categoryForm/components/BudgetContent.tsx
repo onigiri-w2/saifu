@@ -6,9 +6,9 @@ import { useSnapshot } from 'valtio';
 
 import { useStoreContext } from '../context/StoreContext';
 
-import StrategySwitcher from './StrategySwitcher';
 import NoBudgetStrategy from './NoBudgetStrategy';
 import RegularlyBudgetStrategy from './RegularlyBudgetStrategy';
+import StrategySwitcher from './StrategySwitcher';
 
 function BudgetContent() {
   const { styles } = useStyles(stylesheet);

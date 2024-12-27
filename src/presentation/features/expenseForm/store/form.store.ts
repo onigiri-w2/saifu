@@ -31,7 +31,7 @@ export const createFormDataStore = (source?: Expense, defaultCategoryId?: string
       this.form.timestamp = onlyDate.getTime();
     },
     getId() {
-      return id;
+      return id?.value;
     },
   });
 
@@ -46,7 +46,7 @@ export const createFormDataStore = (source?: Expense, defaultCategoryId?: string
   return store;
 };
 const validate = (form: FormDataState): boolean => {
-  if (!form.categoryId) return false;
+  if (form.categoryId === undefined) return false;
   return true;
 };
 
@@ -74,7 +74,7 @@ const createInitialState = (source?: Expense, defaultCategoryId?: string): FormD
   return {
     amount: source.amount.value,
     timestamp: source.date.getTime(),
-    categoryId: source.categoryId ?? defaultCategoryId,
+    categoryId: source.categoryId?.value ?? defaultCategoryId,
     memo: source.memo,
   };
 };

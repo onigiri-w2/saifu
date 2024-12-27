@@ -1,3 +1,4 @@
+import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import { buildActualCost } from '@/src/domain/projection/timeseries/daily/builder/actualCost';
 import { ProjectedCostBuilder } from '@/src/domain/projection/timeseries/daily/builder/projectedCost';
 import { DailyTimeSeries } from '@/src/domain/projection/timeseries/daily/timeseries';
@@ -6,7 +7,7 @@ import BudgetPlanService from '@/src/domain/service/BudgetPlanService';
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
 
 export type CategorizedProjectedCost = {
-  categoryId: string;
+  categoryId: ExpenseCategoryId;
   cost: DailyTimeSeries;
 };
 

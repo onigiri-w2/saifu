@@ -10,7 +10,7 @@ export const useBudgetingCategoryMutation = {
       mutationFn: createBudgetingCategory,
       onSuccess: (data) => {
         queryClient.invalidateQueries({ queryKey: keys.category.list });
-        queryClient.resetQueries({ queryKey: keys.category.detail(data.category.id) });
+        queryClient.resetQueries({ queryKey: keys.category.detail(data.category.id.value) });
         queryClient.invalidateQueries({ queryKey: keys.budgetMetrics.root });
         queryClient.invalidateQueries({ queryKey: keys.projectedCost.root });
       },
@@ -21,7 +21,7 @@ export const useBudgetingCategoryMutation = {
       mutationFn: updateBudgetingCategory,
       onSuccess: (data) => {
         queryClient.invalidateQueries({ queryKey: keys.category.list });
-        queryClient.resetQueries({ queryKey: keys.category.detail(data.category.id) });
+        queryClient.resetQueries({ queryKey: keys.category.detail(data.category.id.value) });
         queryClient.invalidateQueries({ queryKey: keys.budgetMetrics.root });
         queryClient.invalidateQueries({ queryKey: keys.projectedCost.root });
       },
@@ -32,7 +32,7 @@ export const useBudgetingCategoryMutation = {
       mutationFn: deleteBudgetingCategory,
       onSuccess: (data) => {
         queryClient.invalidateQueries({ queryKey: keys.category.list });
-        queryClient.removeQueries({ queryKey: keys.category.detail(data?.id ?? '') });
+        queryClient.removeQueries({ queryKey: keys.category.detail(data?.id.value ?? '') });
         queryClient.invalidateQueries({ queryKey: keys.projectedCost.root });
         queryClient.invalidateQueries({ queryKey: keys.expense.root });
       },

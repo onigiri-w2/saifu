@@ -1,19 +1,20 @@
-import Expense, { ExpenseId } from '@/src/domain/aggregation/expense';
-import IExpenseRepository from '@/src/domain/aggregation/expense/repository.type';
-import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
-import { ExpenseRepositoryError } from '@/src/domain/error';
+import Income, { IncomeId } from '@/src/domain/aggregation/income';
+import IIncomeRepository from '@/src/domain/aggregation/income/repository.type';
+import { IncomeCategoryId } from '@/src/domain/aggregation/incomeCategory';
+import { ExpenseRepositoryError, IncomeRepositoryError } from '@/src/domain/error';
 import Money from '@/src/domain/valueobject/money';
 
 import { db } from '../client';
-import { ExpenseTable } from '../schema/tables';
+import { IncomeTable } from '../schema/tables';
 
-class DbExpenseRepository implements IExpenseRepository {
-  async save(entity: Expense): Promise<void> {
+const TABLE_NAME = 'incomes';
+class DbIncomeRepository implements IIncomeRepository {
+  async save(entity: Income): Promise<void> {
     try {
       await db.transaction().execute(async (trx) => {
-        await trx.deleteFrom('expenses').where('id', '=', entity.id.value).execute();
+        await trx.deleteFrom(TABLE_NAME).where('id', '=', entity.id.value).execute();
         await trx
-          .insertInto('expenses')
+          .insertInto(TABLE_NAME)
           .values({
             id: entity.id.value,
             categoryId: entity.categoryId.value,
@@ -24,39 +25,39 @@ class DbExpenseRepository implements IExpenseRepository {
           .execute();
       });
     } catch (e) {
-      throw new ExpenseRepositoryError('Expenseデータの保存に失敗しました', {
+      throw new IncomeRepositoryError('Incomeデータの保存に失敗しました', {
         cause: e,
         context: { entity },
       });
     }
   }
-  async remove(id: ExpenseId): Promise<void> {
+  async remove(id: IncomeId): Promise<void> {
     try {
       await db.transaction().execute(async (trx) => {
-        await trx.deleteFrom('expenses').where('id', '=', id.value).execute();
+        await trx.deleteFrom(TABLE_NAME).where('id', '=', id.value).execute();
       });
     } catch (e) {
-      throw new ExpenseRepositoryError('Expenseデータの削除に失敗しました', {
+      throw new IncomeRepositoryError('Incomeデータの削除に失敗しました', {
         cause: e,
         context: { id },
       });
     }
   }
-  async removeByCategoryId(categoryId: ExpenseCategoryId): Promise<void> {
+  async removeByCategoryId(categoryId: IncomeCategoryId): Promise<void> {
     try {
       await db.transaction().execute(async (trx) => {
-        await trx.deleteFrom('expenses').where('categoryId', '=', categoryId.value).execute();
+        await trx.deleteFrom(TABLE_NAME).where('categoryId', '=', categoryId.value).execute();
       });
     } catch (e) {
-      throw new ExpenseRepositoryError('カテゴリに紐づくExpenseデータの削除に失敗しました', {
+      throw new IncomeRepositoryError('カテゴリに紐づくIncomeデータの削除に失敗しました', {
         cause: e,
         context: { categoryId },
       });
     }
   }
-  async find(id: ExpenseId): Promise<Expense | undefined> {
+  async find(id: IncomeId): Promise<Income | undefined> {
     try {
-      const record = await db.selectFrom('expenses').selectAll().where('id', '=', id.value).executeTakeFirst();
+      const record = await db.selectFrom(TABLE_NAME).selectAll().where('id', '=', id.value).executeTakeFirst();
       if (!record) return undefined;
       return this.record2entity(record);
     } catch (e) {
@@ -67,13 +68,13 @@ class DbExpenseRepository implements IExpenseRepository {
     }
   }
   async findSome(
-    categoryIds: ExpenseCategoryId[],
+    categoryIds: IncomeCategoryId[],
     from?: Date,
     to?: Date,
     dateOrder: 'asc' | 'desc' = 'desc',
-  ): Promise<Expense[]> {
+  ): Promise<Income[]> {
     try {
-      let query = db.selectFrom('expenses').selectAll();
+      let query = db.selectFrom(TABLE_NAME).selectAll();
       if (categoryIds.length !== 0) {
         query = query.where(
           'categoryId',
@@ -93,15 +94,15 @@ class DbExpenseRepository implements IExpenseRepository {
     }
   }
 
-  private record2entity(record: ExpenseTable): Expense {
+  private record2entity(record: IncomeTable): Income {
     // NOTE: sqliteの仕様で、date型指定してても文字列で返されるのでDateでラップしてる。
-    return Expense.build(
-      ExpenseId.build(record.id),
-      ExpenseCategoryId.build(record.categoryId),
+    return Income.build(
+      IncomeId.build(record.id),
+      IncomeCategoryId.build(record.categoryId),
       Money.build(record.amount),
       new Date(record.date),
       record.memo,
     );
   }
 }
-export default DbExpenseRepository;
+export default DbIncomeRepository;

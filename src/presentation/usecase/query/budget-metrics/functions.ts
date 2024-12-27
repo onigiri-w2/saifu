@@ -1,9 +1,10 @@
+import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import buildActiveBudget from '@/src/domain/projection/budgetMetrics/activeBudget/builder';
 import { ActiveBudgetMetrics } from '@/src/domain/projection/budgetMetrics/activeBudget/metrics';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 
 export type CategorizedActiveBudgetMetrics = {
-  categoryId: string;
+  categoryId: ExpenseCategoryId;
   metrics: ActiveBudgetMetrics;
 };
 
@@ -18,11 +19,8 @@ export const loadAllActiveBudgetMetrics = async (): Promise<CategorizedActiveBud
 
   const allMetrics = await Promise.all(
     budgetPlans.map(async (bp) => {
-      const start = performance.now();
       const metrics = await buildActiveBudget(bp, calendar, today, expneseRepo);
       if (metrics === undefined) return undefined;
-      const end = performance.now();
-      console.log(`makeActiveBudget: ${end - start}ms`);
       return { categoryId: bp.categoryId, metrics };
     }),
   );

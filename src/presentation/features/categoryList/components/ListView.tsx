@@ -19,7 +19,7 @@ function ListView({ viewData, onPressAdd, onPressItem }: Props) {
     ({ item }: ListRenderItemInfo<BudgetingCategory>) => <Row budgetingCategory={item} onPress={onPressItem} />,
     [onPressItem],
   );
-  const keyExtractor = useCallback((item: BudgetingCategory) => item.category.id, []);
+  const keyExtractor = useCallback((item: BudgetingCategory) => item.category.id.value, []);
 
   return (
     <FlatList

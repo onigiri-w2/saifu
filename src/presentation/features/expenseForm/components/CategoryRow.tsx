@@ -20,7 +20,7 @@ function CategoryRow() {
   const categoryId = useSnapshot(store.form).categoryId;
 
   const category = useMemo(() => {
-    return categories.find((category) => category.id === categoryId);
+    return categories.find((category) => category.id.value === categoryId);
   }, [categoryId, categories]);
 
   const menuRef = useRef(null);
@@ -28,9 +28,9 @@ function CategoryRow() {
   const actions = useMemo(() => {
     return categories.map((category) => {
       return {
-        id: category.id,
+        id: category.id.value,
         title: category.name,
-        state: categoryId === category.id ? ('on' as const) : ('off' as const),
+        state: categoryId === category.id.value ? ('on' as const) : ('off' as const),
       };
     });
   }, [categories, categoryId]);

@@ -1,11 +1,18 @@
-import Expense from '.';
+import { ExpenseCategoryId } from '../expenseCategory';
+
+import Expense, { ExpenseId } from '.';
 
 interface IExpenseRepository {
   save: (entity: Expense) => Promise<void>;
-  remove: (id: string) => Promise<void>;
-  removeByCategoryId: (categoryId: string) => Promise<void>;
-  find: (id: string) => Promise<Expense | undefined>;
-  findSome: (categoryIds: string[], from?: Date, to?: Date, dateOrder?: 'asc' | 'desc') => Promise<Expense[]>;
+  remove: (id: ExpenseId) => Promise<void>;
+  removeByCategoryId: (categoryId: ExpenseCategoryId) => Promise<void>;
+  find: (id: ExpenseId) => Promise<Expense | undefined>;
+  findSome: (
+    categoryIds: ExpenseCategoryId[],
+    from?: Date,
+    to?: Date,
+    dateOrder?: 'asc' | 'desc',
+  ) => Promise<Expense[]>;
 }
 
 export default IExpenseRepository;

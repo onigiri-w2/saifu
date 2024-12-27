@@ -86,7 +86,7 @@ import WashingMachineIcon from '@/assets/icons/phosphor/washing-machine.svg';
 import WineIcon from '@/assets/icons/phosphor/wine.svg';
 import XLogoIcon from '@/assets/icons/phosphor/x-logo.svg';
 import YoutubeLogoIcon from '@/assets/icons/phosphor/youtube-logo.svg';
-import { IconName } from '@/src/domain/aggregation/category/types/iconName';
+import { IconName } from '@/src/domain/types/categoryIconName';
 
 const icons: Record<IconName, React.FC<SvgProps>> = {
   fork: ForkIcon,

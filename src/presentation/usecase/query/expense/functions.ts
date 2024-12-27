@@ -1,4 +1,4 @@
-import Expense from '@/src/domain/aggregation/expense';
+import Expense, { ExpenseId } from '@/src/domain/aggregation/expense';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 import LocalDate from '@/src/domain/valueobject/localdate';
 import Yearmonth from '@/src/domain/valueobject/yearmonth';
@@ -66,7 +66,7 @@ export const loadMonthlyTimeline = async (yearmonth: Yearmonth, asc: boolean): P
 
 export const loadExpenseDetail = async (id: string): Promise<Expense> => {
   const expenseRepo = RepositoryRegistry.getInstance().expenseRepository;
-  const expense = await expenseRepo.find(id);
+  const expense = await expenseRepo.find(ExpenseId.build(id));
   if (!expense) {
     throw new BaseError('指定の支出が見つかりません', { context: { expense } });
   }

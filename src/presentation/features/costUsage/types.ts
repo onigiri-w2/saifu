@@ -1,9 +1,9 @@
-import Category from '@/src/domain/aggregation/category';
+import ExpenseCategory from '@/src/domain/aggregation/expenseCategory';
 import Expense from '@/src/domain/aggregation/expense';
 import LocalDate from '@/src/domain/valueobject/localdate';
 
 export type ExpenseViewData = {
-  category: Category;
+  category: ExpenseCategory;
   expense: Expense;
 };
 export const isExpenseViewData = (v: any): v is ExpenseViewData => {

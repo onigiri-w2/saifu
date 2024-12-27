@@ -1,11 +1,10 @@
 import { Kysely } from 'kysely';
 import { ExpoDialect } from 'kysely-expo';
 
-import { Database } from './schema';
+import { Schema } from './schema';
 
-export const db = new Kysely<Database>({
+export const db = new Kysely<Schema>({
   dialect: new ExpoDialect({
-    database: 'dev-11.db',
-    // debug: true,
+    database: 'dev-13.db',
   }),
 });

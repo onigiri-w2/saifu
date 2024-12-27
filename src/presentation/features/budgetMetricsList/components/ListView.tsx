@@ -14,7 +14,7 @@ function ListView({ allMetrics }: Props) {
   const renderItem = useCallback((item: ListRenderItemInfo<CategorizedActiveBudgetMetrics>) => {
     return <Row metrics={item.item} />;
   }, []);
-  const keyExtractor = useCallback((item: CategorizedActiveBudgetMetrics) => item.categoryId, []);
+  const keyExtractor = useCallback((item: CategorizedActiveBudgetMetrics) => item.categoryId.value, []);
   const { styles } = useStyles(stylesheet);
 
   return (

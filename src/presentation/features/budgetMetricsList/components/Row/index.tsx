@@ -20,7 +20,7 @@ function Row({ metrics }: Props) {
   const { styles, theme } = useStyles(stylesheet);
   const variant = useInfoVariantContext();
   const categories = useCategoryContext();
-  const category = categories.find((c) => c.category.id === metrics.categoryId)?.category;
+  const category = categories.find((c) => c.category.id.equals(metrics.categoryId))?.category;
 
   if (category === undefined) return null;
 

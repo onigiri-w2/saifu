@@ -41,8 +41,8 @@ function ListView({ costs: stocks, aggregatedCost, timeline, today, focusDate, s
 
   const keyExtractor = useCallback((item: CategorizedProjectedCost | Expense | LocalDate) => {
     if (item instanceof LocalDate) return item.toString();
-    if (item instanceof Expense) return item.id;
-    return item.categoryId;
+    if (item instanceof Expense) return item.id.value;
+    return item.categoryId.value;
   }, []);
 
   const { styles, theme } = useStyles(stylesheet);

@@ -45,7 +45,7 @@ function Row({ budgetingCategory, onPress }: Props) {
   }, [budgetPlan]);
 
   const store = useEnrichedCategoryListContext();
-  const isOpen = useSnapshot(store).rowCollapseStates.get(category.id);
+  const isOpen = useSnapshot(store).rowCollapseStates.get(category.id.value);
 
   useEffect(() => {
     if (Boolean(isOpen) === false) {
@@ -53,9 +53,9 @@ function Row({ budgetingCategory, onPress }: Props) {
     }
   }, [isOpen]);
 
-  const deleteAction = useMemo(() => <DeleteAction categoryId={category.id} />, [category.id]);
+  const deleteAction = useMemo(() => <DeleteAction categoryId={category.id.value} />, [category.id]);
   const handlePress = useCallback(() => {
-    onPress(category.id);
+    onPress(category.id.value);
   }, []);
 
   return (
@@ -66,10 +66,10 @@ function Row({ budgetingCategory, onPress }: Props) {
       righActions={deleteAction}
       onPress={handlePress}
       onOpen={() => {
-        store.toggleRowCollapseState(category.id);
+        store.toggleRowCollapseState(category.id.value);
       }}
       onClose={() => {
-        store.rowCollapseStates.set(category.id, false);
+        store.rowCollapseStates.set(category.id.value, false);
       }}
     >
       <View style={styles.container}>

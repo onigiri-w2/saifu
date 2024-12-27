@@ -22,7 +22,7 @@ type Props = {
 function ExpenseRow({ expense, focusDate }: Props) {
   const { styles } = useStyles(stylesheet);
   const categoryList = useCategoryContext();
-  const category = categoryList.find((c) => c.category.id === expense.categoryId)?.category;
+  const category = categoryList.find((c) => c.category.id.equals(expense.categoryId))?.category;
   const localDate = {
     year: expense.date.getFullYear(),
     month: (expense.date.getMonth() + 1) as Month,
@@ -37,7 +37,7 @@ function ExpenseRow({ expense, focusDate }: Props) {
 
   const actions = useActionsContext();
   const handlePress = () => {
-    actions.onSelectExpenseItem?.(expense.id);
+    actions.onSelectExpenseItem?.(expense.id.value);
   };
 
   if (!category) return null;

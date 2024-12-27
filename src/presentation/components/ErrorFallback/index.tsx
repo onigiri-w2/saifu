@@ -35,7 +35,7 @@ const stylesheet = createStyleSheet((theme) => ({
     marginBottom: theme.spacing.x2,
   },
   description: {
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.caption,
     color: theme.colors.text.secondary,
     textAlign: 'center',
   },

@@ -1,6 +1,6 @@
 import { BudgetCycle } from '@/src/domain/aggregation/budgetPlan/types';
-import { IconColor } from '@/src/domain/aggregation/category/types/iconColor';
-import { IconName } from '@/src/domain/aggregation/category/types/iconName';
+import { IconColor } from '@/src/domain/types/categoryIconColor';
+import { IconName } from '@/src/domain/types/categoryIconName';
 
 // リクエスト型の定義
 export type AddRequest = {
@@ -22,14 +22,14 @@ export type CategoryBase = {
 
 export type BudgetStrategyBase =
   | {
-    type: 'regularly';
-    cycle: BudgetCycle;
-    amount: number;
-    tempAmount?: number;
-  }
+      type: 'regularly';
+      cycle: BudgetCycle;
+      amount: number;
+      tempAmount?: number;
+    }
   | {
-    type: 'none';
-  };
+      type: 'none';
+    };
 
 export type BudgetPlanBase = {
   strategy: BudgetStrategyBase;

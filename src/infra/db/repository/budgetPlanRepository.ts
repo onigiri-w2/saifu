@@ -1,35 +1,41 @@
-import BudgetPlan from '@/src/domain/aggregation/budgetPlan';
+import BudgetPlan, { BudgetPlanId } from '@/src/domain/aggregation/budgetPlan';
 import IBudgetPlanRepository from '@/src/domain/aggregation/budgetPlan/repository.type';
 import BudgetNoneStrategy from '@/src/domain/aggregation/budgetPlan/strategy/none';
 import BudgetRegularlyStrategy from '@/src/domain/aggregation/budgetPlan/strategy/regularly';
+import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import { BudgetPlanRepositoryError } from '@/src/domain/error';
 import Money from '@/src/domain/valueobject/money';
 import { NotImplementedError } from '@/src/utils/errors';
 
 import { db } from '../client';
-import { BudgetPlanTable, BudgetRegularyStrategyTable } from '../schema';
+import { BudgetPlanTable, BudgetRegularyStrategyTable } from '../schema/tables';
 
+const PLAN_TABLE_NAME = 'budgetPlans';
+const REGULARLY_STRATEGY_TABLE_NAME = 'budgetRegularyStrategies';
 class DbBudgetPlanRepository implements IBudgetPlanRepository {
   async save(entity: BudgetPlan): Promise<void> {
     try {
       await db.transaction().execute(async (transaction) => {
         // BudgetPlanの保存
-        await transaction.deleteFrom('budgetPlans').where('id', '=', entity.id).execute();
+        await transaction.deleteFrom(PLAN_TABLE_NAME).where('id', '=', entity.id.value).execute();
         await transaction
-          .insertInto('budgetPlans')
-          .values({ id: entity.id, categoryId: entity.categoryId, strategyType: entity.strategy.type })
+          .insertInto(PLAN_TABLE_NAME)
+          .values({ id: entity.id.value, categoryId: entity.categoryId.value, strategyType: entity.strategy.type })
           .execute();
 
         // Strategyの保存
-        await transaction.deleteFrom('budgetRegularyStrategies').where('budgetPlanId', '=', entity.id).execute();
+        await transaction
+          .deleteFrom(REGULARLY_STRATEGY_TABLE_NAME)
+          .where('budgetPlanId', '=', entity.id.value)
+          .execute();
         switch (entity.strategy.type) {
           case 'none':
             break;
           case 'regularly':
             await transaction
-              .insertInto('budgetRegularyStrategies')
+              .insertInto(REGULARLY_STRATEGY_TABLE_NAME)
               .values({
-                budgetPlanId: entity.id,
+                budgetPlanId: entity.id.value,
                 amount: entity.strategy.amount.value,
                 cycle: entity.strategy.cycle,
                 tempAmount: entity.strategy.tempAmount?.value,
@@ -50,11 +56,11 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     }
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: BudgetPlanId): Promise<void> {
     try {
       await db.transaction().execute(async (transaction) => {
-        await transaction.deleteFrom('budgetPlans').where('id', '=', id).execute();
-        await transaction.deleteFrom('budgetRegularyStrategies').where('budgetPlanId', '=', id).execute();
+        await transaction.deleteFrom(PLAN_TABLE_NAME).where('id', '=', id.value).execute();
+        await transaction.deleteFrom(REGULARLY_STRATEGY_TABLE_NAME).where('budgetPlanId', '=', id.value).execute();
       });
     } catch (e) {
       throw new BudgetPlanRepositoryError('予算計画の削除に失敗しました', {
@@ -66,24 +72,24 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     }
   }
 
-  async removeByCategoryId(categoryId: string): Promise<void> {
+  async removeByCategoryId(categoryId: ExpenseCategoryId): Promise<void> {
     try {
       await db.transaction().execute(async (transaction) => {
         // 削除対象のプランIDを取得
         const planIds = await transaction
-          .selectFrom('budgetPlans')
+          .selectFrom(PLAN_TABLE_NAME)
           .select('id')
-          .where('categoryId', '=', categoryId)
+          .where('categoryId', '=', categoryId.value)
           .execute()
           .then((plans) => plans.map((plan) => plan.id));
 
         if (planIds.length === 0) return;
 
         // budgetRegularyStrategiesを一括削除
-        await transaction.deleteFrom('budgetRegularyStrategies').where('budgetPlanId', 'in', planIds).execute();
+        await transaction.deleteFrom(REGULARLY_STRATEGY_TABLE_NAME).where('budgetPlanId', 'in', planIds).execute();
 
         // budgetPlansを一括削除
-        await transaction.deleteFrom('budgetPlans').where('id', 'in', planIds).execute();
+        await transaction.deleteFrom(PLAN_TABLE_NAME).where('id', 'in', planIds).execute();
       });
     } catch (e) {
       throw new BudgetPlanRepositoryError('カテゴリに紐づく予算計画の削除に失敗しました', {
@@ -95,13 +101,21 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     }
   }
 
-  async find(id: string): Promise<BudgetPlan | undefined> {
+  async find(id: BudgetPlanId): Promise<BudgetPlan | undefined> {
     try {
-      const budgetPlanRecord = await db.selectFrom('budgetPlans').selectAll().where('id', '=', id).executeTakeFirst();
+      const budgetPlanRecord = await db
+        .selectFrom(PLAN_TABLE_NAME)
+        .selectAll()
+        .where('id', '=', id.value)
+        .executeTakeFirst();
       if (!budgetPlanRecord) return undefined;
 
       const strategy = await this.getBudgetStrategy(budgetPlanRecord);
-      return BudgetPlan.build(budgetPlanRecord.id, budgetPlanRecord.categoryId, strategy);
+      return BudgetPlan.build(
+        BudgetPlanId.build(budgetPlanRecord.id),
+        ExpenseCategoryId.build(budgetPlanRecord.categoryId),
+        strategy,
+      );
     } catch (e) {
       throw new BudgetPlanRepositoryError('予算計画の取得に失敗しました', {
         cause: e,
@@ -112,18 +126,22 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     }
   }
 
-  async findByCategoryId(categoryId: string) {
+  async findByCategoryId(categoryId: ExpenseCategoryId) {
     try {
       const budgetPlanRecord = await db
-        .selectFrom('budgetPlans')
+        .selectFrom(PLAN_TABLE_NAME)
         .selectAll()
-        .where('categoryId', '=', categoryId)
+        .where('categoryId', '=', categoryId.value)
         .executeTakeFirst();
 
       if (!budgetPlanRecord) return undefined;
 
       const strategy = await this.getBudgetStrategy(budgetPlanRecord);
-      return BudgetPlan.build(budgetPlanRecord.id, budgetPlanRecord.categoryId, strategy);
+      return BudgetPlan.build(
+        BudgetPlanId.build(budgetPlanRecord.id),
+        ExpenseCategoryId.build(budgetPlanRecord.categoryId),
+        strategy,
+      );
     } catch (e) {
       throw new BudgetPlanRepositoryError('カテゴリIDに紐づく予算計画の取得に失敗しました', {
         cause: e,
@@ -137,8 +155,8 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
   async findAll(): Promise<BudgetPlan[]> {
     try {
       return await db.transaction().execute(async (transaction) => {
-        const budgetPlanRecs = await transaction.selectFrom('budgetPlans').selectAll().execute();
-        const regularlyStrategyRecs = await transaction.selectFrom('budgetRegularyStrategies').selectAll().execute();
+        const budgetPlanRecs = await transaction.selectFrom(PLAN_TABLE_NAME).selectAll().execute();
+        const regularlyStrategyRecs = await transaction.selectFrom(REGULARLY_STRATEGY_TABLE_NAME).selectAll().execute();
 
         return budgetPlanRecs.map((planRec) => {
           const strategyRec = regularlyStrategyRecs.find((rec) => rec.budgetPlanId === planRec.id);
@@ -156,7 +174,11 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
           } else {
             strategy = BudgetNoneStrategy.build();
           }
-          return BudgetPlan.build(planRec.id, planRec.categoryId, strategy);
+          return BudgetPlan.build(
+            BudgetPlanId.build(planRec.id),
+            ExpenseCategoryId.build(planRec.categoryId),
+            strategy,
+          );
         });
       });
     } catch (e) {
@@ -170,7 +192,7 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     if (budgetPlan.strategyType === 'none') return BudgetNoneStrategy.build();
     else if (budgetPlan.strategyType === 'regularly') {
       const strategyRecord = await db
-        .selectFrom('budgetRegularyStrategies')
+        .selectFrom(REGULARLY_STRATEGY_TABLE_NAME)
         .selectAll()
         .where('budgetPlanId', '=', budgetPlan.id)
         .executeTakeFirst();

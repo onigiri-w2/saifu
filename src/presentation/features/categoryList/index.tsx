@@ -21,7 +21,7 @@ function CategoryList({ onPressAdd, onPressItem, useDeferredRender = true }: Pro
 
   const store = useRef<CategoryToggleMapStore>();
   if (!store.current) {
-    store.current = createCategoryToggleMapStore(categoryListQuery.data.map((c) => c.category.id));
+    store.current = createCategoryToggleMapStore(categoryListQuery.data.map((c) => c.category.id.value));
   }
 
   return (
