@@ -7,7 +7,7 @@ import { DailyTimeSeries } from '../timeseries';
 
 export async function buildActualCost(categoryIds: string[], period: Period, expenseRespository: IExpenseRepository) {
   const start = period.start.datetime;
-  const end = new Date(period.end.datetime.getTime() - 1);
+  const end = period.end.datetime;
   const expenses = await expenseRespository.findSome(categoryIds, start, end);
   const map = new HashMap<LocalDate, number>();
   expenses.forEach((e) => {

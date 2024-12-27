@@ -75,7 +75,7 @@ class DbExpenseRepository implements IExpenseRepository {
       let query = db.selectFrom('expenses').selectAll();
       if (categoryIds.length !== 0) query = query.where('categoryId', 'in', categoryIds);
       if (from) query = query.where('date', '>=', from);
-      if (to) query = query.where('date', '<=', to);
+      if (to) query = query.where('date', '<', to);
       const records = await query.orderBy('date', dateOrder).execute();
       return records.map((record) => this.record2entity(record));
     } catch (e) {
