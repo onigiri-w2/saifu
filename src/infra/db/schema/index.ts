@@ -1,19 +1,15 @@
 import {
-  ExpenseCategoryTable,
-  IncomeCategoryTable,
   BudgetPlanTable,
   BudgetRegularyStrategyTable,
   CalendarTable,
-  ExpenseTable,
-  IncomeTable,
+  TransactionCategoryTable,
+  TransactionTable,
 } from './tables';
 
 export interface Schema {
-  expenseCategories: ExpenseCategoryTable;
-  incomeCategories: IncomeCategoryTable;
   budgetPlans: BudgetPlanTable;
   budgetRegularyStrategies: BudgetRegularyStrategyTable;
   calendars: CalendarTable;
-  expenses: ExpenseTable;
-  incomes: IncomeTable;
+  transactions: TransactionTable;
+  transactionCategories: TransactionCategoryTable;
 }

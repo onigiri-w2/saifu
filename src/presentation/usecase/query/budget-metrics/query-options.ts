@@ -1,12 +1,15 @@
 import { queryOptions as queryOptionsRQ } from '@tanstack/react-query';
 
-import { loadAllActiveBudgetMetrics } from './functions';
-import { budgetMetricsKeys } from './keys';
+import { QueryKeys } from '../query-keys';
 
-export const budgetMetricsQueryOptions = {
-  'active/list': () =>
-    queryOptionsRQ({
-      queryKey: budgetMetricsKeys['active/list'],
-      queryFn: loadAllActiveBudgetMetrics,
-    }),
+import { loadAllActiveBudgetMetrics } from './functions/loadActiveBudget';
+
+export const BudgetMetricsQueryOptions = {
+  active: {
+    all: () =>
+      queryOptionsRQ({
+        queryKey: QueryKeys['budget-metrics'].active.all,
+        queryFn: loadAllActiveBudgetMetrics,
+      }),
+  },
 };

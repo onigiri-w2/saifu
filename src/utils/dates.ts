@@ -1,4 +1,4 @@
-import { Day, Month, Year } from '../domain/valueobject/types';
+import { Day, Month, Year } from '../domain/model/valueobject/types';
 
 export function clampDateToMonthEnd(year: Year, month: Month, day: Day) {
   // 各月の最大日数

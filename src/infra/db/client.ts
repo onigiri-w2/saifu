@@ -5,6 +5,6 @@ import { Schema } from './schema';
 
 export const db = new Kysely<Schema>({
   dialect: new ExpoDialect({
-    database: 'dev-13.db',
+    database: 'dev-0.1.1.db',
   }),
 });

@@ -1,12 +1,9 @@
 import { assert } from '../utils/errors';
 
-import IBudgetPlanRepository from './aggregation/budgetPlan/repository.type';
-import ICalendarRepository from './aggregation/calendar/repository.type';
-import IExpenseCategoryRepository from './aggregation/expenseCategory/repository.type';
-import IExpenseRepository from './aggregation/expense/repository.type';
-import IIncomeRepository from './aggregation/income/repository.type';
-import IIncomeCategoryRepository from './aggregation/incomeCategory/repository.type';
-import ITodayRepository from './aggregation/today/repository.type';
+import IBudgetPlanRepository from './model/aggregation/budgetPlan/repository.type';
+import ICalendarRepository from './model/aggregation/calendar/repository.type';
+import ITransactionRepository from './model/aggregation/transaction/repository.type';
+import ITransactionCategoryRepository from './model/aggregation/transactionCategory/repository.type';
 
 // NOTE: このファイルのあるべき位置が不明。とりあえずdomain層に置いてる...
 
@@ -15,28 +12,19 @@ class RepositoryRegistry {
 
   readonly budgetPlanRepository!: IBudgetPlanRepository;
   readonly calendarRepository!: ICalendarRepository;
-  readonly categoryRepository!: IExpenseCategoryRepository;
-  readonly incomeCategoryRepository!: IIncomeCategoryRepository;
-  readonly expenseRepository!: IExpenseRepository;
-  readonly incomeRepository!: IIncomeRepository;
-  readonly todayRepository!: ITodayRepository;
+  readonly transactionRepository!: ITransactionRepository;
+  readonly transactionCategoryRepository!: ITransactionCategoryRepository;
 
   private constructor(
     budgetPlanRepository: IBudgetPlanRepository,
     calendarRepository: ICalendarRepository,
-    categoryRepository: IExpenseCategoryRepository,
-    incomeCategoryRepository: IIncomeCategoryRepository,
-    expenseRepository: IExpenseRepository,
-    incomeRepository: IIncomeRepository,
-    todayRepository: ITodayRepository,
+    transactionRepository: ITransactionRepository,
+    transactionCategoryRepository: ITransactionCategoryRepository,
   ) {
     this.budgetPlanRepository = budgetPlanRepository;
     this.calendarRepository = calendarRepository;
-    this.categoryRepository = categoryRepository;
-    this.incomeCategoryRepository = incomeCategoryRepository;
-    this.expenseRepository = expenseRepository;
-    this.incomeRepository = incomeRepository;
-    this.todayRepository = todayRepository;
+    this.transactionRepository = transactionRepository;
+    this.transactionCategoryRepository = transactionCategoryRepository;
   }
 
   static getInstance(): RepositoryRegistry {
@@ -47,22 +35,16 @@ class RepositoryRegistry {
   static initialize(
     budgetPlanRepository: IBudgetPlanRepository,
     calendarRepository: ICalendarRepository,
-    categoryRepository: IExpenseCategoryRepository,
-    incomeCategoryRepository: IIncomeCategoryRepository,
-    expenseRepository: IExpenseRepository,
-    incomeRepository: IIncomeRepository,
-    todayRepository: ITodayRepository,
+    transactionRepository: ITransactionRepository,
+    transactionCategoryRepository: ITransactionCategoryRepository,
   ) {
     // すでに初期化されてるなら何もしない。エラーも返さない。
     if (this.instance) return;
     this.instance = new RepositoryRegistry(
       budgetPlanRepository,
       calendarRepository,
-      categoryRepository,
-      incomeCategoryRepository,
-      expenseRepository,
-      incomeRepository,
-      todayRepository,
+      transactionRepository,
+      transactionCategoryRepository,
     );
   }
 }

@@ -1,6 +1,6 @@
 import { JsonObject } from 'type-fest';
 
-import { Day, Month, Year } from '@/src/domain/valueobject/types';
+import { Day, Month, Year } from '@/src/domain/model/valueobject/types';
 
 export type JsonLocalDate = {
   year: Year;

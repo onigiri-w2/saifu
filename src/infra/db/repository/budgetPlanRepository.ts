@@ -1,17 +1,19 @@
-import BudgetPlan, { BudgetPlanId } from '@/src/domain/aggregation/budgetPlan';
-import IBudgetPlanRepository from '@/src/domain/aggregation/budgetPlan/repository.type';
-import BudgetNoneStrategy from '@/src/domain/aggregation/budgetPlan/strategy/none';
-import BudgetRegularlyStrategy from '@/src/domain/aggregation/budgetPlan/strategy/regularly';
-import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import { BudgetPlanRepositoryError } from '@/src/domain/error';
-import Money from '@/src/domain/valueobject/money';
-import { NotImplementedError } from '@/src/utils/errors';
+import BudgetPlan, { BudgetPlanId } from '@/src/domain/model/aggregation/budgetPlan';
+import IBudgetPlanRepository from '@/src/domain/model/aggregation/budgetPlan/repository.type';
+import BudgetRegularlyStrategy from '@/src/domain/model/aggregation/budgetPlan/strategy/regularly';
+import { TransactionCategoryId } from '@/src/domain/model/aggregation/transactionCategory';
+import Money from '@/src/domain/model/valueobject/money';
+import { NotImplementedError, assert } from '@/src/utils/errors';
 
 import { db } from '../client';
 import { BudgetPlanTable, BudgetRegularyStrategyTable } from '../schema/tables';
 
 const PLAN_TABLE_NAME = 'budgetPlans';
 const REGULARLY_STRATEGY_TABLE_NAME = 'budgetRegularyStrategies';
+
+const CATEGORY_IDS_DELIMITER = '  ';
+
 class DbBudgetPlanRepository implements IBudgetPlanRepository {
   async save(entity: BudgetPlan): Promise<void> {
     try {
@@ -20,7 +22,11 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
         await transaction.deleteFrom(PLAN_TABLE_NAME).where('id', '=', entity.id.value).execute();
         await transaction
           .insertInto(PLAN_TABLE_NAME)
-          .values({ id: entity.id.value, categoryId: entity.categoryId.value, strategyType: entity.strategy.type })
+          .values({
+            id: entity.id.value,
+            categoryIds: entity.categoryIds.map((id) => id.value).join(CATEGORY_IDS_DELIMITER),
+            strategyType: entity.strategy.type,
+          })
           .execute();
 
         // Strategyの保存
@@ -29,8 +35,6 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
           .where('budgetPlanId', '=', entity.id.value)
           .execute();
         switch (entity.strategy.type) {
-          case 'none':
-            break;
           case 'regularly':
             await transaction
               .insertInto(REGULARLY_STRATEGY_TABLE_NAME)
@@ -43,7 +47,7 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
               .execute();
             break;
           default:
-            throw new NotImplementedError('Strategy type', entity.strategy);
+            throw new NotImplementedError('Strategy type', entity.strategy.type);
         }
       });
     } catch (e) {
@@ -72,35 +76,6 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     }
   }
 
-  async removeByCategoryId(categoryId: ExpenseCategoryId): Promise<void> {
-    try {
-      await db.transaction().execute(async (transaction) => {
-        // 削除対象のプランIDを取得
-        const planIds = await transaction
-          .selectFrom(PLAN_TABLE_NAME)
-          .select('id')
-          .where('categoryId', '=', categoryId.value)
-          .execute()
-          .then((plans) => plans.map((plan) => plan.id));
-
-        if (planIds.length === 0) return;
-
-        // budgetRegularyStrategiesを一括削除
-        await transaction.deleteFrom(REGULARLY_STRATEGY_TABLE_NAME).where('budgetPlanId', 'in', planIds).execute();
-
-        // budgetPlansを一括削除
-        await transaction.deleteFrom(PLAN_TABLE_NAME).where('id', 'in', planIds).execute();
-      });
-    } catch (e) {
-      throw new BudgetPlanRepositoryError('カテゴリに紐づく予算計画の削除に失敗しました', {
-        cause: e,
-        context: {
-          categoryId,
-        },
-      });
-    }
-  }
-
   async find(id: BudgetPlanId): Promise<BudgetPlan | undefined> {
     try {
       const budgetPlanRecord = await db
@@ -110,12 +85,8 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
         .executeTakeFirst();
       if (!budgetPlanRecord) return undefined;
 
-      const strategy = await this.getBudgetStrategy(budgetPlanRecord);
-      return BudgetPlan.build(
-        BudgetPlanId.build(budgetPlanRecord.id),
-        ExpenseCategoryId.build(budgetPlanRecord.categoryId),
-        strategy,
-      );
+      const strategyRecord = await this.loadStrategy(budgetPlanRecord);
+      return Record2Entity.budgetPlan(budgetPlanRecord, strategyRecord);
     } catch (e) {
       throw new BudgetPlanRepositoryError('予算計画の取得に失敗しました', {
         cause: e,
@@ -126,22 +97,17 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     }
   }
 
-  async findByCategoryId(categoryId: ExpenseCategoryId) {
+  async findByCategoryId(categoryId: TransactionCategoryId) {
     try {
       const budgetPlanRecord = await db
         .selectFrom(PLAN_TABLE_NAME)
         .selectAll()
-        .where('categoryId', '=', categoryId.value)
+        .where('categoryIds', 'like', `%${categoryId.value}%`)
         .executeTakeFirst();
-
       if (!budgetPlanRecord) return undefined;
 
-      const strategy = await this.getBudgetStrategy(budgetPlanRecord);
-      return BudgetPlan.build(
-        BudgetPlanId.build(budgetPlanRecord.id),
-        ExpenseCategoryId.build(budgetPlanRecord.categoryId),
-        strategy,
-      );
+      const strategyRecord = await this.loadStrategy(budgetPlanRecord);
+      return Record2Entity.budgetPlan(budgetPlanRecord, strategyRecord);
     } catch (e) {
       throw new BudgetPlanRepositoryError('カテゴリIDに紐づく予算計画の取得に失敗しました', {
         cause: e,
@@ -154,32 +120,13 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
 
   async findAll(): Promise<BudgetPlan[]> {
     try {
-      return await db.transaction().execute(async (transaction) => {
-        const budgetPlanRecs = await transaction.selectFrom(PLAN_TABLE_NAME).selectAll().execute();
-        const regularlyStrategyRecs = await transaction.selectFrom(REGULARLY_STRATEGY_TABLE_NAME).selectAll().execute();
+      const budgetPlanRecords = await db.selectFrom(PLAN_TABLE_NAME).selectAll().execute();
+      const strategyRecords = await this.loadStrategies(budgetPlanRecords);
 
-        return budgetPlanRecs.map((planRec) => {
-          const strategyRec = regularlyStrategyRecs.find((rec) => rec.budgetPlanId === planRec.id);
-
-          let strategy;
-          if (strategyRec && planRec.strategyType === 'regularly') {
-            strategy = this.budgetRegularyStrategyRecordToEntity(strategyRec);
-          } else if (planRec.strategyType === 'regularly' && !strategyRec) {
-            throw new BudgetPlanRepositoryError('BudgetPlanのStrategyが見つかりません', {
-              context: {
-                budgetPlanId: planRec.id,
-                type: planRec.strategyType,
-              },
-            });
-          } else {
-            strategy = BudgetNoneStrategy.build();
-          }
-          return BudgetPlan.build(
-            BudgetPlanId.build(planRec.id),
-            ExpenseCategoryId.build(planRec.categoryId),
-            strategy,
-          );
-        });
+      return budgetPlanRecords.map((record) => {
+        const strategyRecord = strategyRecords.find((strategy) => strategy.budgetPlanId === record.id);
+        assert(strategyRecord, 'Strategy record not found');
+        return Record2Entity.budgetPlan(record, strategyRecord);
       });
     } catch (e) {
       throw new BudgetPlanRepositoryError('予算計画の全件取得に失敗しました', {
@@ -188,34 +135,63 @@ class DbBudgetPlanRepository implements IBudgetPlanRepository {
     }
   }
 
-  private async getBudgetStrategy(budgetPlan: BudgetPlanTable) {
-    if (budgetPlan.strategyType === 'none') return BudgetNoneStrategy.build();
-    else if (budgetPlan.strategyType === 'regularly') {
-      const strategyRecord = await db
-        .selectFrom(REGULARLY_STRATEGY_TABLE_NAME)
-        .selectAll()
-        .where('budgetPlanId', '=', budgetPlan.id)
-        .executeTakeFirst();
-      if (!strategyRecord) {
-        throw new BudgetPlanRepositoryError('BudgetPlanのStrategyが見つかりません', {
-          context: {
-            budgetPlanId: budgetPlan.id,
-            type: budgetPlan.strategyType,
-          },
-        });
-      }
-      return this.budgetRegularyStrategyRecordToEntity(strategyRecord);
-    } else {
-      throw new NotImplementedError('Strategy type', budgetPlan.strategyType);
+  private async loadStrategies(budgetPlanRecords: BudgetPlanTable[]): Promise<BudgetRegularyStrategyTable[]> {
+    const budgetPlanIds = budgetPlanRecords.map((record) => record.id);
+    const strategyRecords = await db
+      .selectFrom(REGULARLY_STRATEGY_TABLE_NAME)
+      .selectAll()
+      .where('budgetPlanId', 'in', budgetPlanIds)
+      .execute();
+    const check = new Set(budgetPlanIds).size === new Set(strategyRecords.map((record) => record.budgetPlanId)).size;
+    if (!check) {
+      throw new BudgetPlanRepositoryError('BudgetPlanのStrategyが見つかりません', {
+        context: {
+          budgetPlanIds,
+          regularStrategis: strategyRecords,
+        },
+      });
     }
+
+    return strategyRecords;
   }
 
-  private budgetRegularyStrategyRecordToEntity(record: BudgetRegularyStrategyTable): BudgetRegularlyStrategy {
+  private async loadStrategy(budgetPlanRecord: BudgetPlanTable): Promise<BudgetRegularyStrategyTable> {
+    switch (budgetPlanRecord.strategyType) {
+      case 'regularly': {
+        // 波括弧を追加
+        const strategyRecord = await db
+          .selectFrom(REGULARLY_STRATEGY_TABLE_NAME)
+          .selectAll()
+          .where('budgetPlanId', '=', budgetPlanRecord.id)
+          .executeTakeFirst();
+        if (!strategyRecord) {
+          throw new BudgetPlanRepositoryError('BudgetPlanのStrategyが見つかりません', {
+            context: {
+              budgetPlanId: budgetPlanRecord.id,
+              type: budgetPlanRecord.strategyType,
+            },
+          });
+        }
+        return strategyRecord;
+      } // 波括弧を追加
+      default:
+        throw new NotImplementedError('Strategy type', budgetPlanRecord.strategyType);
+    }
+  }
+}
+export default DbBudgetPlanRepository;
+
+class Record2Entity {
+  static regularlyStrategy(record: BudgetRegularyStrategyTable): BudgetRegularlyStrategy {
     return BudgetRegularlyStrategy.build(
       Money.build(record.amount),
       record.cycle,
       record.tempAmount !== null ? Money.build(record.tempAmount) : undefined,
     );
   }
+
+  static budgetPlan(record: BudgetPlanTable, strategy: BudgetRegularyStrategyTable): BudgetPlan {
+    const categoryIds = record.categoryIds.split(CATEGORY_IDS_DELIMITER).map((id) => TransactionCategoryId.build(id));
+    return BudgetPlan.build(BudgetPlanId.build(record.id), categoryIds, this.regularlyStrategy(strategy));
+  }
 }
-export default DbBudgetPlanRepository;

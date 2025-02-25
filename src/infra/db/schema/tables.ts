@@ -1,21 +1,9 @@
-import { StrategyType, BudgetCycle } from '@/src/domain/aggregation/budgetPlan/types';
-import { IconColor } from '@/src/domain/types/categoryIconColor';
-import { IconName } from '@/src/domain/types/categoryIconName';
-import { Month, Day, DayOfWeek } from '@/src/domain/valueobject/types';
-
-export interface ExpenseCategoryTable {
-  id: string;
-  name: string;
-  iconName: IconName;
-  iconColor: IconColor;
-}
-
-export interface IncomeCategoryTable {
-  id: string;
-  name: string;
-  iconName: IconName;
-  iconColor: IconColor;
-}
+import { StrategyType, BudgetCycle } from '@/src/domain/model/aggregation/budgetPlan/types';
+import { TransactionType } from '@/src/domain/model/aggregation/transaction';
+import { TransactionCategoryType } from '@/src/domain/model/aggregation/transactionCategory';
+import { IconColor } from '@/src/domain/model/types/categoryIconColor';
+import { IconName } from '@/src/domain/model/types/categoryIconName';
+import { Month, Day, DayOfWeek } from '@/src/domain/model/valueobject/types';
 
 export interface CalendarTable {
   id: string;
@@ -24,25 +12,26 @@ export interface CalendarTable {
   startWeek: DayOfWeek;
 }
 
-export interface ExpenseTable {
+export interface TransactionTable {
   id: string;
   categoryId: string;
   amount: number;
   date: Date;
   memo: string;
+  type: TransactionType;
 }
 
-export interface IncomeTable {
+export interface TransactionCategoryTable {
   id: string;
-  categoryId: string;
-  amount: number;
-  date: Date;
-  memo: string;
+  name: string;
+  iconName: IconName;
+  iconColor: IconColor;
+  type: TransactionCategoryType;
 }
 
 export interface BudgetPlanTable {
   id: string;
-  categoryId: string;
+  categoryIds: string;
   strategyType: StrategyType;
 }
 

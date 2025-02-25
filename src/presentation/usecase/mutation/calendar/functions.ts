@@ -1,4 +1,4 @@
-import Calendar from '@/src/domain/aggregation/calendar';
+import Calendar from '@/src/domain/model/aggregation/calendar';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
 
 import { UpdateRequest } from './types';

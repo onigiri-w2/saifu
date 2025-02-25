@@ -1,4 +1,4 @@
-import { Month } from '@/src/domain/valueobject/types';
+import { Month } from '@/src/domain/model/valueobject/types';
 
 import { JsonLocalDate, JsonYearmonth } from './types';
 

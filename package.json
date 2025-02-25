@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
+    "@gorhom/bottom-sheet": "^5",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-menu/menu": "^1.1.7",
     "@react-navigation/bottom-tabs": "^7.1.3",

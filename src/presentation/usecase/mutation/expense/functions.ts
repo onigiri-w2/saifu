@@ -1,7 +1,7 @@
 import Expense, { ExpenseId } from '@/src/domain/aggregation/expense';
 import { ExpenseCategoryId } from '@/src/domain/aggregation/expenseCategory';
 import RepositoryRegistry from '@/src/domain/repositoryRegistry';
-import Money from '@/src/domain/valueobject/money';
+import Money from '@/src/domain/model/valueobject/money';
 
 import { CreateRequest, UpdateRequest } from './types';
 
